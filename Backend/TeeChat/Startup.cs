@@ -121,7 +121,7 @@ namespace TeeChat
                             // If the request is for our hub...
                             var path = context.HttpContext.Request.Path;
                             if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/hubs/chat")))
+                                (path.StartsWithSegments(Configuration["ChatHubUrl"]))) 
                             {
                                 // Read the token out of the query string
                                 context.Token = accessToken;
@@ -171,7 +171,7 @@ namespace TeeChat
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChatHub>("/hubs/chat");
+                endpoints.MapHub<ChatHub>(Configuration["ChatHubUrl"]);
             });
         }
     }

@@ -10,7 +10,9 @@ namespace TeeChat
         {
             CreateMap<AppUser, UserViewModel>();
             CreateMap<Chat, ChatViewModel>();
-            CreateMap<Message, MessageViewModel>().ForMember(des => des.SenderUserName, act => act.MapFrom(src => src.Sender.UserName));
+            CreateMap<Message, MessageViewModel>()
+                .ForMember(des => des.SenderUserName, act => act.MapFrom(src => src.Sender.UserName))
+                .ForMember(des => des.SenderFullName, act => act.MapFrom(src => $"{src.Sender.LastName} {src.Sender.FirstName}"));
         }
     }
 }
