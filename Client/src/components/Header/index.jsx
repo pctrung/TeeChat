@@ -7,13 +7,15 @@ import ClickableIcon from "../ClickableIcon";
 import DarkModeIcon from "assets/icons/dark-mode-icon.svg";
 import SignOutIcon from "assets/icons/sign-out-icon.svg";
 import DefaultAvatar from "assets/img/default-avatar.jpg";
-import currentUser from "utils/currentUser";
+import { useSelector } from "react-redux";
 
 Header.propTypes = {
-  userAvatar: PropTypes.string,
+  logout: PropTypes.func,
 };
 
-function Header() {
+function Header({ logout }) {
+  const currentUser = useSelector((state) => state.users.currentUser);
+
   const userAvatar = currentUser.avatarUrl;
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const ref = useRef();
@@ -58,15 +60,18 @@ function Header() {
                   alt="Dark mode icon"
                   className="w-6 h-6"
                 />
-                <span>Dark mode</span>
+                <span>Dark Mode</span>
               </button>
-              <button className="flex space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200">
+              <button
+                className="flex space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200"
+                onClick={logout}
+              >
                 <img
                   src={SignOutIcon}
                   alt="Dark mode icon"
                   className="w-6 h-6"
                 />
-                <span>Sign out</span>
+                <span>Log Out</span>
               </button>
             </div>
           )}

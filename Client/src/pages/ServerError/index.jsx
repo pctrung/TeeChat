@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 
 function ServerError({ message }) {
   return (
-    <div className="fixed h-screen w-screen flex flex-col justify-center items-center space-y-8">
-      <img className="w-1/3 object-cover" src={ErrorImg} alt="Error" />
-      <span className="font-bold text-3xl">
+    <div className="fixed h-screen w-screen flex flex-col justify-center items-center space-y-8 px-2">
+      <img className="md:w-1/3 object-cover" src={ErrorImg} alt="Error" />
+      <span className="font-bold text-2xl md:text-3xl text-center">
         {message ?? "Oops! Something went wrong!"}
       </span>
       <Link to="/">

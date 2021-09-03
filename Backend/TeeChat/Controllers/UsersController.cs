@@ -40,7 +40,7 @@ namespace TeeChat.Controllers
             }
             else
             {
-                return BadRequest();
+                return Ok(new { isFailed = true, message = "Username or password is incorrect" });
             }
         }
     }

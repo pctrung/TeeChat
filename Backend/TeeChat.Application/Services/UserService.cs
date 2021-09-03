@@ -98,11 +98,11 @@ namespace TeeChat.Application.Services
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
-            await _userManager.AddClaimAsync(user, new Claim("Id", user.Id));
-            await _userManager.AddClaimAsync(user, new Claim("UserName", user.UserName));
-            await _userManager.AddClaimAsync(user, new Claim("FirstName", user.LastName));
-            await _userManager.AddClaimAsync(user, new Claim("LastName", user.FirstName));
-            await _userManager.AddClaimAsync(user, new Claim("Email", user.Email));
+            await _userManager.AddClaimAsync(user, new Claim("id", user.Id));
+            await _userManager.AddClaimAsync(user, new Claim("userName", user.UserName));
+            await _userManager.AddClaimAsync(user, new Claim("firstName", user.LastName));
+            await _userManager.AddClaimAsync(user, new Claim("lastName", user.FirstName));
+            await _userManager.AddClaimAsync(user, new Claim("email", user.Email));
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.UserName));
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, user.UserName));
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Email, user.Email));

@@ -13,6 +13,7 @@ import {
   setSelectedChat,
   setSelectedId,
 } from "app/chatSlice";
+import { getCurrentUser } from "app/userSlice";
 import ChatList from "components/ChatList";
 import ChatWindow from "components/ChatWindow";
 import Header from "components/Header";
@@ -20,9 +21,11 @@ import Loader from "components/Loader";
 import Popup from "components/Popup";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 
 function Chat() {
   const [connection, setConnection] = useState(null);
+  const history = useHistory();
 
   const dispatch = useDispatch();
   const chats = useSelector((state) => state.chats.chats);
@@ -32,18 +35,20 @@ function Chat() {
   const isOpenPopup = useSelector((state) => state.app.isOpenPopup);
   const popupContent = useSelector((state) => state.app.popupContent);
 
+  function logout() {
+    window.localStorage.removeItem("token");
+    connection.stop();
+    history.push("/login");
+  }
+
   useEffect(() => {
     async function fetchData() {
       const openLoadingAction = setIsLoading(true);
       dispatch(openLoadingAction);
-      var result = await chatApi.getAllAsync().catch((error) => {
-        const setIsOpenAction = setIsOpenPopup(true);
-        const setContentAction = setPopupContent(error.data);
-        const setTileAction = setPopupTitle("Error");
-        dispatch(setIsOpenAction);
-        dispatch(setContentAction);
-        dispatch(setTileAction);
-      });
+      var result = await chatApi.getAllAsync();
+      // .catch((error) => {
+      //   openPopup("Error", error.data);
+      // });
       if (result) {
         const refreshChatAction = refreshChats(result.data);
         dispatch(refreshChatAction);
@@ -57,6 +62,8 @@ function Chat() {
       dispatch(closeLoadingAction);
     }
     fetchData();
+
+    dispatch(getCurrentUser());
   }, []);
 
   function onPopupClick() {
@@ -82,12 +89,10 @@ function Chat() {
         .start()
         .then((result) => {
           connection.on("ReceiveMessage", (response) => {
-            console.log("ReceiveMessage", response);
             const action = addMessage(response);
             dispatch(action);
           });
           connection.on("ReceiveChat", (chat) => {
-            console.log("ReceiveChat", chat);
             const action = addChat(chat);
             dispatch(action);
           });
@@ -107,14 +112,7 @@ function Chat() {
     dispatch(setContentAction);
     dispatch(setTileAction);
   }
-  function closePopup() {
-    const setIsOpenAction = setIsOpenPopup(false);
-    const setContentAction = setPopupContent("");
-    const setTileAction = setPopupTitle("");
-    dispatch(setIsOpenAction);
-    dispatch(setContentAction);
-    dispatch(setTileAction);
-  }
+
   return isLoading ? (
     <Loader />
   ) : (
@@ -132,7 +130,7 @@ function Chat() {
             (selectedId !== 0 ? " hidden" : "")
           }
         >
-          <Header />
+          <Header logout={logout} />
           <ChatList />
         </div>
         {!selectedId ? (

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import currentUser from "utils/currentUser";
 import DefaultAvatar from "assets/img/default-avatar.jpg";
 import constants from "utils/constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +8,7 @@ import { setSelectedId } from "app/chatSlice";
 function ChatList() {
   const chats = useSelector((state) => state.chats.chats);
   const selectedId = useSelector((state) => state.chats.selectedId);
+  const currentUser = useSelector((state) => state.users.currentUser);
   const dispatch = useDispatch();
 
   const [keyword, setKeyword] = useState("");

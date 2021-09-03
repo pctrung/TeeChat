@@ -103,14 +103,6 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<CreateChatResponse>> CreateGroupChatAsync(CreateGroupChatRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Content) || string.IsNullOrWhiteSpace(request.Name))
-            {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Content or group name cannot be null or empty"
-                };
-            }
             if (request.ParticipantUserNames.Count < 2)
             {
                 return new ApiResult<CreateChatResponse>(null)
@@ -158,23 +150,11 @@ namespace TeeChat.Application.Services
             chat.DateCreated = DateTime.Now;
             chat.Name = request.Name;
 
-            // add init message
-            var newMessage = new Message()
-            {
-                Content = request.Content,
-                Chat = chat,
-                DateCreated = DateTime.Now,
-                Sender = currentUser
-            };
-
-            chat.Messages = new List<Message>();
-            chat.Messages.Add(newMessage);
-
             await _context.Chats.AddAsync(chat);
 
             await _context.SaveChangesAsync();
 
-            if (chat.Id != 0 && newMessage.Id != 0)
+            if (chat.Id != 0)
             {
                 var result = new CreateChatResponse()
                 {
@@ -200,15 +180,6 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<CreateChatResponse>> CreatePrivateChatAsync(CreatePrivateChatRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Content))
-            {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Content cannot be null or empty"
-                };
-            }
-
             // add participants
             var participant = await _context.Users.Where(x => request.ParticipantUserName.Equals(x.UserName)).FirstOrDefaultAsync();
 
@@ -249,22 +220,11 @@ namespace TeeChat.Application.Services
             chat.CreatorUserName = _currentUser.UserName;
             chat.DateCreated = DateTime.Now;
 
-            // add init message
-            var newMessage = new Message()
-            {
-                Content = request.Content,
-                Chat = chat,
-                DateCreated = DateTime.Now,
-                Sender = currentUser
-            };
-            chat.Messages = new List<Message>();
-            chat.Messages.Add(newMessage);
-
             await _context.Chats.AddAsync(chat);
 
             await _context.SaveChangesAsync();
 
-            if (chat.Id != 0 && newMessage.Id != 0)
+            if (chat.Id != 0)
             {
                 var result = new CreateChatResponse()
                 {
