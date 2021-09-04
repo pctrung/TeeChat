@@ -11,5 +11,7 @@ namespace TeeChat.Application.Interfaces
         Task<string> LoginAsync(LoginRequest request);
 
         Task LogoutAsync();
+
+        Task<bool> CheckUserNameExistsAsync(string userName);
     }
 }

@@ -29,6 +29,15 @@ namespace TeeChat.Application.Services
             _configuration = configuration;
         }
 
+        public async Task<bool> CheckUserNameExistsAsync(string userName)
+        {
+            if (!string.IsNullOrEmpty(userName))
+            {
+                return await _context.Users.AnyAsync(x => x.UserName.Equals(userName));
+            }
+            return false;
+        }
+
         public async Task<string> LoginAsync(LoginRequest request)
         {
             var username = request.Username;

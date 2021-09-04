@@ -21,21 +21,26 @@ function Login() {
       setIsDirty(false);
     }
   }, [username, password]);
-  async function login(e) {
+  function login(e) {
     e.preventDefault();
 
     const request = { username, password };
     setError("");
-    document.body.style.cursor = "wait";
-    const response = await userApi.loginAsync(request);
-    if (response.isFailed) {
-      setError(response?.message);
-    } else {
-      dispatch(getCurrentUser());
-      window.localStorage.setItem("token", response);
-      history.push("/");
-    }
-    document.body.style.cursor = "default";
+
+    userApi
+      .login(request)
+      .then((response) => {
+        dispatch(getCurrentUser());
+        window.localStorage.setItem("token", response);
+        history.push("/");
+      })
+      .catch((error) => {
+        var message =
+          typeof error === "string"
+            ? error
+            : "Username or password is incorrect";
+        setError(message);
+      });
   }
   return (
     <div className="h-screen grid md:grid-cols-7 place-items-center px-6">
@@ -51,6 +56,11 @@ function Login() {
         <h1 className="text-3xl font-bold text-primary text-green-600 text-center mb-8">
           Login to TeeChat
         </h1>
+        {error && (
+          <span className="bg-red-500 rounded-md text-white text-lg mb-2 py-2 text-center">
+            {error ?? "Username or password is incorrect"}
+          </span>
+        )}
         <div className="space-y-2 mb-3">
           <label htmlFor="username" className="text-lg font-semibold px-1">
             Username or email address
@@ -75,15 +85,15 @@ function Login() {
             className="bg-gray-100 rounded-lg w-full py-2 px-4 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200"
           />
         </div>
-        {error && (
-          <span className="text-red-500 text-lg my-2 text-center">
-            {error ?? "Username or password is incorrect"}
-          </span>
-        )}
-        <Button disabled={!isDirty} content="Login" className="mb-4 mt-2" />
+
+        <Button
+          disabled={!isDirty}
+          content="Login"
+          className="mb-4 mt-2 font-bold"
+        />
         <div className="text-center">
           Not a member?{" "}
-          <Link to="/register" className="text-green-500">
+          <Link to="/register" className="text-green-500 font-bold">
             Sign up now
           </Link>
         </div>

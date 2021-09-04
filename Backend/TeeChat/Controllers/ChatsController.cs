@@ -59,7 +59,7 @@ namespace TeeChat.Controllers
             {
                 case 201:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNames).ReceiveChat(result.Data.Chat);
+                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveChat(result.Data.Chat);
                         return Created("", result);
                     }
                 case 200: return Ok(result);
@@ -78,7 +78,7 @@ namespace TeeChat.Controllers
             {
                 case 201:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNames).ReceiveChat(result.Data.Chat);
+                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveChat(result.Data.Chat);
                         return Created("", result);
                     }
                 case 200: return Ok(result);
@@ -97,11 +97,30 @@ namespace TeeChat.Controllers
             {
                 case 201:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNames).ReceiveMessage(result.Data);
+                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveMessage(result.Data);
 
                         return Created("", result);
                     };
                 case 200: return Ok(result);
+                case 403: return Forbid();
+                case 404: return NotFound(result.Message);
+                default: return BadRequest(result.Message);
+            }
+        }
+
+        [HttpPatch("{id:int}")]
+        public async Task<IActionResult> UpdateChat(int id, UpdateGroupChatRequest request)
+        {
+            var result = await _chatService.UpdateGroupChatAsync(id, request);
+
+            switch (result.StatusCode)
+            {
+                case 200:
+                    {
+                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveUpdatedChat(result.Data.Chat);
+
+                        return Created("", result);
+                    };
                 case 403: return Forbid();
                 case 404: return NotFound(result.Message);
                 default: return BadRequest(result.Message);

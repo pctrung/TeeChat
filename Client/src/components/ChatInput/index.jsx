@@ -5,6 +5,8 @@ import SendIconNormal from "assets/icons/send-icon.svg";
 import EmojiIcon from "assets/icons/emoji.svg";
 import chatApi from "api/chatApi";
 import Picker from "emoji-picker-react";
+import { setIsLoading } from "app/appSlice";
+import { useDispatch } from "react-redux";
 
 ChatInput.propTypes = {
   onSubmit: PropTypes.func,
@@ -15,6 +17,7 @@ function ChatInput({ chatId }) {
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
   const ref = useRef();
+  const dispatch = useDispatch();
 
   async function onSendMessage(e) {
     e.preventDefault();
@@ -23,7 +26,9 @@ function ChatInput({ chatId }) {
     }
 
     var request = { content };
-    await chatApi.sendMessageAsync(chatId, request);
+    dispatch(setIsLoading(true));
+    await chatApi.sendMessage(chatId, request);
+    dispatch(setIsLoading(false));
 
     setContent("");
   }

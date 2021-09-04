@@ -3,15 +3,13 @@ import Api from "./Api.js";
 const baseApiUrl = "/chats";
 
 const chatApi = {
-  getAllAsync: async () => {
+  getAll: () => {
     const url = `${baseApiUrl}`;
-    var result = await Api.get(url);
-    return result;
+    return Api.get(url);
   },
-  sendMessageAsync: async (chatId, content) => {
+  sendMessage: (chatId, content) => {
     const url = `${baseApiUrl}/${chatId}/send`;
-    var result = await Api.post(url, content);
-    return result;
+    return Api.post(url, content);
   },
 };
 

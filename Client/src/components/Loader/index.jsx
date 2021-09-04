@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const Loader = () => {
+const Loader = ({ className, isOpen = true }) => {
   let circleCommonClasses = "h-3 w-3 bg-green-300 rounded-full";
   const [isEnding, setIsEnding] = useState(false);
   useEffect(() => {
@@ -9,16 +9,19 @@ const Loader = () => {
     };
   }, []);
   return (
-    <div
-      className={
-        "flex h-screen w-screen justify-center items-center transition-all duration-200" +
-        (isEnding ? "opacity-0" : "")
-      }
-    >
-      <div className={`${circleCommonClasses} mr-3 animate-bounce`}></div>
-      <div className={`${circleCommonClasses} mr-3 animate-bounce200`}></div>
-      <div className={`${circleCommonClasses} animate-bounce400`}></div>
-    </div>
+    isOpen && (
+      <div
+        className={
+          "z-50 flex h-screen w-screen justify-center items-center fixed transition-all duration-200 bg-white bg-opacity-50" +
+          (isEnding ? " opacity-0" : "") +
+          (" " + className ?? "")
+        }
+      >
+        <div className={`${circleCommonClasses} mr-3 animate-bounce`}></div>
+        <div className={`${circleCommonClasses} mr-3 animate-bounce200`}></div>
+        <div className={`${circleCommonClasses} animate-bounce400`}></div>
+      </div>
+    )
   );
 };
 

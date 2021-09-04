@@ -35,7 +35,17 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<SendMessageResponse>> AddMessageAsync(int chatId, SendMessageRequest request)
         {
-            var isHaveAccess = await IsHaveAccessChatAsync(chatId);
+            var chat = await _context.Chats.Include(x => x.Participants).Include(x => x.Messages).Where(x => x.Id == chatId).FirstOrDefaultAsync();
+            if (chat == null)
+            {
+                return new ApiResult<SendMessageResponse>(null)
+                {
+                    StatusCode = 404,
+                    Message = "Not found chat with Id: " + chatId
+                };
+            }
+
+            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
                 return new ApiResult<SendMessageResponse>(null)
@@ -51,16 +61,6 @@ namespace TeeChat.Application.Services
                 {
                     StatusCode = 400,
                     Message = "Content cannot be null or empty"
-                };
-            }
-
-            var chat = await _context.Chats.Include(x => x.Participants).Where(x => x.Id == chatId).FirstOrDefaultAsync();
-            if (chat == null)
-            {
-                return new ApiResult<SendMessageResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found chat with Id: " + chatId
                 };
             }
 
@@ -91,7 +91,7 @@ namespace TeeChat.Application.Services
             {
                 ChatId = chat.Id,
                 Message = _mapper.Map<MessageViewModel>(newMessage),
-                ParticipantUserNames = chat.Participants.Select(x => x.UserName).ToList()
+                ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
             };
 
             return new ApiResult<SendMessageResponse>(result)
@@ -159,7 +159,7 @@ namespace TeeChat.Application.Services
                 var result = new CreateChatResponse()
                 {
                     Chat = _mapper.Map<ChatViewModel>(chat),
-                    ParticipantUserNames = chat.Participants.Select(x => x.UserName).ToList()
+                    ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
                 };
 
                 return new ApiResult<CreateChatResponse>(result)
@@ -229,7 +229,7 @@ namespace TeeChat.Application.Services
                 var result = new CreateChatResponse()
                 {
                     Chat = _mapper.Map<ChatViewModel>(chat),
-                    ParticipantUserNames = chat.Participants.Select(x => x.UserName).ToList()
+                    ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
                 };
 
                 return new ApiResult<CreateChatResponse>(result)
@@ -248,9 +248,19 @@ namespace TeeChat.Application.Services
             }
         }
 
-        public async Task<ApiResult<ChatViewModel>> GetByIdAsync(int id, GetChatRequest request)
+        public async Task<ApiResult<ChatViewModel>> GetByIdAsync(int chatId, GetChatRequest request)
         {
-            var isHaveAccess = await IsHaveAccessChatAsync(id);
+            var chat = await _context.Chats.Include(x => x.Participants).Include(x => x.Messages).Where(x => x.Id == chatId).FirstOrDefaultAsync();
+            if (chat == null)
+            {
+                return new ApiResult<ChatViewModel>(null)
+                {
+                    StatusCode = 404,
+                    Message = "Not found chat with id: " + chatId
+                };
+            }
+
+            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
                 return new ApiResult<ChatViewModel>(null)
@@ -259,22 +269,15 @@ namespace TeeChat.Application.Services
                     Message = "You do not have permission to access this chat"
                 };
             }
-            var chat = await _context.Chats
-                .Include(x => x.Messages.OrderBy(x => x.DateCreated))
-                .Include(x => x.Participants)
-                .Where(x => x.Id == id)
-                .AsSplitQuery()
-                .OrderBy(x => x.DateCreated)
-                .FirstOrDefaultAsync();
 
-            chat.Messages = chat.Messages.AsQueryable().Where(x => x.Content.Contains(request.Keyword ?? "")).Paged(request.Page, DEFAULT_LIMIT).ToList();
+            chat.Messages = chat.Messages.AsQueryable().Where(x => x.Content.Contains(request.Keyword ?? "")).OrderBy(x => x.DateCreated).Paged(request.Page, DEFAULT_LIMIT).ToList();
 
             if (chat == null)
             {
                 return new ApiResult<ChatViewModel>(null)
                 {
                     StatusCode = 404,
-                    Message = "Not found chat with id: " + id
+                    Message = "Not found chat with id: " + chatId
                 };
             }
             else
@@ -283,7 +286,7 @@ namespace TeeChat.Application.Services
                 return new ApiResult<ChatViewModel>(result)
                 {
                     StatusCode = 200,
-                    Message = "Get chat successfully, id: " + id
+                    Message = "Get chat successfully, id: " + chatId
                 };
             }
         }
@@ -313,28 +316,108 @@ namespace TeeChat.Application.Services
 
             var chats = await query.ToListAsync();
 
-            if (!chats.Any())
+            var chatViewModel = new List<ChatViewModel>();
+
+            if (chats.Any())
             {
-                var result = new ApiResult<List<ChatViewModel>>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found any chats"
-                };
-                return result;
-            }
-            else
+                chatViewModel = _mapper.Map<List<ChatViewModel>>(chats);
+            } 
+            var result = new ApiResult<List<ChatViewModel>>(chatViewModel)
             {
-                var chatViewModel = _mapper.Map<List<ChatViewModel>>(chats);
-                var result = new ApiResult<List<ChatViewModel>>(chatViewModel)
-                {
-                    StatusCode = 200,
-                    Message = "Get chat successfully"
-                };
-                return result;
-            }
+                StatusCode = 200,
+                Message = "Get chat successfully"
+            };
+            return result;
         }
 
-        private async Task<bool> IsHaveAccessChatAsync(int chatId)
+        public async Task<ApiResult<CreateChatResponse>> UpdateGroupChatAsync(int chatId, UpdateGroupChatRequest request)
+        {
+            var chat = await _context.Chats.Include(x => x.Participants).Where(x => x.Id == chatId).FirstOrDefaultAsync();
+            if (chat == null)
+            {
+                return new ApiResult<CreateChatResponse>(null)
+                {
+                    StatusCode = 404,
+                    Message = "Not found chat with id: " + chatId
+                };
+            }
+            if (chat.Type == ChatType.PRIVATE)
+            {
+                return new ApiResult<CreateChatResponse>(null)
+                {
+                    StatusCode = 400,
+                    Message = "You can only update group chat"
+                };
+            }
+
+            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
+            if (!isHaveAccess)
+            {
+                return new ApiResult<CreateChatResponse>(null)
+                {
+                    StatusCode = 403,
+                    Message = "You do not have permission to access this chat"
+                };
+            }
+
+            if (!string.IsNullOrEmpty(request.NewGroupName))
+            {
+                chat.Name = request.NewGroupName;
+            }
+            if (request.ParticipantUserNamesToAdd != null)
+            {
+                foreach (var userName in request.ParticipantUserNamesToAdd)
+                {
+                    
+                    var user = await _context.Users.Where(x => x.UserName.Equals(userName)).FirstOrDefaultAsync();
+                    if (chat.Participants.Contains(user))
+                    {
+                        continue;
+                    }
+                    if (user == null)
+                    {
+                        return new ApiResult<CreateChatResponse>(null)
+                        {
+                            StatusCode = 404,
+                            Message = "Not found user: " + userName
+                        };
+                    }
+                    chat.Participants.Add(user);
+                }
+            }
+            if (request.ParticipantUserNamesToRemove != null)
+            {
+                foreach (var userName in request.ParticipantUserNamesToRemove)
+                {
+                    var user = await _context.Users.Where(x => x.UserName.Equals(userName)).FirstOrDefaultAsync();
+                    if (user == null)
+                    {
+                        return new ApiResult<CreateChatResponse>(null)
+                        {
+                            StatusCode = 404,
+                            Message = "Not found user: " + userName
+                        };
+                    }
+                    chat.Participants.Remove(user);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            var result = new CreateChatResponse()
+            {
+                Chat = _mapper.Map<ChatViewModel>(chat),
+                ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+            };
+
+            return new ApiResult<CreateChatResponse>(result)
+            {
+                StatusCode = 200,
+                Message = "Update chat successfully"
+            };
+        }
+
+        private async Task<bool> IsHavePerrmissionToAccessChatAsync(Chat chat)
         {
             var user = await _context.Users.FindAsync(_currentUser.UserId);
 
@@ -343,7 +426,7 @@ namespace TeeChat.Application.Services
                 return false;
             }
 
-            var result = _context.Chats.Where(x => x.Participants.Contains(user)).Any(x => x.Id == chatId);
+            var result = chat.Participants.Contains(user);
 
             return result;
         }

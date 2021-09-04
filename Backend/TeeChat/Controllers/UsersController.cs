@@ -16,6 +16,14 @@ namespace TeeChat.Controllers
             _userService = userService;
         }
 
+        [HttpGet("{userName}/isExists")]
+        public async Task<IActionResult> CheckUserExistsAsync(string userName)
+        {
+            var result = await _userService.CheckUserNameExistsAsync(userName);
+
+            return Ok(new { isExists = result });
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
@@ -26,7 +34,13 @@ namespace TeeChat.Controllers
             }
             else
             {
-                return BadRequest(result);
+                var message = "";
+                foreach (var error in result.Errors)
+                {
+                    message = error.Description;
+                    break;
+                }
+                return BadRequest(message);
             }
         }
 
@@ -40,7 +54,7 @@ namespace TeeChat.Controllers
             }
             else
             {
-                return Ok(new { isFailed = true, message = "Username or password is incorrect" });
+                return BadRequest("Username or password is incorrect");
             }
         }
     }

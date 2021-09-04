@@ -28,7 +28,7 @@ namespace TeeChat.Models.RequestModels.Users
 
         [Required(ErrorMessage = "Please enter email")]
         [DataType(DataType.EmailAddress)]
-        [RegularExpression("^[a-z][a-z0-9_\\.]{5,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$", ErrorMessage = "Email is invalid")]
+        [RegularExpression("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", ErrorMessage = "Email is invalid")]
         public string Email { get; set; }
     }
 }

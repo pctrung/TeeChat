@@ -27,9 +27,9 @@ Api.interceptors.response.use(
     if (response && response.data) {
       return response.data;
     }
+    return response;
   },
   (error) => {
-    console.log(error.data);
     if (error.response) {
       switch (error.response.status) {
         case 401:
@@ -38,33 +38,10 @@ Api.interceptors.response.use(
         case 403:
           window.location.href = "/ForBid";
           break;
-        case 404:
-          window.location.href = "/NotFound";
-          break;
-        default:
-          window.location.href = "/NotFound";
       }
     }
-    if (error.response && !error.response.data) {
-      switch (error.response.status) {
-        case 401:
-          error.response.data = "You must be logged in to system";
-          break;
-        case 403:
-          error.response.data = "You are not allowed to access";
-          break;
-        case 404:
-          error.response.data = "Not found resources";
-          break;
-        default:
-          error.response.data = "Something went wrong!";
-      }
-    }
-    if (error.response) {
-      return Promise.reject(error.response);
-    } else {
-      window.location.href = "/ServerError";
-    }
+    console.error(error?.response);
+    return Promise.reject(error?.response?.data);
   },
 );
 
