@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TeeChat.Models.ResponseModels.Chats;
 using TeeChat.Models.ResponseModels.Messages;
+using TeeChat.Models.ViewModels;
 
 namespace TeeChat.Hubs.Interfaces
 {
@@ -8,6 +9,6 @@ namespace TeeChat.Hubs.Interfaces
     {
         Task ReceiveMessage(SendMessageResponse message);
 
-        Task ReceiveChat(CreateChatResponse chat);
+        Task ReceiveChat(ChatViewModel chat);
     }
 }

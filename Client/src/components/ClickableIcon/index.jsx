@@ -9,12 +9,12 @@ ClickableIcon.propTypes = {
 function ClickableIcon({ className, icon, alt, onClick, onBlur }) {
   return (
     <>
-      <button
+      <div
         onBlur={onBlur}
         onClick={onClick}
         className={
           "p-1 rounded-full hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 cursor-pointer ease-in " +
-            className ?? ""
+          (className ?? "")
         }
       >
         <img
@@ -23,7 +23,7 @@ function ClickableIcon({ className, icon, alt, onClick, onBlur }) {
           onClick={onClick}
           className="w-full"
         />
-      </button>
+      </div>
     </>
   );
 }

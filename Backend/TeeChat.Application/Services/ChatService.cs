@@ -113,7 +113,7 @@ namespace TeeChat.Application.Services
             }
 
             // add participants
-            var participants = await _context.Users.Where(x => request.ParticipantUserNames.Contains(x.UserName)).ToListAsync();
+            var participants = await _context.Users.Where(x => !x.UserName.Equals(_currentUser.UserName) && request.ParticipantUserNames.Contains(x.UserName)).ToListAsync();
 
             if (participants == null)
             {

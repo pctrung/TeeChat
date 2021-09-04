@@ -14,7 +14,7 @@ function Button({ content, className, onClick, onBlur, disabled }) {
         onClick={onClick}
         onBlur={onBlur}
         className={
-          "px-4 py-2 rounded-lg bg-green-500 text-white  focus:ring-green-300 focus:ring-4 transition-all duration-200 disabled:opacity-50" +
+          "px-4 py-2 rounded-lg bg-green-500 text-white  focus:ring-green-300 focus:ring-4 transition-all duration-200 disabled:opacity-50 outline-none" +
           " " +
           (className ?? "") +
           " " +

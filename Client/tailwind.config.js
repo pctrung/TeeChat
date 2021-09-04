@@ -21,6 +21,7 @@ module.exports = {
     },
   },
   variants: {
+    scale: ["responsive", "hover", "focus", "active", "group-hover"],
     extend: {
       backgroundColor: ["active", "disabled"],
       opacity: ["disabled"],

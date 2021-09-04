@@ -6,13 +6,7 @@ import {
   setPopupContent,
   setPopupTitle,
 } from "app/appSlice";
-import {
-  addChat,
-  addMessage,
-  refreshChats,
-  setSelectedChat,
-  setSelectedId,
-} from "app/chatSlice";
+import { addChat, addMessage, refreshChats } from "app/chatSlice";
 import { getCurrentUser } from "app/userSlice";
 import ChatList from "components/ChatList";
 import ChatWindow from "components/ChatWindow";
@@ -52,11 +46,6 @@ function Chat() {
       if (result) {
         const refreshChatAction = refreshChats(result.data);
         dispatch(refreshChatAction);
-        if (result.data) {
-          const id = result.data[0]?.id;
-          const setSelectedIdAction = setSelectedId(id);
-          dispatch(setSelectedIdAction);
-        }
       }
       const closeLoadingAction = setIsLoading(false);
       dispatch(closeLoadingAction);
@@ -93,6 +82,7 @@ function Chat() {
             dispatch(action);
           });
           connection.on("ReceiveChat", (chat) => {
+            console.log(chat);
             const action = addChat(chat);
             dispatch(action);
           });
@@ -138,7 +128,7 @@ function Chat() {
             Select a chat to start
           </div>
         ) : (
-          <div className="lg:col-span-9 md:col-span-8 col-span-12 flex h-full w-full ">
+          <div className="lg:col-span-9 md:col-span-8 col-span-12 flex h-screen w-full ">
             <ChatWindow chat={chats.find((chat) => chat.id === selectedId)} />
           </div>
         )}

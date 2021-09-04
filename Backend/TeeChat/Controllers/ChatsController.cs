@@ -59,7 +59,7 @@ namespace TeeChat.Controllers
             {
                 case 201:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNames).ReceiveChat(result.Data);
+                        await _chatHub.Clients.Users(result.Data.ParticipantUserNames).ReceiveChat(result.Data.Chat);
                         return Created("", result);
                     }
                 case 200: return Ok(result);
@@ -78,7 +78,7 @@ namespace TeeChat.Controllers
             {
                 case 201:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNames).ReceiveChat(result.Data);
+                        await _chatHub.Clients.Users(result.Data.ParticipantUserNames).ReceiveChat(result.Data.Chat);
                         return Created("", result);
                     }
                 case 200: return Ok(result);

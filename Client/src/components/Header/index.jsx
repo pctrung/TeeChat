@@ -45,7 +45,7 @@ function Header({ logout }) {
         />
         <h1 className="font-bold text-3xl">Chats</h1>
       </div>
-      <div className="flex space-x-1">
+      <div className="flex space-x-1 items-center">
         <ClickableIcon icon={NewChatIcon} />
         <div className="relative" ref={ref}>
           <ClickableIcon
