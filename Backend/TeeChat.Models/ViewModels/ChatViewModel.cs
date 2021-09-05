@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using TeeChat.Models.Common;
 using TeeChat.Models.Common.Enums;
 
 namespace TeeChat.Models.ViewModels
 {
-    public class ChatViewModel
+    public class ChatViewModel : PagedResultBase
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import moment from "moment";
@@ -15,6 +15,8 @@ import EditChat from "components/EditChat";
 function ChatWindow({ chat }) {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.users.currentUser);
+
+  const endMessageRef = useRef();
 
   const [showTimeIndexes, setShowTimeIndexes] = useState([]);
   const [isOpenInfoPopup, setIsOpenInfoPopup] = useState(false);
@@ -40,6 +42,14 @@ function ChatWindow({ chat }) {
     }
     setShowTimeIndexes(result);
   }
+
+  const scrollToBottom = () => {
+    endMessageRef.current.scrollIntoView();
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chat]);
 
   return (
     <>
@@ -74,65 +84,70 @@ function ChatWindow({ chat }) {
         {/* End header chat window */}
 
         {/* Chat content */}
-        <div className="flex-grow overflow-y-auto px-4 pb-4 pt-2 space-y-1 flex flex-col justify-end ">
-          {chat.messages?.map((message, index) =>
-            message.senderUserName === currentUser.userName ? (
-              <div
-                key={index + Math.random()}
-                className="flex flex-col items-end"
-              >
-                {showTimeIndexes.includes(index) ? (
-                  <>
-                    <span className="transition-all animate-fade text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
-                      {moment(
-                        new Date(message.dateCreated),
-                        "YYYYMMDD",
-                      ).calendar() ?? ""}
-                    </span>
+        <div className="flex-grow overflow-y-auto px-4 pb-4 pt-2 space-y-1 flex flex-col">
+          {[...chat.messages]
+            ?.sort((messageA, messageB) => {
+              return messageA.dateCreated > messageB.dateCreated ? 1 : -1;
+            })
+            .map((message, index) =>
+              message.senderUserName === currentUser.userName ? (
+                <div
+                  key={index + Math.random()}
+                  className="flex flex-col items-end"
+                >
+                  {showTimeIndexes.includes(index) ? (
+                    <>
+                      <span className="transition-all animate-fade text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
+                        {moment(
+                          new Date(message.dateCreated),
+                          "YYYYMMDD",
+                        ).calendar() ?? ""}
+                      </span>
+                      <span
+                        onClick={() => handleMessageClick(index)}
+                        className="bg-green-600 text-white rounded-3xl px-4 py-2
+                break-all rounded-br-none cursor-pointer"
+                      >
+                        {message.content}
+                      </span>
+                    </>
+                  ) : (
                     <span
                       onClick={() => handleMessageClick(index)}
-                      className="bg-green-600 text-white rounded-3xl px-4 py-2
+                      className="bg-green-500 text-white rounded-3xl px-4 py-2
                 break-all rounded-br-none cursor-pointer"
                     >
                       {message.content}
                     </span>
-                  </>
-                ) : (
-                  <span
-                    onClick={() => handleMessageClick(index)}
-                    className="bg-green-500 text-white rounded-3xl px-4 py-2
-                break-all rounded-br-none cursor-pointer"
-                  >
-                    {message.content}
-                  </span>
-                )}
-              </div>
-            ) : (
-              <div
-                key={index + Math.random()}
-                className="flex items-end space-x-2"
-              >
-                <img
-                  src={message.senderAvatarUrl ?? DefaultAvatar}
-                  alt="Avatar"
-                  className="h-8 w-8 rounded-full object-cover"
-                />
-                <div className="flex flex-col items-start">
-                  <span className="text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis">
-                    {message.senderFullName +
-                      " - " +
-                      moment(
-                        new Date(message.dateCreated),
-                        "YYYYMMDD",
-                      ).calendar() ?? ""}
-                  </span>
-                  <span className="bg-gray-200 rounded-3xl px-4 py-2 break-all rounded-bl-none">
-                    {message.content}
-                  </span>
+                  )}
                 </div>
-              </div>
-            ),
-          )}
+              ) : (
+                <div
+                  key={index + Math.random()}
+                  className="flex items-end space-x-2"
+                >
+                  <img
+                    src={message.senderAvatarUrl ?? DefaultAvatar}
+                    alt="Avatar"
+                    className="h-8 w-8 rounded-full object-cover"
+                  />
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis">
+                      {message.senderFullName +
+                        " - " +
+                        moment(
+                          new Date(message.dateCreated),
+                          "YYYYMMDD",
+                        ).calendar() ?? ""}
+                    </span>
+                    <span className="bg-gray-200 rounded-3xl px-4 py-2 break-all rounded-bl-none">
+                      {message.content}
+                    </span>
+                  </div>
+                </div>
+              ),
+            )}
+          <div ref={endMessageRef}></div>
         </div>
         {/* End chat content */}
 

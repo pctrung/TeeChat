@@ -43,8 +43,9 @@ function Chat() {
   }
 
   useEffect(() => {
+    dispatch(setIsLoading(true));
+
     async function fetchData() {
-      dispatch(setIsLoading(true));
       chatApi
         .getAll()
         .then((response) => {
@@ -59,11 +60,11 @@ function Chat() {
 
           openPopup("Error", message);
         });
-
-      dispatch(setIsLoading(false));
     }
+
     fetchData();
 
+    dispatch(setIsLoading(false));
     dispatch(getCurrentUser());
   }, []);
 
@@ -136,10 +137,10 @@ function Chat() {
         content={popupContent}
         onClick={onPopupClick}
       />
-      <div className="grid grid-cols-12 h-screen w-screen">
+      <div className="animate-fade grid grid-cols-12 h-screen w-screen">
         <div
           className={
-            "lg:col-span-3 md:col-span-4 col-span-12 md:flex flex-col h-screen border-r-2 border-gray-200 px-4" +
+            "animate-fade lg:col-span-3 md:col-span-4 col-span-12 md:flex flex-col h-screen border-r-2 border-gray-200 px-4" +
             (selectedId !== 0 ? " hidden" : "")
           }
         >
@@ -148,16 +149,16 @@ function Chat() {
         </div>
         {!selectedId ? (
           chats?.length === 0 ? (
-            <div className="hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex h-full w-full ">
+            <div className="animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex h-full w-full ">
               You do not have any chats, please create a chat
             </div>
           ) : (
-            <div className="hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex h-full w-full ">
+            <div className="animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex h-full w-full ">
               Select a chat to start
             </div>
           )
         ) : (
-          <div className="lg:col-span-9 md:col-span-8 col-span-12 flex h-screen w-full overflow-y-auto">
+          <div className="animate-fade lg:col-span-9 md:col-span-8 col-span-12 flex h-screen w-full overflow-y-auto">
             <ChatWindow chat={chats.find((chat) => chat.id === selectedId)} />
           </div>
         )}

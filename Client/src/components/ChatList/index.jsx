@@ -25,7 +25,7 @@ function ChatList() {
       <input
         type="search"
         className="my-3 rounded-3xl bg-gray-100 px-4 py-2 focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 outline-none transition-all duration-200 w-full"
-        placeholder="Search user"
+        placeholder="Search chat"
         onChange={(e) => setKeyword(e.target.value)}
       />
       <div className="h-full space-y-2 overflow-y-auto">
@@ -55,7 +55,7 @@ function ChatList() {
               <div
                 key={Date.now() + index}
                 className={
-                  "select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100  p-2 rounded-2xl transition-all duration-300 ease-in " +
+                  "select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100  p-2 rounded-2xl transition-all duration-200 ease-in " +
                   (selectedId === chat.id ? "bg-gray-100" : "")
                 }
                 onClick={() => handleClick(chat.id)}
@@ -115,11 +115,8 @@ function sortChat(chats) {
       } else {
         lastMessageB.dateCreated = chatB.dateCreated;
       }
-      if (lastMessageA?.dateCreated < lastMessageB?.dateCreated) {
-        return 1;
-      } else {
-        return -1;
-      }
+
+      return lastMessageA?.dateCreated < lastMessageB?.dateCreated ? 1 : -1;
     });
   }
 }

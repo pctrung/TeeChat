@@ -24,7 +24,7 @@ namespace TeeChat.Application.Services
         private readonly TeeChatDbContext _context;
         private readonly IMapper _mapper;
         private readonly ICurrentUser _currentUser;
-        private const int DEFAULT_LIMIT = 30;
+        private const int DEFAULT_LIMIT = 20;
 
         public ChatService(IMapper mapper, TeeChatDbContext context, ICurrentUser currentUser)
         {
@@ -35,7 +35,7 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<SendMessageResponse>> AddMessageAsync(int chatId, SendMessageRequest request)
         {
-            var chat = await _context.Chats.Include(x => x.Participants).Include(x => x.Messages).Where(x => x.Id == chatId).FirstOrDefaultAsync();
+            var chat = await _context.Chats.Include(x => x.Participants).Include(x => x.Messages).Where(x => x.Id == chatId).AsSplitQuery().FirstOrDefaultAsync();
             if (chat == null)
             {
                 return new ApiResult<SendMessageResponse>(null)
@@ -142,9 +142,11 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var chat = new Chat();
-            chat.Type = ChatType.GROUP;
-            chat.Participants = participants;
+            var chat = new Chat
+            {
+                Type = ChatType.GROUP,
+                Participants = participants
+            };
             chat.Participants.Add(currentUser);
             chat.CreatorUserName = _currentUser.UserName;
             chat.DateCreated = DateTime.Now;
@@ -181,7 +183,7 @@ namespace TeeChat.Application.Services
         public async Task<ApiResult<CreateChatResponse>> CreatePrivateChatAsync(CreatePrivateChatRequest request)
         {
             // add participants
-            var participant = await _context.Users.Where(x => request.ParticipantUserName.Equals(x.UserName)).FirstOrDefaultAsync();
+            var participant = await _context.Users.Where(x => request.ParticipantUserName.Equals(x.UserName)).AsSplitQuery().FirstOrDefaultAsync();
 
             if (participant == null)
             {
@@ -250,7 +252,7 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<ChatViewModel>> GetByIdAsync(int chatId, GetChatRequest request)
         {
-            var chat = await _context.Chats.Include(x => x.Participants).Include(x => x.Messages).Where(x => x.Id == chatId).FirstOrDefaultAsync();
+            var chat = await _context.Chats.Include(x => x.Participants).Include(x => x.Messages).Where(x => x.Id == chatId).AsSplitQuery().FirstOrDefaultAsync();
             if (chat == null)
             {
                 return new ApiResult<ChatViewModel>(null)
@@ -270,7 +272,13 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            chat.Messages = chat.Messages.AsQueryable().Where(x => x.Content.Contains(request.Keyword ?? "")).OrderBy(x => x.DateCreated).Paged(request.Page, DEFAULT_LIMIT).ToList();
+            var totalMessage = chat.Messages.Count();
+            var pageCount = (double)totalMessage / DEFAULT_LIMIT;
+            var totalPage = (int)Math.Ceiling(pageCount);
+
+            request.Page = request.Page > 0 ? request.Page : 1;
+            request.Page = request.Page <= totalPage ? request.Page : totalPage;
+            chat.Messages = chat.Messages.AsQueryable().Where(x => x.Content.Contains(request.Keyword ?? "")).OrderByDescending(x => x.DateCreated).Paged(request.Page, DEFAULT_LIMIT).ToList();
 
             if (chat == null)
             {
@@ -283,6 +291,11 @@ namespace TeeChat.Application.Services
             else
             {
                 var result = _mapper.Map<ChatViewModel>(chat);
+                result.Keyword = request.Keyword;
+                result.Page = request.Page;
+                result.Limit = DEFAULT_LIMIT;
+                result.TotalRecords = totalMessage;
+
                 return new ApiResult<ChatViewModel>(result)
                 {
                     StatusCode = 200,
@@ -307,12 +320,12 @@ namespace TeeChat.Application.Services
             var query = _context.Chats
                 .Where(x => x.Participants.Contains(user))
                 .Include(x => x.Participants)
-                .Include(x => x.Messages.OrderBy(x => x.DateCreated))
+                .Include(x => x.Messages)
                 .OrderBy(x => x.DateCreated)
                 .AsSplitQuery();
 
             // get all chat just take page 1 of every chat
-            await query.ForEachAsync(x => { x.Messages.AsQueryable().Paged(1, DEFAULT_LIMIT).AsSplitQuery().ToList(); });
+            await query.ForEachAsync(x => { x.Messages = x.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(1, DEFAULT_LIMIT).AsSplitQuery().ToList(); });
 
             var chats = await query.ToListAsync();
 
@@ -322,17 +335,27 @@ namespace TeeChat.Application.Services
             {
                 chatViewModel = _mapper.Map<List<ChatViewModel>>(chats);
             }
+
+            chatViewModel.ForEach(x =>
+            {
+                x.Keyword = "";
+                x.Page = 1;
+                x.Limit = DEFAULT_LIMIT;
+                x.TotalRecords = x.Messages.Count();
+            });
+
             var result = new ApiResult<List<ChatViewModel>>(chatViewModel)
             {
                 StatusCode = 200,
                 Message = "Get chat successfully"
             };
+
             return result;
         }
 
         public async Task<ApiResult<CreateChatResponse>> UpdateGroupChatAsync(int chatId, UpdateGroupChatRequest request)
         {
-            var chat = await _context.Chats.Include(x => x.Participants).Where(x => x.Id == chatId).FirstOrDefaultAsync();
+            var chat = await _context.Chats.Include(x => x.Participants).Where(x => x.Id == chatId).AsSplitQuery().FirstOrDefaultAsync();
             if (chat == null)
             {
                 return new ApiResult<CreateChatResponse>(null)
@@ -373,7 +396,7 @@ namespace TeeChat.Application.Services
             {
                 foreach (var userName in request.ParticipantUserNamesToAdd)
                 {
-                    var user = await _context.Users.Where(x => x.UserName.Equals(userName)).FirstOrDefaultAsync();
+                    var user = await _context.Users.Where(x => x.UserName.Equals(userName)).AsSplitQuery().FirstOrDefaultAsync();
                     if (chat.Participants.Contains(user))
                     {
                         continue;
@@ -393,7 +416,7 @@ namespace TeeChat.Application.Services
             {
                 foreach (var userName in request.ParticipantUserNamesToRemove)
                 {
-                    var user = await _context.Users.Where(x => x.UserName.Equals(userName)).FirstOrDefaultAsync();
+                    var user = await _context.Users.Where(x => x.UserName.Equals(userName)).AsSplitQuery().FirstOrDefaultAsync();
                     if (user == null)
                     {
                         return new ApiResult<CreateChatResponse>(null)
