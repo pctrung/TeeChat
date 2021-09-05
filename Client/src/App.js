@@ -1,5 +1,11 @@
-import React from "react";
-import { BrowserRouter, Switch, Redirect, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  BrowserRouter,
+  Switch,
+  Redirect,
+  Route,
+  useHistory,
+} from "react-router-dom";
 
 import Chat from "./pages/Chat";
 import Login from "./pages/Login";

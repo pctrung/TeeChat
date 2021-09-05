@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using TeeChat.Application.Interfaces;
 using TeeChat.Models.RequestModels.Users;
 
-namespace TeeChat.Controllers
+namespace TeeChat.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

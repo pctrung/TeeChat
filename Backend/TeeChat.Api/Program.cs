@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace TeeChat
+namespace TeeChat.Api
 {
     public class Program
     {

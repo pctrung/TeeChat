@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Models\TeeChat.Models.csproj" />
+    <ProjectReference Include="..\TeeChat.Models\TeeChat.Models.csproj" />
     <ProjectReference Include="..\TeeChat.Utilities\TeeChat.Utilities.csproj" />
   </ItemGroup>
 </Project>

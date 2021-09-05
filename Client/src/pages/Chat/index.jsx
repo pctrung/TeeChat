@@ -55,7 +55,7 @@ function Chat() {
           var message =
             typeof error === "string"
               ? error
-              : "Cannot get any chats. Something went wrong!";
+              : "Cannot get any chats. Please login and try again!";
 
           openPopup("Error", message);
         });

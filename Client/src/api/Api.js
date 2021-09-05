@@ -38,6 +38,9 @@ Api.interceptors.response.use(
         case 403:
           window.location.href = "/ForBid";
           break;
+        case 500:
+          window.location.href = "/ServerError";
+          break;
       }
     }
     return Promise.reject(error?.response?.data);

@@ -17,7 +17,7 @@ using TeeChat.Data.EF;
 using TeeChat.Data.Entities;
 using TeeChat.Hubs.Hubs;
 
-namespace TeeChat
+namespace TeeChat.Api
 {
     public class Startup
     {
@@ -121,7 +121,7 @@ namespace TeeChat
                             // If the request is for our hub...
                             var path = context.HttpContext.Request.Path;
                             if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments(Configuration["ChatHubUrl"]))) 
+                                (path.StartsWithSegments(Configuration["ChatHubUrl"])))
                             {
                                 // Read the token out of the query string
                                 context.Token = accessToken;

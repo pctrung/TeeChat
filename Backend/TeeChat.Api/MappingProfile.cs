@@ -2,7 +2,7 @@
 using TeeChat.Data.Entities;
 using TeeChat.Models.ViewModels;
 
-namespace TeeChat
+namespace TeeChat.Api
 {
     public class MappingProfile : Profile
     {

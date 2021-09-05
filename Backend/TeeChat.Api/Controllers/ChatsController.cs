@@ -8,7 +8,7 @@ using TeeChat.Hubs.Interfaces;
 using TeeChat.Models.RequestModels.Chat;
 using TeeChat.Models.RequestModels.Messages;
 
-namespace TeeChat.Controllers
+namespace TeeChat.Api.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
