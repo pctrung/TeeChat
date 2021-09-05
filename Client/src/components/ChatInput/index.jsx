@@ -26,9 +26,7 @@ function ChatInput({ chatId }) {
     }
 
     var request = { content };
-    dispatch(setIsLoading(true));
     await chatApi.sendMessage(chatId, request);
-    dispatch(setIsLoading(false));
 
     setContent("");
   }
@@ -59,7 +57,7 @@ function ChatInput({ chatId }) {
     <div>
       <form
         onSubmit={(e) => onSendMessage(e)}
-        className="flex justify-between items-center space-x-3 pl-4 pr-6"
+        className="flex justify-between items-center space-x-1 pl-4 pr-2 md:pr-6 z-0"
       >
         <div className="relative w-full">
           <input

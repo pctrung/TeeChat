@@ -205,11 +205,11 @@ namespace TeeChat.Application.Services
             var isExists = _context.Chats.Where(x => x.Type == ChatType.PRIVATE).Any(x => x.Participants.Contains(currentUser) && x.Participants.Contains(participant));
 
             if (isExists)
-            {
+            { 
                 return new ApiResult<CreateChatResponse>(null)
                 {
                     StatusCode = 400,
-                    Message = "Already exists chat with username: " + request.ParticipantUserName
+                    Message = $"Already exists chat with username: {participant.LastName} {participant.FirstName}. Please open in chat list!"
                 };
             }
 
@@ -243,7 +243,7 @@ namespace TeeChat.Application.Services
                 return new ApiResult<CreateChatResponse>(null)
                 {
                     StatusCode = 400,
-                    Message = "Cannot save chat"
+                    Message = "Cannot create chat. Something went wrong!"
                 };
             }
         }
@@ -312,7 +312,7 @@ namespace TeeChat.Application.Services
                 .AsSplitQuery();
 
             // get all chat just take page 1 of every chat
-            await query.ForEachAsync(x => { x.Messages.AsQueryable().Paged(1, DEFAULT_LIMIT).ToList(); });
+            await query.ForEachAsync(x => { x.Messages.AsQueryable().Paged(1, DEFAULT_LIMIT).AsSplitQuery().ToList(); });
 
             var chats = await query.ToListAsync();
 
@@ -321,7 +321,7 @@ namespace TeeChat.Application.Services
             if (chats.Any())
             {
                 chatViewModel = _mapper.Map<List<ChatViewModel>>(chats);
-            } 
+            }
             var result = new ApiResult<List<ChatViewModel>>(chatViewModel)
             {
                 StatusCode = 200,
@@ -368,7 +368,6 @@ namespace TeeChat.Application.Services
             {
                 foreach (var userName in request.ParticipantUserNamesToAdd)
                 {
-                    
                     var user = await _context.Users.Where(x => x.UserName.Equals(userName)).FirstOrDefaultAsync();
                     if (chat.Participants.Contains(user))
                     {

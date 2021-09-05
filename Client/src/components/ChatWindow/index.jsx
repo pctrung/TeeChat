@@ -7,6 +7,7 @@ import constants from "utils/constants";
 import LeftArrowIcon from "assets/icons/left-arrow-icon.svg";
 import { setSelectedId } from "app/chatSlice";
 import ChatInput from "components/ChatInput";
+import ImageCircle from "components/ImageCircle";
 
 function ChatWindow({ chat }) {
   const dispatch = useDispatch();
@@ -47,11 +48,7 @@ function ChatWindow({ chat }) {
             className="h-5 w-5 md:hidden cursor-pointer"
             onClick={backToChats}
           />
-          <img
-            src={friend?.avatarUrl ?? DefaultAvatar}
-            alt="Avatar"
-            className="h-12 w-12 rounded-full object-cover"
-          />
+          <ImageCircle src={friend?.avatarUrl} />
           <span className="text-lg font-semibold truncate w-60 md:w-96">
             {chat.type === constants.chatType.PRIVATE
               ? friend?.fullName

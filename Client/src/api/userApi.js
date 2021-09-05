@@ -18,6 +18,10 @@ const userApi = {
     }
     return Promise.reject();
   },
+  getFriendList: () => {
+    const url = `${baseApiUrl}`;
+    return Api.get(url);
+  },
 };
 
 export default userApi;

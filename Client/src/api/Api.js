@@ -40,7 +40,6 @@ Api.interceptors.response.use(
           break;
       }
     }
-    console.error(error?.response);
     return Promise.reject(error?.response?.data);
   },
 );

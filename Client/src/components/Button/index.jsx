@@ -6,7 +6,14 @@ Button.propTypes = {
   className: PropTypes.string,
 };
 
-function Button({ content, className, onClick, onBlur, disabled }) {
+function Button({
+  outline = false,
+  content,
+  className,
+  onClick,
+  onBlur,
+  disabled,
+}) {
   return (
     <>
       <button
@@ -14,12 +21,16 @@ function Button({ content, className, onClick, onBlur, disabled }) {
         onClick={onClick}
         onBlur={onBlur}
         className={
-          "px-4 py-2 rounded-lg bg-green-500 text-white  focus:ring-green-300 focus:ring-4 transition-all duration-200 disabled:opacity-50 outline-none" +
+          "px-4 py-2 rounded-lg transition-all duration-200 disabled:opacity-50 outline-none z-0" +
+          " " +
+          (outline
+            ? "border border-green-500 bg-white text-green-500 hover:text-white "
+            : "bg-green-500 text-white  focus:ring-green-300 ") +
           " " +
           (className ?? "") +
           " " +
           (!disabled
-            ? "hover:bg-green-600 active:bg-green-700"
+            ? "hover:bg-green-600 active:bg-green-700 active:scale-95 active:transform"
             : "cursor-default")
         }
       >

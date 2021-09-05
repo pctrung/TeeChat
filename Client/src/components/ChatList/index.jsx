@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import moment from "moment";
-import DefaultAvatar from "assets/img/default-avatar.jpg";
 import constants from "utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedId } from "app/chatSlice";
+import ImageCircle from "components/ImageCircle";
 
 function ChatList() {
   const chats = useSelector((state) => state.chats.chats);
@@ -51,11 +51,11 @@ function ChatList() {
                 }
                 onClick={() => handleClick(chat.id)}
               >
-                <img
-                  src={chat.groupAvatarUrl ?? friend.avatarUrl ?? DefaultAvatar}
-                  alt={friend?.fullName + " avatar"}
-                  className="h-full rounded-full"
+                <ImageCircle
+                  src={chat.groupAvatarUrl ?? friend.avatarUrl}
+                  size="full"
                 />
+
                 <div className="font-primary flex flex-col px-3 py-2 justify-between truncate">
                   <span className="text-gray-800 truncate">
                     {chat.type === constants.chatType.PRIVATE

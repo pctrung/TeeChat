@@ -6,14 +6,14 @@ import MenuIcon from "assets/icons/menu-icon.svg";
 import ClickableIcon from "../ClickableIcon";
 import DarkModeIcon from "assets/icons/dark-mode-icon.svg";
 import SignOutIcon from "assets/icons/sign-out-icon.svg";
-import DefaultAvatar from "assets/img/default-avatar.jpg";
 import { useSelector } from "react-redux";
+import ImageCircle from "components/ImageCircle";
 
 Header.propTypes = {
   logout: PropTypes.func,
 };
 
-function Header({ logout }) {
+function Header({ logout, setIsOpenCreateChat }) {
   const currentUser = useSelector((state) => state.users.currentUser);
 
   const userAvatar = currentUser.avatarUrl;
@@ -39,15 +39,14 @@ function Header({ logout }) {
     <>
       <div className="h-24 flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <img
-            src={userAvatar ?? DefaultAvatar}
-            alt="Avatar"
-            className="h-12 w-12 rounded-full object-cover"
-          />
+          <ImageCircle src={userAvatar} size="md" />
           <h1 className="font-bold text-3xl">Chats</h1>
         </div>
         <div className="flex space-x-1 items-center">
-          <ClickableIcon icon={NewChatIcon} />
+          <ClickableIcon
+            icon={NewChatIcon}
+            onClick={() => setIsOpenCreateChat(true)}
+          />
           <div className="relative" ref={ref}>
             <ClickableIcon
               icon={MenuIcon}

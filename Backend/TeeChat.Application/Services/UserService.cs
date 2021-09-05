@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -11,6 +13,7 @@ using TeeChat.Application.Interfaces;
 using TeeChat.Data.EF;
 using TeeChat.Data.Entities;
 using TeeChat.Models.RequestModels.Users;
+using TeeChat.Models.ViewModels;
 
 namespace TeeChat.Application.Services
 {
@@ -20,13 +23,15 @@ namespace TeeChat.Application.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public UserService(TeeChatDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration)
+        public UserService(TeeChatDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         public async Task<bool> CheckUserNameExistsAsync(string userName)
@@ -83,6 +88,16 @@ namespace TeeChat.Application.Services
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<List<UserViewModel>> GetFriendListAsync()
+        {
+            // filter friend in social app
+            var data = await _context.Users.ToListAsync();
+
+            var result = _mapper.Map<List<UserViewModel>>(data);
+
+            return result;
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterRequest request)

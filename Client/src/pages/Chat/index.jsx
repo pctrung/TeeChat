@@ -6,10 +6,16 @@ import {
   setPopupContent,
   setPopupTitle,
 } from "app/appSlice";
-import { addChat, addMessage, refreshChats } from "app/chatSlice";
+import {
+  addChat,
+  addMessage,
+  refreshChats,
+  setSelectedId,
+} from "app/chatSlice";
 import { getCurrentUser } from "app/userSlice";
 import ChatList from "components/ChatList";
 import ChatWindow from "components/ChatWindow";
+import CreateChat from "components/CreateChat";
 import Header from "components/Header";
 import Loader from "components/Loader";
 import Popup from "components/Popup";
@@ -19,10 +25,12 @@ import { useHistory } from "react-router";
 
 function Chat() {
   const [connection, setConnection] = useState(null);
+  const [isOpenCreateChat, setIsOpenCreateChat] = useState(false);
   const history = useHistory();
 
   const dispatch = useDispatch();
   const chats = useSelector((state) => state.chats.chats);
+  const currentUser = useSelector((state) => state.users.currentUser);
   const selectedId = useSelector((state) => state.chats.selectedId);
   const isLoading = useSelector((state) => state.app.isLoading);
   const popupTitle = useSelector((state) => state.app.popupTitle);
@@ -37,18 +45,24 @@ function Chat() {
 
   useEffect(() => {
     async function fetchData() {
-      const openLoadingAction = setIsLoading(true);
-      dispatch(openLoadingAction);
-      var result = await chatApi.getAllAsync();
-      // .catch((error) => {
-      //   openPopup("Error", error.data);
-      // });
-      if (result) {
-        const refreshChatAction = refreshChats(result.data);
-        dispatch(refreshChatAction);
-      }
-      const closeLoadingAction = setIsLoading(false);
-      dispatch(closeLoadingAction);
+      dispatch(setIsLoading(true));
+      chatApi
+        .getAll()
+        .then((response) => {
+          const refreshChatAction = refreshChats(response.data);
+          dispatch(refreshChatAction);
+        })
+        .catch((error) => {
+          var message =
+            typeof error === "string"
+              ? error
+              : "Cannot get any chats. Something went wrong!";
+          message = typeof error.data === "string" ? error.data : message;
+
+          openPopup("Error", message);
+        });
+
+      dispatch(setIsLoading(false));
     }
     fetchData();
 
@@ -82,9 +96,11 @@ function Chat() {
             dispatch(action);
           });
           connection.on("ReceiveChat", (chat) => {
-            console.log(chat);
             const action = addChat(chat);
             dispatch(action);
+            if (chat.creatorUserName === currentUser.userName) {
+              dispatch(setSelectedId(chat.id));
+            }
           });
         })
         .catch((e) => {
@@ -92,6 +108,11 @@ function Chat() {
           openPopup("Connection failed", e);
         });
     }
+    return () => {
+      if (connection) {
+        connection.stop();
+      }
+    };
   }, [connection]);
 
   function openPopup(title, content) {
@@ -103,10 +124,10 @@ function Chat() {
     dispatch(setTileAction);
   }
 
-  return isLoading ? (
-    <Loader />
-  ) : (
+  return (
     <>
+      <CreateChat isOpen={isOpenCreateChat} setIsOpen={setIsOpenCreateChat} />
+      <Loader isOpen={isLoading} className="z-50" />
       <Popup
         title={popupTitle}
         isOpen={isOpenPopup}
@@ -120,13 +141,19 @@ function Chat() {
             (selectedId !== 0 ? " hidden" : "")
           }
         >
-          <Header logout={logout} />
+          <Header setIsOpenCreateChat={setIsOpenCreateChat} logout={logout} />
           <ChatList />
         </div>
         {!selectedId ? (
-          <div className="hidden text-lg font-content items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex h-full w-full ">
-            Select a chat to start
-          </div>
+          chats?.length === 0 ? (
+            <div className="hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex h-full w-full ">
+              You do not have any chats, please create a chat
+            </div>
+          ) : (
+            <div className="hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex h-full w-full ">
+              Select a chat to start
+            </div>
+          )
         ) : (
           <div className="lg:col-span-9 md:col-span-8 col-span-12 flex h-screen w-full ">
             <ChatWindow chat={chats.find((chat) => chat.id === selectedId)} />

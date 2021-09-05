@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TeeChat.Application.Interfaces;
 using TeeChat.Models.RequestModels.Users;
@@ -22,6 +23,15 @@ namespace TeeChat.Controllers
             var result = await _userService.CheckUserNameExistsAsync(userName);
 
             return Ok(new { isExists = result });
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetFriendListAsync()
+        {
+            var result = await _userService.GetFriendListAsync();
+
+            return Ok(result);
         }
 
         [HttpPost("register")]

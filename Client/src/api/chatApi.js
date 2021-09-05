@@ -11,6 +11,14 @@ const chatApi = {
     const url = `${baseApiUrl}/${chatId}/send`;
     return Api.post(url, content);
   },
+  createGroupChat: (content) => {
+    const url = `${baseApiUrl}/group`;
+    return Api.post(url, content);
+  },
+  createPrivateChat: (content) => {
+    const url = `${baseApiUrl}/private`;
+    return Api.post(url, content);
+  },
 };
 
 export default chatApi;

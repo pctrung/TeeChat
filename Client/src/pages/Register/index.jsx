@@ -183,7 +183,7 @@ function Register() {
         />
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="container rounded-2xl flex flex-col py-10 md:w-full md:col-span-4 md:px-20 lg:px-40"
+          className="container rounded-2xl flex flex-col py-10 md:w-full md:col-span-4 md:px-20 lg:px-30"
         >
           <h1 className="text-3xl font-bold text-primary text-green-600 text-center mb-8">
             Sign up to TeeChat
@@ -196,7 +196,7 @@ function Register() {
               <input
                 {...register("firstName")}
                 type="text"
-                className="bg-gray-100 rounded-lg w-full py-2 px-4 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200"
+                className="bg-gray-100 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200"
               />
               <div className="text-red-500 text-sm">
                 {errors.firstName?.message}
@@ -209,7 +209,7 @@ function Register() {
               <input
                 {...register("lastName")}
                 type="text"
-                className="bg-gray-100 rounded-lg w-full py-2 px-4 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 mb-2"
+                className="bg-gray-100 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 mb-2"
               />
               <div className="text-red-500 text-sm">
                 {errors.lastName?.message}
@@ -223,7 +223,7 @@ function Register() {
             <input
               {...register("userName")}
               type="text"
-              className="bg-gray-100 rounded-lg w-full py-2 px-4 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 mb-2"
+              className="bg-gray-100 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 mb-2"
             />
             <div className="text-red-500 text-sm">
               {errors.userName?.message}
@@ -236,7 +236,7 @@ function Register() {
             <input
               {...register("email")}
               type="text"
-              className="bg-gray-100 rounded-lg w-full py-2 px-4 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 mb-2"
+              className="bg-gray-100 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 mb-2"
             />
             <div className="text-red-500 text-sm">{errors.email?.message}</div>
           </div>
@@ -248,7 +248,7 @@ function Register() {
             <input
               type="password"
               {...register("password")}
-              className="bg-gray-100 rounded-lg w-full py-2 px-4 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200"
+              className="bg-gray-100 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200"
             />
             <div className="text-red-500 text-sm">
               {errors.password?.message}
@@ -261,7 +261,7 @@ function Register() {
             <input
               type="password"
               {...register("confirmPassword")}
-              className="bg-gray-100 rounded-lg w-full py-2 px-4 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200"
+              className="bg-gray-100 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200"
             />
             <div className="text-red-500 text-sm">
               {errors.confirmPassword?.message}
