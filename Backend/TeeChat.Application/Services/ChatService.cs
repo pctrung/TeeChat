@@ -205,7 +205,7 @@ namespace TeeChat.Application.Services
             var isExists = _context.Chats.Where(x => x.Type == ChatType.PRIVATE).Any(x => x.Participants.Contains(currentUser) && x.Participants.Contains(participant));
 
             if (isExists)
-            { 
+            {
                 return new ApiResult<CreateChatResponse>(null)
                 {
                     StatusCode = 400,
@@ -364,6 +364,11 @@ namespace TeeChat.Application.Services
             {
                 chat.Name = request.NewGroupName;
             }
+            // notify all participant about updated chat
+            var participantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList();
+            request.ParticipantUserNamesToAdd.ForEach(x => participantUserNamesToNotify.Add(x));
+            request.ParticipantUserNamesToRemove.ForEach(x => participantUserNamesToNotify.Add(x));
+
             if (request.ParticipantUserNamesToAdd != null)
             {
                 foreach (var userName in request.ParticipantUserNamesToAdd)
@@ -406,7 +411,7 @@ namespace TeeChat.Application.Services
             var result = new CreateChatResponse()
             {
                 Chat = _mapper.Map<ChatViewModel>(chat),
-                ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+                ParticipantUserNamesToNotify = participantUserNamesToNotify
             };
 
             return new ApiResult<CreateChatResponse>(result)

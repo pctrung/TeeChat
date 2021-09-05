@@ -32,6 +32,15 @@ function ChatList() {
         {chats &&
           getCurrentChats(chats, keyword).map((chat, index) => {
             const currentUserName = currentUser.userName;
+
+            // check current user still exist in chat (remove participant case)
+            var isValid = chat.participants.some(
+              (x) => x.userName === currentUserName,
+            );
+            if (!isValid) {
+              return;
+            }
+
             const friend = chat.participants
               ?.filter((x) => x.userName !== currentUserName)
               .shift();

@@ -1,5 +1,12 @@
 import Button from "components/Button";
 import React from "react";
+import PropTypes from "prop-types";
+
+Popup.propTypes = {
+  title: PropTypes.string,
+  isOpen: PropTypes.bool,
+  onClick: PropTypes.func,
+};
 
 function Popup({ title, isOpen, content, onClick }) {
   return (

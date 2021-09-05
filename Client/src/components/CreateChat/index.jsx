@@ -61,7 +61,6 @@ function CreateChat({ isOpen, setIsOpen }) {
   useEffect(() => {
     userApi.getFriendList().then((response) => {
       if (response) {
-        console.log(response);
         setFriendList(response);
       }
     });
@@ -94,9 +93,9 @@ function CreateChat({ isOpen, setIsOpen }) {
           .then((response) => {
             if (response.id) {
               dispatch(setSelectedId(response.id));
-              setSelectedFriendList([]);
-              setGroupName("");
             }
+            setSelectedFriendList([]);
+            setGroupName("");
           })
           .catch((error) => {
             const message =
@@ -115,9 +114,9 @@ function CreateChat({ isOpen, setIsOpen }) {
           .then((response) => {
             if (response.id) {
               dispatch(setSelectedId(response.id));
-              setSelectedFriendList([]);
-              setGroupName("");
             }
+            setSelectedFriendList([]);
+            setGroupName("");
           })
           .catch((error) => {
             var message =
@@ -191,7 +190,7 @@ function CreateChat({ isOpen, setIsOpen }) {
             <>
               <div className="space-y-2">
                 <label htmlFor="groupName" className="font-semibold text-lg">
-                  Group name
+                  Group name <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="groupName"
@@ -203,7 +202,7 @@ function CreateChat({ isOpen, setIsOpen }) {
               </div>
               <div ref={friendListRef} className="space-y-2">
                 <label htmlFor="search" className="font-semibold text-lg">
-                  Find Members
+                  Find Friends
                 </label>
                 <div className="relative">
                   <input
@@ -217,7 +216,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                   />
                   {isOpenFriendList && (
                     <>
-                      <div className="animate-fade absolute top-full bg-white border border-gray-400 border-opacity-50 rounded-lg w-full py-4 px-5 space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl">
+                      <div className="animate-fade absolute top-full bg-white border border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl">
                         <h4 className="font-semibold mb-2">Friend list</h4>
                         {friendList
                           .filter(
@@ -261,9 +260,12 @@ function CreateChat({ isOpen, setIsOpen }) {
               </div>
               <div className="space-y-2">
                 <label htmlFor="search" className="font-semibold text-lg">
-                  Selected
+                  Selected <span className="text-red-500">*</span>{" "}
+                  <span className="text-sm text-gray-400">
+                    {"(Click to remove)"}
+                  </span>
                 </label>
-                <div className="bg-white border border-gray-400 border-opacity-50 rounded-lg w-full py-4 px-5 space-y-1 max-h-72 overflow-y-auto select-none">
+                <div className="bg-white border border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none">
                   {selectedFriendList.map((friend, index) => (
                     <div
                       onClick={() => {
@@ -277,7 +279,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                         }
                       }}
                       key={Math.random() + index}
-                      className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  bg-gray-100 hover:bg-green-200 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
+                      className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  bg-gray-100 hover:bg-red-200 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                     >
                       <ImageCircle size="sm" src={friend.avatarUrl} />
                       <span className="break-full w-full overflow-ellipsis truncate">
@@ -291,7 +293,7 @@ function CreateChat({ isOpen, setIsOpen }) {
           ) : (
             <div ref={friendListRef} className="space-y-2">
               <label htmlFor="selectFriend" className="font-semibold text-lg">
-                Select Friend
+                Select Friends
               </label>
               <div className="relative">
                 <input
@@ -305,7 +307,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                 />
                 {isOpenFriendList && (
                   <>
-                    <div className="animate-fade absolute top-full bg-white border border-gray-400 border-opacity-50 rounded-lg w-full space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl py-4 px-5 ">
+                    <div className="animate-fade absolute top-full bg-white border border-gray-400 border-opacity-50 rounded-lg w-full space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl py-4 md:px-8 px-6 ">
                       <h4 className="font-semibold mb-2 text-start">
                         Friend list
                       </h4>
@@ -345,9 +347,12 @@ function CreateChat({ isOpen, setIsOpen }) {
               </div>
               <div className="space-y-2">
                 <label htmlFor="search" className="font-semibold text-lg">
-                  Selected
+                  Selected <span className="text-red-500">*</span>{" "}
+                  <span className="text-sm text-gray-400">
+                    {"(Click to remove)"}
+                  </span>
                 </label>
-                <div className="bg-white border border-gray-400 border-opacity-50 rounded-lg w-full py-4 px-5 space-y-1 max-h-72 overflow-y-auto select-none">
+                <div className="bg-white border border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none">
                   {selectedFriendList.map((friend, index) => {
                     if (index === 0) {
                       return (
@@ -363,7 +368,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                             }
                           }}
                           key={Math.random() + index}
-                          className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  bg-gray-100 hover:bg-green-200 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
+                          className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  bg-gray-100 hover:bg-red-200 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                         >
                           <ImageCircle size="sm" src={friend.avatarUrl} />
                           <span className="break-full w-full overflow-ellipsis truncate">

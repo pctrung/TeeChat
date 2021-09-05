@@ -8,13 +8,16 @@ import DarkModeIcon from "assets/icons/dark-mode-icon.svg";
 import SignOutIcon from "assets/icons/sign-out-icon.svg";
 import { useSelector } from "react-redux";
 import ImageCircle from "components/ImageCircle";
+import CreateChat from "components/CreateChat";
 
 Header.propTypes = {
   logout: PropTypes.func,
 };
 
-function Header({ logout, setIsOpenCreateChat }) {
+function Header({ logout }) {
   const currentUser = useSelector((state) => state.users.currentUser);
+
+  const [isOpenCreateChat, setIsOpenCreateChat] = useState(false);
 
   const userAvatar = currentUser.avatarUrl;
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -37,6 +40,7 @@ function Header({ logout, setIsOpenCreateChat }) {
 
   return (
     <>
+      <CreateChat isOpen={isOpenCreateChat} setIsOpen={setIsOpenCreateChat} />
       <div className="h-24 flex justify-between items-center">
         <div className="flex items-center space-x-3">
           <ImageCircle src={userAvatar} size="md" />

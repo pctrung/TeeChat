@@ -7,6 +7,16 @@ const chats = createSlice({
     addChat: (state, action) => {
       state.push(action.payload);
     },
+    editChat: (state, action) => {
+      const updatedChat = action.payload;
+      const index = state.findIndex((chat) => {
+        return chat.id === updatedChat.id;
+      });
+      if (index >= 0) {
+        state[index].name = updatedChat.name;
+        state[index].participants = updatedChat.participants;
+      }
+    },
     refreshChats: (state, action) => {
       state = action.payload;
       return state;
@@ -39,6 +49,6 @@ const reducer = combineReducers({
   selectedId: selectedId.reducer,
 });
 
-export const { addChat, refreshChats, addMessage } = chats.actions;
+export const { addChat, editChat, refreshChats, addMessage } = chats.actions;
 export const { setSelectedId } = selectedId.actions;
 export default reducer;

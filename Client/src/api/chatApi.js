@@ -15,6 +15,10 @@ const chatApi = {
     const url = `${baseApiUrl}/group`;
     return Api.post(url, content);
   },
+  updateGroupChat: (chatId, content) => {
+    const url = `${baseApiUrl}/${chatId}`;
+    return Api.patch(url, content);
+  },
   createPrivateChat: (content) => {
     const url = `${baseApiUrl}/private`;
     return Api.post(url, content);

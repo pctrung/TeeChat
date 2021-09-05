@@ -9,13 +9,13 @@ import {
 import {
   addChat,
   addMessage,
+  editChat,
   refreshChats,
   setSelectedId,
 } from "app/chatSlice";
 import { getCurrentUser } from "app/userSlice";
 import ChatList from "components/ChatList";
 import ChatWindow from "components/ChatWindow";
-import CreateChat from "components/CreateChat";
 import Header from "components/Header";
 import Loader from "components/Loader";
 import Popup from "components/Popup";
@@ -25,7 +25,6 @@ import { useHistory } from "react-router";
 
 function Chat() {
   const [connection, setConnection] = useState(null);
-  const [isOpenCreateChat, setIsOpenCreateChat] = useState(false);
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -102,6 +101,10 @@ function Chat() {
               dispatch(setSelectedId(chat.id));
             }
           });
+          connection.on("ReceiveUpdatedChat", (chat) => {
+            const action = editChat(chat);
+            dispatch(action);
+          });
         })
         .catch((e) => {
           console.error("Connection failed: ", e);
@@ -126,7 +129,6 @@ function Chat() {
 
   return (
     <>
-      <CreateChat isOpen={isOpenCreateChat} setIsOpen={setIsOpenCreateChat} />
       <Loader isOpen={isLoading} className="z-50" />
       <Popup
         title={popupTitle}
@@ -141,7 +143,7 @@ function Chat() {
             (selectedId !== 0 ? " hidden" : "")
           }
         >
-          <Header setIsOpenCreateChat={setIsOpenCreateChat} logout={logout} />
+          <Header logout={logout} />
           <ChatList />
         </div>
         {!selectedId ? (

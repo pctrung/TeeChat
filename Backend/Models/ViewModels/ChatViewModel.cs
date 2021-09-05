@@ -10,6 +10,7 @@ namespace TeeChat.Models.ViewModels
         public string Name { get; set; }
         public ChatType Type { get; set; }
         public string CreatorUserName { get; set; }
+        public string CreatorFullName { get; set; }
         public virtual List<UserViewModel> Participants { get; set; }
         public virtual List<MessageViewModel> Messages { get; set; }
         public DateTime DateCreated { get; set; }
