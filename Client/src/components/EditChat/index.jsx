@@ -1,14 +1,10 @@
 import chatApi from "api/chatApi";
 import userApi from "api/userApi";
-import {
-  setIsLoading,
-  setIsOpenPopup,
-  setPopupContent,
-  setPopupTitle,
-} from "app/appSlice";
+import { setIsLoading } from "app/appSlice";
 import Button from "components/Button";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
+import Popup from "components/Popup";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,11 +13,19 @@ import constants from "utils/constants";
 function EditChat({ isOpen, setIsOpen, chat }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
-  const [isOpenFriendList, setIsOpenFriendList] = useState(false);
+
+  const [popupTitle, setPopupTitle] = useState("");
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
+
   const [groupName, setGroupName] = useState(chat.name);
   const [keyword, setKeyword] = useState("");
+
   const [friendList, setFriendList] = useState([]);
-  const [selectedFriendList, setSelectedFriendList] = useState([]);
+  const [isOpenFriendList, setIsOpenFriendList] = useState(false);
+  const [selectedFriendList, setSelectedFriendList] = useState(
+    chat.participants,
+  );
 
   const currentUser = useSelector((state) => state.users.currentUser);
   const ref = useRef();
@@ -70,6 +74,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   }, []);
   useEffect(() => {
     setSelectedFriendList(chat.participants);
+    setGroupName(chat.name);
   }, [chat]);
 
   async function handleEditChat() {
@@ -168,9 +173,9 @@ function EditChat({ isOpen, setIsOpen, chat }) {
     await dispatch(setIsLoading(false));
   }
   function openPopup(title, content) {
-    dispatch(setIsOpenPopup(true));
-    dispatch(setPopupContent(content));
-    dispatch(setPopupTitle(title));
+    setIsOpenPopup(true);
+    setPopupContent(content);
+    setPopupTitle(title);
   }
   function openModal(content) {
     setIsOpenModal(true);
@@ -182,7 +187,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   }
 
   return isOpen ? (
-    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4">
+    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 z-30">
       <div
         ref={ref}
         className={
@@ -191,6 +196,13 @@ function EditChat({ isOpen, setIsOpen, chat }) {
           (isOpenFriendList ? "mb-16" : "")
         }
       >
+        <Popup
+          title={popupTitle}
+          isOpen={isOpenPopup}
+          content={popupContent}
+          onClick={() => setIsOpenPopup(false)}
+        />
+
         <ConfirmModal
           isOpen={isOpenModal}
           setIsOpen={setIsOpenModal}

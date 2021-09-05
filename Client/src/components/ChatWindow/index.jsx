@@ -74,7 +74,7 @@ function ChatWindow({ chat }) {
         {/* End header chat window */}
 
         {/* Chat content */}
-        <div className="flex-grow overflow-y-auto h-full px-4 pb-4 pt-2 space-y-1 flex flex-col justify-end ">
+        <div className="flex-grow overflow-y-auto px-4 pb-4 pt-2 space-y-1 flex flex-col justify-end ">
           {chat.messages?.map((message, index) =>
             message.senderUserName === currentUser.userName ? (
               <div

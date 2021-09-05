@@ -56,7 +56,6 @@ function Chat() {
             typeof error === "string"
               ? error
               : "Cannot get any chats. Something went wrong!";
-          message = typeof error.data === "string" ? error.data : message;
 
           openPopup("Error", message);
         });
@@ -86,7 +85,8 @@ function Chat() {
   }, []);
 
   useEffect(() => {
-    if (connection) {
+    console.log(connection);
+    if (connection && !connection.connectionStarted) {
       connection
         .start()
         .then((result) => {
@@ -112,7 +112,7 @@ function Chat() {
         });
     }
     return () => {
-      if (connection) {
+      if (connection && connection.connectionStarted) {
         connection.stop();
       }
     };
@@ -157,7 +157,7 @@ function Chat() {
             </div>
           )
         ) : (
-          <div className="lg:col-span-9 md:col-span-8 col-span-12 flex h-screen w-full ">
+          <div className="lg:col-span-9 md:col-span-8 col-span-12 flex h-screen w-full overflow-y-auto">
             <ChatWindow chat={chats.find((chat) => chat.id === selectedId)} />
           </div>
         )}

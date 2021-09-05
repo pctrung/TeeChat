@@ -8,17 +8,18 @@ Popup.propTypes = {
   onClick: PropTypes.func,
 };
 
-function Popup({ title, isOpen, content, onClick }) {
+function Popup({
+  title = "Notification",
+  isOpen,
+  content = "Something went wrong!",
+  onClick,
+}) {
   return (
     isOpen && (
-      <div className="px-4 animate-fade h-screen fixed w-screen flex justify-center items-center bg-gray-500 bg-opacity-30 z-50">
+      <div className="px-4 animate-fade h-screen fixed inset-0 w-screen flex justify-center items-center bg-gray-500 bg-opacity-30 z-50">
         <div className="bg-white py-8 px-8 w-full md:w-2/3 lg:w-2/5 flex flex-col justify-between items-start rounded-xl space-y-6">
-          <h3 className="font-semibold text-2xl break-all">
-            {title !== "" ? title : "Notification"}
-          </h3>
-          <span className="break-all">
-            {content ?? "Something went wrong!"}
-          </span>
+          <h3 className="font-semibold text-2xl break-words">{title}</h3>
+          <span className="break-words">{content}</span>
           <div className="w-full flex justify-end">
             <Button content="Close" onClick={onClick} />
           </div>

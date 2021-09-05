@@ -9,6 +9,7 @@ import {
 import { setSelectedId } from "app/chatSlice";
 import Button from "components/Button";
 import ImageCircle from "components/ImageCircle";
+import Popup from "components/Popup";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import constants from "utils/constants";
@@ -21,9 +22,14 @@ function CreateChat({ isOpen, setIsOpen }) {
   const [keyword, setKeyword] = useState("");
   const [friendList, setFriendList] = useState([]);
   const [selectedFriendList, setSelectedFriendList] = useState([]);
+
   const ref = useRef();
   const friendListRef = useRef();
   const dispatch = useDispatch();
+
+  const [popupTitle, setPopupTitle] = useState("");
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState("");
 
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
@@ -72,7 +78,7 @@ function CreateChat({ isOpen, setIsOpen }) {
 
   useEffect(() => {
     if (selectedMode === constants.chatType.GROUP) {
-      var result = selectedFriendList?.length !== 0 && groupName;
+      var result = selectedFriendList?.length >= 2 && groupName;
       setIsValidButton(result);
     } else if (selectedMode === constants.chatType.PRIVATE) {
       setIsValidButton(selectedFriendList?.length !== 0 ? true : false);
@@ -117,6 +123,7 @@ function CreateChat({ isOpen, setIsOpen }) {
             }
             setSelectedFriendList([]);
             setGroupName("");
+            setIsOpen(false);
           })
           .catch((error) => {
             var message =
@@ -128,16 +135,15 @@ function CreateChat({ isOpen, setIsOpen }) {
           });
       }
     }
-    setIsOpen(false);
     await dispatch(setIsLoading(false));
   }
   function openPopup(title, content) {
-    dispatch(setIsOpenPopup(true));
-    dispatch(setPopupContent(content));
-    dispatch(setPopupTitle(title));
+    setIsOpenPopup(true);
+    setPopupContent(content);
+    setPopupTitle(title);
   }
   return isOpen ? (
-    <div className="animate-fade fixed grid place-items-center h-screen w-screen px-4">
+    <div className="animate-fade fixed grid place-items-center h-screen w-screen px-4 z-30">
       <div
         ref={ref}
         className={
@@ -146,6 +152,12 @@ function CreateChat({ isOpen, setIsOpen }) {
           (isOpenFriendList ? "mb-16" : "")
         }
       >
+        <Popup
+          title={popupTitle}
+          isOpen={isOpenPopup}
+          content={popupContent}
+          onClick={() => setIsOpenPopup(false)}
+        />
         <div className="flex px-10 pt-6 pb-5 space-x-7 justify-between h-full items-center">
           <h3 className="font-semibold text-2xl text-green-600">New chat!</h3>
 
@@ -262,7 +274,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                 <label htmlFor="search" className="font-semibold text-lg">
                   Selected <span className="text-red-500">*</span>{" "}
                   <span className="text-sm text-gray-400">
-                    {"(Click to remove)"}
+                    {"(At least 2 people. Click to remove)"}
                   </span>
                 </label>
                 <div className="bg-white border border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none">
