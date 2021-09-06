@@ -24,7 +24,7 @@ namespace TeeChat.Application.Services
         private readonly TeeChatDbContext _context;
         private readonly IMapper _mapper;
         private readonly ICurrentUser _currentUser;
-        private const int DEFAULT_LIMIT = 20;
+        private const int DEFAULT_LIMIT = 30;
 
         public ChatService(IMapper mapper, TeeChatDbContext context, ICurrentUser currentUser)
         {
@@ -272,13 +272,15 @@ namespace TeeChat.Application.Services
                 };
             }
 
+            chat.Messages = chat.Messages.AsQueryable().Where(x => x.Content.Contains(request.Keyword ?? "")).ToList();
+
             var totalMessage = chat.Messages.Count();
             var pageCount = (double)totalMessage / DEFAULT_LIMIT;
             var totalPage = (int)Math.Ceiling(pageCount);
 
             request.Page = request.Page > 0 ? request.Page : 1;
             request.Page = request.Page <= totalPage ? request.Page : totalPage;
-            chat.Messages = chat.Messages.AsQueryable().Where(x => x.Content.Contains(request.Keyword ?? "")).OrderByDescending(x => x.DateCreated).Paged(request.Page, DEFAULT_LIMIT).ToList();
+            chat.Messages = chat.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(request.Page, DEFAULT_LIMIT).ToList();
 
             if (chat == null)
             {
@@ -317,17 +319,12 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var query = _context.Chats
+            var chats = await _context.Chats
                 .Where(x => x.Participants.Contains(user))
                 .Include(x => x.Participants)
                 .Include(x => x.Messages)
                 .OrderBy(x => x.DateCreated)
-                .AsSplitQuery();
-
-            // get all chat just take page 1 of every chat
-            await query.ForEachAsync(x => { x.Messages = x.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(1, DEFAULT_LIMIT).AsSplitQuery().ToList(); });
-
-            var chats = await query.ToListAsync();
+                .AsSplitQuery().ToListAsync();
 
             var chatViewModel = new List<ChatViewModel>();
 
@@ -336,12 +333,14 @@ namespace TeeChat.Application.Services
                 chatViewModel = _mapper.Map<List<ChatViewModel>>(chats);
             }
 
+            // get all chat just take page 1 of every chat
             chatViewModel.ForEach(x =>
             {
                 x.Keyword = "";
                 x.Page = 1;
                 x.Limit = DEFAULT_LIMIT;
                 x.TotalRecords = x.Messages.Count();
+                x.Messages = x.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(1, DEFAULT_LIMIT).AsSplitQuery().ToList();
             });
 
             var result = new ApiResult<List<ChatViewModel>>(chatViewModel)

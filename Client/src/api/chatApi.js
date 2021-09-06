@@ -7,6 +7,10 @@ const chatApi = {
     const url = `${baseApiUrl}`;
     return Api.get(url);
   },
+  getById: (chatId, params) => {
+    const url = `${baseApiUrl}/${chatId}`;
+    return Api.get(url, { params });
+  },
   sendMessage: (chatId, content) => {
     const url = `${baseApiUrl}/${chatId}/send`;
     return Api.post(url, content);

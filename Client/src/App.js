@@ -1,17 +1,10 @@
-import React, { useEffect } from "react";
-import {
-  BrowserRouter,
-  Switch,
-  Redirect,
-  Route,
-  useHistory,
-} from "react-router-dom";
-
+import React from "react";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import Chat from "./pages/Chat";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import NotFound from "./pages/NotFound";
 import Forbid from "./pages/Forbid";
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
+import Register from "./pages/Register";
 import ServerError from "./pages/ServerError";
 
 function App() {

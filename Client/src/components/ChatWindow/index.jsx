@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import moment from "moment";
@@ -6,17 +6,16 @@ import DefaultAvatar from "assets/img/default-avatar.jpg";
 import constants from "utils/constants";
 import LeftArrowIcon from "assets/icons/left-arrow-icon.svg";
 import InfoIcon from "assets/icons/info-icon.svg";
-import { setSelectedId } from "app/chatSlice";
+import { appendMessageToChat, setSelectedId } from "app/chatSlice";
 import ChatInput from "components/ChatInput";
 import ImageCircle from "components/ImageCircle";
 import ClickableIcon from "components/ClickableIcon";
 import EditChat from "components/EditChat";
+import useMessagePagination from "hooks/useMessagePagination";
 
 function ChatWindow({ chat }) {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.users.currentUser);
-
-  const endMessageRef = useRef();
 
   const [showTimeIndexes, setShowTimeIndexes] = useState([]);
   const [isOpenInfoPopup, setIsOpenInfoPopup] = useState(false);
@@ -43,14 +42,35 @@ function ChatWindow({ chat }) {
     setShowTimeIndexes(result);
   }
 
+  // infinity scrolling
+  const [page, setPage] = useState(1);
+  const { appendChat, hasMore, loading, error } = useMessagePagination(
+    chat,
+    page,
+  );
+  const endMessageRef = useRef();
+
+  useEffect(() => {
+    dispatch(appendMessageToChat(appendChat));
+  }, [appendChat]);
+
   const scrollToBottom = () => {
-    endMessageRef.current.scrollIntoView();
+    if (endMessageRef) {
+      endMessageRef.current.scrollIntoView();
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (chat.page === 1) {
+      scrollToBottom();
+    }
   }, [chat]);
 
+  function loadMore() {
+    if (page < chat.pageCount) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  }
   return (
     <>
       <EditChat
@@ -85,6 +105,28 @@ function ChatWindow({ chat }) {
 
         {/* Chat content */}
         <div className="flex-grow overflow-y-auto px-4 pb-4 pt-2 space-y-1 flex flex-col">
+          {loading && (
+            <div className="text-gray-500 text-center my-2">Loading...</div>
+          )}
+          {hasMore && !loading && (
+            <div className="flex">
+              <button
+                className="mx-auto px-4 bg-gray-200 py-2 rounded-lg transform active:scale-95 hover:bg-gray-300 text-sm transition-all duration-200"
+                onClick={loadMore}
+              >
+                Load more messages...
+              </button>
+            </div>
+          )}
+          {!hasMore && (
+            <div className="text-gray-500 text-sm text-center mb-2">
+              Date created:{" "}
+              {moment(new Date(chat.dateCreated), "YYYYMMDD").format(
+                "MMMM Do YYYY, h:mm:ss a",
+              )}
+            </div>
+          )}
+          <div>{error && "Error"}</div>
           {[...chat.messages]
             ?.sort((messageA, messageB) => {
               return messageA.dateCreated > messageB.dateCreated ? 1 : -1;

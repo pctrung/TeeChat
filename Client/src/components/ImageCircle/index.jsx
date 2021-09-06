@@ -20,7 +20,7 @@ function ImageCircle({
   const lgSize = "h-16 w-16";
   const xlSize = "h-24 w-24";
   const fullSize = "h-full w-full";
-  var realSize = "";
+  var realSize;
   switch (size) {
     case "sm":
       realSize = smSize;

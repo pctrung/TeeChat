@@ -43,7 +43,7 @@ namespace TeeChat.Api.Controllers
             var result = await _chatService.GetByIdAsync(id, request);
             switch (result.StatusCode)
             {
-                case 200: return Ok(result);
+                case 200: return Ok(result.Data);
                 case 403: return Forbid();
                 case 404: return NotFound(result.Message);
                 default: return BadRequest(result.Message);

@@ -41,6 +41,8 @@ Api.interceptors.response.use(
         case 500:
           window.location.href = "/ServerError";
           break;
+        default:
+          return Promise.reject(error.response?.data);
       }
     }
     return Promise.reject(error?.response?.data);

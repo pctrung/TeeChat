@@ -86,7 +86,6 @@ function Chat() {
   }, []);
 
   useEffect(() => {
-    console.log(connection);
     if (connection && !connection.connectionStarted) {
       connection
         .start()

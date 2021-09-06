@@ -1,11 +1,6 @@
 import chatApi from "api/chatApi";
 import userApi from "api/userApi";
-import {
-  setIsLoading,
-  setIsOpenPopup,
-  setPopupContent,
-  setPopupTitle,
-} from "app/appSlice";
+import { setIsLoading } from "app/appSlice";
 import { setSelectedId } from "app/chatSlice";
 import Button from "components/Button";
 import ImageCircle from "components/ImageCircle";
@@ -388,6 +383,8 @@ function CreateChat({ isOpen, setIsOpen }) {
                           </span>
                         </div>
                       );
+                    } else {
+                      return <></>;
                     }
                   })}
                 </div>

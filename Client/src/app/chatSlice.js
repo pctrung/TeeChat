@@ -17,6 +17,25 @@ const chats = createSlice({
         state[index].participants = updatedChat.participants;
       }
     },
+    appendMessageToChat: (state, action) => {
+      const chatToAppend = action.payload;
+      const messagesToAppend = chatToAppend?.messages;
+      const index = state.findIndex((chat) => {
+        return chat.id === chatToAppend.id;
+      });
+      if (index >= 0) {
+        state[index].totalRecords = chatToAppend.totalRecords;
+        state[index].limit = chatToAppend.limit;
+        state[index].page = chatToAppend.page;
+        state[index].pageCount = chatToAppend.pageCount;
+        if (chatToAppend.keyword) {
+          state[index].messages = messagesToAppend;
+        } else {
+          state[index].messages =
+            state[index].messages.concat(messagesToAppend);
+        }
+      }
+    },
     refreshChats: (state, action) => {
       state = action.payload;
       return state;
@@ -49,6 +68,12 @@ const reducer = combineReducers({
   selectedId: selectedId.reducer,
 });
 
-export const { addChat, editChat, refreshChats, addMessage } = chats.actions;
+export const {
+  addChat,
+  editChat,
+  refreshChats,
+  addMessage,
+  appendMessageToChat,
+} = chats.actions;
 export const { setSelectedId } = selectedId.actions;
 export default reducer;

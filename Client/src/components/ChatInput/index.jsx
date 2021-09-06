@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
-import ClickableIcon from "components/ClickableIcon";
-import SendIconNormal from "assets/icons/send-icon.svg";
-import EmojiIcon from "assets/icons/emoji.svg";
 import chatApi from "api/chatApi";
+import EmojiIcon from "assets/icons/emoji.svg";
+import SendIconNormal from "assets/icons/send-icon.svg";
+import ClickableIcon from "components/ClickableIcon";
 import Picker from "emoji-picker-react";
-import { setIsLoading } from "app/appSlice";
+import PropTypes from "prop-types";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
 ChatInput.propTypes = {
