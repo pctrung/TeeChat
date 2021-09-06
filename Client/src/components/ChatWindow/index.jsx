@@ -133,36 +133,62 @@ function ChatWindow({ chat }) {
             })
             .map((message, index) =>
               message.senderUserName === currentUser.userName ? (
-                <div
-                  key={index + Math.random()}
-                  className="flex flex-col items-end"
-                >
-                  {showTimeIndexes.includes(index) ? (
-                    <>
+                message.imageUrl ? (
+                  <>
+                    <div
+                      key={index + Math.random()}
+                      className="flex flex-col items-end"
+                    >
+                      {showTimeIndexes.includes(index) && (
+                        <span className="transition-all animate-fade text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
+                          {moment(
+                            new Date(message.dateCreated),
+                            "YYYYMMDD",
+                          ).calendar() ?? ""}
+                        </span>
+                      )}
+                      <img
+                        onClick={() => handleMessageClick(index)}
+                        className="max-w-300 rounded-lg shadow transition-all duration-200"
+                        src={message.imageUrl}
+                        alt="Message image"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    key={index + Math.random()}
+                    className="flex flex-col items-end"
+                  >
+                    {showTimeIndexes.includes(index) && (
                       <span className="transition-all animate-fade text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
                         {moment(
                           new Date(message.dateCreated),
                           "YYYYMMDD",
                         ).calendar() ?? ""}
                       </span>
-                      <span
-                        onClick={() => handleMessageClick(index)}
-                        className="bg-green-600 text-white rounded-3xl px-4 py-2
-                break-all rounded-br-none cursor-pointer"
-                      >
-                        {message.content}
-                      </span>
-                    </>
-                  ) : (
+                    )}
                     <span
                       onClick={() => handleMessageClick(index)}
-                      className="bg-green-500 text-white rounded-3xl px-4 py-2
-                break-all rounded-br-none cursor-pointer"
+                      className={
+                        "text-white rounded-3xl px-4 py-2 break-all rounded-br-none cursor-pointer" +
+                        " " +
+                        (showTimeIndexes.includes(index)
+                          ? "bg-green-600"
+                          : "bg-green-500")
+                      }
                     >
                       {message.content}
                     </span>
-                  )}
-                </div>
+                  </div>
+                )
+              ) : message.imageUrl ? (
+                <img
+                  onClick={() => handleMessageClick(index)}
+                  className="max-w-300 rounded-lg shadow cursor-pointer"
+                  src={message.imageUrl}
+                  alt="Message image"
+                />
               ) : (
                 <div
                   key={index + Math.random()}

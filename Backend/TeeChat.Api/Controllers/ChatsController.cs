@@ -108,6 +108,26 @@ namespace TeeChat.Api.Controllers
             }
         }
 
+        [HttpPost("{id:int}/sendImage")]
+        public async Task<IActionResult> SendImage(int id, [FromForm] SendImageRequest request)
+        {
+            var result = await _chatService.AddImageAsync(id, request);
+
+            switch (result.StatusCode)
+            {
+                case 201:
+                    {
+                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveMessage(result.Data);
+
+                        return Created("", result);
+                    };
+                case 200: return Ok(result);
+                case 403: return Forbid();
+                case 404: return NotFound(result.Message);
+                default: return BadRequest(result.Message);
+            }
+        }
+
         [HttpPatch("{id:int}")]
         public async Task<IActionResult> UpdateChat(int id, UpdateGroupChatRequest request)
         {

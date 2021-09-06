@@ -66,8 +66,8 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var senderId = _currentUser.UserId;
-            if (senderId == null)
+            var sender = await _context.Users.FindAsync(_currentUser.UserId);
+            if (sender == null)
             {
                 return new ApiResult<SendMessageResponse>(null)
                 {
@@ -76,7 +76,6 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var sender = await _context.Users.FindAsync(senderId);
             var newMessage = new Message()
             {
                 Sender = sender,
@@ -99,7 +98,7 @@ namespace TeeChat.Application.Services
             return new ApiResult<SendMessageResponse>(result)
             {
                 StatusCode = 201,
-                Message = "Create message successfully"
+                Message = "Send message successfully"
             };
         }
 
@@ -275,7 +274,7 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            chat.Messages = chat.Messages.AsQueryable().Where(x => x.Content.Contains(request.Keyword ?? "")).ToList();
+            chat.Messages = chat.Messages.AsQueryable().Where(x => !string.IsNullOrEmpty(x.Content) ? x.Content.Contains(request.Keyword ?? "") : true).ToList();
 
             var totalMessage = chat.Messages.Count();
             var pageCount = (double)totalMessage / DEFAULT_LIMIT;
@@ -471,6 +470,24 @@ namespace TeeChat.Application.Services
                     Message = "Not found chat with id: " + chatId
                 };
             }
+            if (chat.Type == ChatType.PRIVATE)
+            {
+                return new ApiResult<UpdateGroupAvatarResponse>(null)
+                {
+                    StatusCode = 400,
+                    Message = "You can only update group chat"
+                };
+            }
+
+            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
+            if (!isHaveAccess)
+            {
+                return new ApiResult<UpdateGroupAvatarResponse>(null)
+                {
+                    StatusCode = 403,
+                    Message = "You do not have permission to access this chat"
+                };
+            }
             if (request.Avatar != null)
             {
                 try
@@ -513,6 +530,108 @@ namespace TeeChat.Application.Services
             }
 
             return new ApiResult<UpdateGroupAvatarResponse>(null)
+            {
+                StatusCode = 400,
+                Message = "Cannot update image. Something went wrong!"
+            };
+        }
+
+        public async Task<ApiResult<SendMessageResponse>> AddImageAsync(int chatId, SendImageRequest request)
+        {
+            var chat = await _context.Chats.Include(x => x.Participants).Include(x => x.Messages).Where(x => x.Id == chatId).AsSplitQuery().FirstOrDefaultAsync();
+            if (chat == null)
+            {
+                return new ApiResult<SendMessageResponse>(null)
+                {
+                    StatusCode = 404,
+                    Message = "Not found chat with Id: " + chatId
+                };
+            }
+
+            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
+            if (!isHaveAccess)
+            {
+                return new ApiResult<SendMessageResponse>(null)
+                {
+                    StatusCode = 403,
+                    Message = "You do not have permission to access this chat"
+                };
+            }
+
+            if (request.Image == null)
+            {
+                return new ApiResult<SendMessageResponse>(null)
+                {
+                    StatusCode = 400,
+                    Message = "Image cannot be null"
+                };
+            }
+
+            var sender = await _context.Users.FindAsync(_currentUser.UserId);
+
+            if (sender == null)
+            {
+                return new ApiResult<SendMessageResponse>(null)
+                {
+                    StatusCode = 404,
+                    Message = "Something went wrong with current user"
+                };
+            }
+
+            if (request.Image != null)
+            {
+                try
+                {
+                    var fileName = await _storageService.SaveImageAsync(request.Image);
+
+                    if (!string.IsNullOrWhiteSpace(fileName))
+                    {
+                        if (!string.IsNullOrWhiteSpace(chat.AvatarFileName))
+                        {
+                            var currentFileName = chat.AvatarFileName;
+                            await _storageService.DeleteFileAsync(currentFileName);
+                        }
+                        chat.AvatarFileName = fileName;
+
+                        await _context.SaveChangesAsync();
+
+                        var newMessage = new Message()
+                        {
+                            Sender = sender,
+                            Chat = chat,
+                            ImageFileName = fileName,
+                            DateCreated = DateTime.Now,
+                        };
+
+                        await _context.Messages.AddAsync(newMessage);
+
+                        await _context.SaveChangesAsync();
+
+                        var result = new SendMessageResponse()
+                        {
+                            ChatId = chat.Id,
+                            Message = _mapper.Map<MessageViewModel>(newMessage),
+                            ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+                        };
+
+                        return new ApiResult<SendMessageResponse>(result)
+                        {
+                            StatusCode = 201,
+                            Message = "Send image successfully"
+                        };
+                    }
+                }
+                catch (Exception e)
+                {
+                    return new ApiResult<SendMessageResponse>(null)
+                    {
+                        StatusCode = 400,
+                        Message = e.Message
+                    };
+                }
+            }
+
+            return new ApiResult<SendMessageResponse>(null)
             {
                 StatusCode = 400,
                 Message = "Cannot update image. Something went wrong!"

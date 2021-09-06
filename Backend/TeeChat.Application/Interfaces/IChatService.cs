@@ -13,6 +13,8 @@ namespace TeeChat.Application.Interfaces
     {
         Task<ApiResult<SendMessageResponse>> AddMessageAsync(int chatId, SendMessageRequest request);
 
+        Task<ApiResult<SendMessageResponse>> AddImageAsync(int chatId, SendImageRequest request);
+
         Task<ApiResult<CreateChatResponse>> CreateGroupChatAsync(CreateGroupChatRequest request);
 
         Task<ApiResult<CreateChatResponse>> UpdateGroupChatAsync(int chatId, UpdateGroupChatRequest request);
