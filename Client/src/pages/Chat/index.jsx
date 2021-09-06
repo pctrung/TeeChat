@@ -10,6 +10,7 @@ import {
   addChat,
   addMessage,
   editChat,
+  editGroupAvatar,
   refreshChats,
   setSelectedId,
 } from "app/chatSlice";
@@ -51,20 +52,20 @@ function Chat() {
         .then((response) => {
           const refreshChatAction = refreshChats(response.data);
           dispatch(refreshChatAction);
+          dispatch(setIsLoading(false));
         })
         .catch((error) => {
           var message =
             typeof error === "string"
               ? error
               : "Cannot get any chats. Please login and try again!";
-
+          dispatch(setIsLoading(false));
           openPopup("Error", message);
         });
     }
 
     fetchData();
 
-    dispatch(setIsLoading(false));
     dispatch(getCurrentUser());
   }, []);
 
@@ -103,6 +104,10 @@ function Chat() {
           });
           connection.on("ReceiveUpdatedChat", (chat) => {
             const action = editChat(chat);
+            dispatch(action);
+          });
+          connection.on("ReceiveUpdatedGroupAvatar", (response) => {
+            const action = editGroupAvatar(response);
             dispatch(action);
           });
         })

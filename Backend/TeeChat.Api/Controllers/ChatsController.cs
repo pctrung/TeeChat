@@ -126,5 +126,24 @@ namespace TeeChat.Api.Controllers
                 default: return BadRequest(result.Message);
             }
         }
+
+        [HttpPatch("{id:int}/avatar")]
+        public async Task<IActionResult> UpdateAvatar(int id, [FromForm] UpdateGroupAvatarRequest request)
+        {
+            var result = await _chatService.UpdateGroupAvatarAsync(id, request);
+
+            switch (result.StatusCode)
+            {
+                case 200:
+                    {
+                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveUpdatedGroupAvatar(result.Data);
+
+                        return Ok(result);
+                    };
+                case 403: return Forbid();
+                case 404: return NotFound(result.Message);
+                default: return BadRequest(result.Message);
+            }
+        }
     }
 }

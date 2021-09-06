@@ -62,7 +62,7 @@ function ChatList() {
               >
                 <ImageCircle
                   src={chat.groupAvatarUrl ?? friend.avatarUrl}
-                  size="full"
+                  size="lg"
                 />
 
                 <div className="font-primary flex flex-col px-3 py-2 justify-between truncate">

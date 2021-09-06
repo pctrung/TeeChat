@@ -1,6 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -73,6 +75,12 @@ namespace TeeChat.Api
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IChatService, ChatService>();
             services.AddTransient<ICurrentUser, CurrentUser>();
+            services.AddTransient<IStorageService, StorageService>();
+
+            services.AddSingleton(provider => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new MappingProfile(provider.GetService<IHttpContextAccessor>()));
+            }).CreateMapper());
 
             services.AddDbContext<TeeChatDbContext>(options =>
                 options.UseSqlServer(
@@ -157,6 +165,8 @@ namespace TeeChat.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TeeChat v1"));
             }
+
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 

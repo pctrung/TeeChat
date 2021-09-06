@@ -12,5 +12,7 @@ namespace TeeChat.Hubs.Interfaces
         Task ReceiveChat(ChatViewModel chat);
 
         Task ReceiveUpdatedChat(ChatViewModel chat);
+
+        Task ReceiveUpdatedGroupAvatar(UpdateGroupAvatarResponse response);
     }
 }

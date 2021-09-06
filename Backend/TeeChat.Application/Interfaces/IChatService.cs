@@ -17,6 +17,8 @@ namespace TeeChat.Application.Interfaces
 
         Task<ApiResult<CreateChatResponse>> UpdateGroupChatAsync(int chatId, UpdateGroupChatRequest request);
 
+        Task<ApiResult<UpdateGroupAvatarResponse>> UpdateGroupAvatarAsync(int chatId, UpdateGroupAvatarRequest request);
+
         Task<ApiResult<CreateChatResponse>> CreatePrivateChatAsync(CreatePrivateChatRequest request);
 
         Task<ApiResult<List<ChatViewModel>>> GetAllAsync();

@@ -11,7 +11,7 @@ ImageCircle.propTypes = {
 
 function ImageCircle({
   src = DefaultAvatar,
-  className,
+  className = "",
   alt = "Avatar",
   size = "md",
 }) {
@@ -43,7 +43,7 @@ function ImageCircle({
         className={
           realSize + " " + "rounded-full object-cover " + " " + className ?? ""
         }
-        src={src}
+        src={!src || src === "" ? DefaultAvatar : src}
         alt={alt}
       />
     </div>

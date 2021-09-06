@@ -24,11 +24,13 @@ namespace TeeChat.Application.Services
         private readonly TeeChatDbContext _context;
         private readonly IMapper _mapper;
         private readonly ICurrentUser _currentUser;
+        private readonly IStorageService _storageService;
         private const int DEFAULT_LIMIT = 30;
 
-        public ChatService(IMapper mapper, TeeChatDbContext context, ICurrentUser currentUser)
+        public ChatService(IMapper mapper, TeeChatDbContext context, ICurrentUser currentUser, IStorageService storageService)
         {
             _context = context;
+            _storageService = storageService;
             _mapper = mapper;
             _currentUser = currentUser;
         }
@@ -149,6 +151,7 @@ namespace TeeChat.Application.Services
             };
             chat.Participants.Add(currentUser);
             chat.CreatorUserName = _currentUser.UserName;
+            chat.CreatorUserName = _currentUser.FullName;
             chat.DateCreated = DateTime.Now;
             chat.Name = request.Name;
 
@@ -455,6 +458,65 @@ namespace TeeChat.Application.Services
             var result = chat.Participants.Contains(user);
 
             return result;
+        }
+
+        public async Task<ApiResult<UpdateGroupAvatarResponse>> UpdateGroupAvatarAsync(int chatId, UpdateGroupAvatarRequest request)
+        {
+            var chat = await _context.Chats.Include(x => x.Participants).Where(x => x.Id == chatId).AsSplitQuery().FirstOrDefaultAsync();
+            if (chat == null)
+            {
+                return new ApiResult<UpdateGroupAvatarResponse>(null)
+                {
+                    StatusCode = 404,
+                    Message = "Not found chat with id: " + chatId
+                };
+            }
+            if (request.Avatar != null)
+            {
+                try
+                {
+                    var fileName = await _storageService.SaveImageAsync(request.Avatar);
+
+                    if (!string.IsNullOrWhiteSpace(fileName))
+                    {
+                        if (!string.IsNullOrWhiteSpace(chat.AvatarFileName))
+                        {
+                            var currentFileName = chat.AvatarFileName;
+                            await _storageService.DeleteFileAsync(currentFileName);
+                        }
+                        chat.AvatarFileName = fileName;
+
+                        await _context.SaveChangesAsync();
+
+                        var result = new UpdateGroupAvatarResponse()
+                        {
+                            ChatId = chat.Id,
+                            GroupAvatarUrl = _storageService.GetImageUrl(fileName),
+                            ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+                        };
+
+                        return new ApiResult<UpdateGroupAvatarResponse>(result)
+                        {
+                            StatusCode = 200,
+                            Message = "Update group image successfully!"
+                        };
+                    }
+                }
+                catch (Exception e)
+                {
+                    return new ApiResult<UpdateGroupAvatarResponse>(null)
+                    {
+                        StatusCode = 400,
+                        Message = e.Message
+                    };
+                }
+            }
+
+            return new ApiResult<UpdateGroupAvatarResponse>(null)
+            {
+                StatusCode = 400,
+                Message = "Cannot update image. Something went wrong!"
+            };
         }
     }
 }

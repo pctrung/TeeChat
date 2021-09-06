@@ -27,9 +27,11 @@ namespace TeeChat.Application.Services
         private readonly IConfiguration _configuration;
         private readonly ICurrentUser _currentUser;
         private readonly IMapper _mapper;
+        private readonly IStorageService _storageService;
 
-        public UserService(TeeChatDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, IMapper mapper, ICurrentUser currentUser)
+        public UserService(TeeChatDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, IMapper mapper, ICurrentUser currentUser, IStorageService storageService)
         {
+            _storageService = storageService;
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -126,8 +128,48 @@ namespace TeeChat.Application.Services
             }
             if (request.Avatar != null)
             {
+                try
+                {
+                    var fileName = await _storageService.SaveImageAsync(request.Avatar);
+
+                    if (!string.IsNullOrWhiteSpace(fileName))
+                    {
+                        if (!string.IsNullOrWhiteSpace(user.AvatarFileName))
+                        {
+                            var currentFileName = user.AvatarFileName;
+                            await _storageService.DeleteFileAsync(currentFileName);
+                        }
+                        user.AvatarFileName = fileName;
+                    }
+                }
+                catch (Exception e)
+                {
+                    return new ApiResult<UserViewModel>(null)
+                    {
+                        StatusCode = 400,
+                        Message = e.Message
+                    };
+                }
             }
-            return null;
+
+            await _context.SaveChangesAsync();
+            var responseUser = _mapper.Map<UserViewModel>(user);
+
+            var oldClaim = _currentUser.User.FindFirst("avatarUrl");
+            if (oldClaim != null)
+            {
+                await _userManager.ReplaceClaimAsync(user, oldClaim, new Claim("avatarUrl", responseUser.AvatarUrl));
+            }
+            else
+            {
+                await _userManager.AddClaimAsync(user, new Claim("avatarUrl", responseUser.AvatarUrl));
+            }
+
+            return new ApiResult<UserViewModel>(responseUser)
+            {
+                StatusCode = 200,
+                Message = "Update user successfully"
+            }; ;
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterRequest request)

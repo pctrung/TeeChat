@@ -17,6 +17,15 @@ const chats = createSlice({
         state[index].participants = updatedChat.participants;
       }
     },
+    editGroupAvatar: (state, action) => {
+      const updatedChatId = action.payload.chatId;
+      const index = state.findIndex((chat) => {
+        return chat.id === updatedChatId;
+      });
+      if (index >= 0) {
+        state[index].groupAvatarUrl = action.payload.groupAvatarUrl;
+      }
+    },
     appendMessageToChat: (state, action) => {
       const chatToAppend = action.payload;
       const messagesToAppend = chatToAppend?.messages;
@@ -74,6 +83,7 @@ export const {
   refreshChats,
   addMessage,
   appendMessageToChat,
+  editGroupAvatar,
 } = chats.actions;
 export const { setSelectedId } = selectedId.actions;
 export default reducer;
