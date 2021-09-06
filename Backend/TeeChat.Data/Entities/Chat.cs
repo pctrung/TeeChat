@@ -9,6 +9,7 @@ namespace TeeChat.Data.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string CreatorUserName { get; set; }
+        public string AvatarFileName { get; set; }
         public ChatType Type { get; set; }
         public virtual List<AppUser> Participants { get; set; }
         public virtual List<Message> Messages { get; set; }

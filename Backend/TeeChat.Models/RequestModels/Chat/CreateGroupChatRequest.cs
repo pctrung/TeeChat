@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using TeeChat.Models.Common.Enums;
 
 namespace TeeChat.Models.RequestModels.Chat
 {
     public class CreateGroupChatRequest
-    { 
-
+    {
         [Required(ErrorMessage = "Participant username list cannot be null")]
         public List<string> ParticipantUserNames { get; set; }
 

@@ -9,9 +9,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using TeeChat.Application.Identity;
 using TeeChat.Application.Interfaces;
 using TeeChat.Data.EF;
 using TeeChat.Data.Entities;
+using TeeChat.Models.Common;
 using TeeChat.Models.RequestModels.Users;
 using TeeChat.Models.ViewModels;
 
@@ -23,15 +25,17 @@ namespace TeeChat.Application.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly ICurrentUser _currentUser;
         private readonly IMapper _mapper;
 
-        public UserService(TeeChatDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, IMapper mapper)
+        public UserService(TeeChatDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, IMapper mapper, ICurrentUser currentUser)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _mapper = mapper;
+            _currentUser = currentUser;
         }
 
         public async Task<bool> CheckUserNameExistsAsync(string userName)
@@ -98,6 +102,32 @@ namespace TeeChat.Application.Services
             var result = _mapper.Map<List<UserViewModel>>(data);
 
             return result;
+        }
+
+        public async Task<ApiResult<UserViewModel>> UpdateUserAsync(UpdateUserRequest request)
+        {
+            var user = await _context.Users.FindAsync(_currentUser.UserId);
+            if (user == null)
+            {
+                return new ApiResult<UserViewModel>(null)
+                {
+                    StatusCode = 400,
+                    Message = "Something went wrong. Cannot find user: " + _currentUser.UserName
+                };
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.FirstName))
+            {
+                user.FirstName = request.FirstName;
+            }
+            if (!string.IsNullOrWhiteSpace(request.LastName))
+            {
+                user.LastName = request.LastName;
+            }
+            if (request.Avatar != null)
+            {
+            }
+            return null;
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterRequest request)

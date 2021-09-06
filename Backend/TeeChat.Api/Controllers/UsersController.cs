@@ -25,15 +25,6 @@ namespace TeeChat.Api.Controllers
             return Ok(new { isExists = result });
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetFriendListAsync()
-        {
-            var result = await _userService.GetFriendListAsync();
-
-            return Ok(result);
-        }
-
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
@@ -65,6 +56,28 @@ namespace TeeChat.Api.Controllers
             else
             {
                 return BadRequest("Username or password is incorrect");
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetFriendListAsync()
+        {
+            var result = await _userService.GetFriendListAsync();
+
+            return Ok(result);
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> UpdateUserAsync(UpdateUserRequest request)
+        {
+            var result = await _userService.UpdateUserAsync(request);
+
+            switch (result.StatusCode)
+            {
+                case 200: return Ok(result.Data);
+                default: return BadRequest(result.Message);
             }
         }
     }

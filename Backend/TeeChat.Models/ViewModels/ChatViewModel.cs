@@ -8,6 +8,7 @@ namespace TeeChat.Models.ViewModels
     public class ChatViewModel : PagedResultBase
     {
         public int Id { get; set; }
+        public string GroupAvatarUrl { get; set; }
         public string Name { get; set; }
         public ChatType Type { get; set; }
         public string CreatorUserName { get; set; }
