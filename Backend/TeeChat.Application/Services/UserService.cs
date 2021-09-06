@@ -76,6 +76,12 @@ namespace TeeChat.Application.Services
 
             var claims = await _userManager.GetClaimsAsync(user);
 
+            if (!string.IsNullOrWhiteSpace(user.AvatarFileName))
+            {
+                var avatarUrl = _storageService.GetImageUrl(user.AvatarFileName);
+                claims.Add(new Claim("avatarUrl", avatarUrl));
+            }
+
             string issuer = _configuration["Tokens:Issuer"];
             string signingKey = _configuration["Tokens:Key"];
 
@@ -158,11 +164,11 @@ namespace TeeChat.Application.Services
             var oldClaim = _currentUser.User.FindFirst("avatarUrl");
             if (oldClaim != null)
             {
-                await _userManager.ReplaceClaimAsync(user, oldClaim, new Claim("avatarUrl", responseUser.AvatarUrl));
+                await _userManager.ReplaceClaimAsync(user, oldClaim, new Claim("avatarFileName", user.AvatarFileName));
             }
             else
             {
-                await _userManager.AddClaimAsync(user, new Claim("avatarUrl", responseUser.AvatarUrl));
+                await _userManager.AddClaimAsync(user, new Claim("avatarFileName", user.AvatarFileName));
             }
 
             return new ApiResult<UserViewModel>(responseUser)

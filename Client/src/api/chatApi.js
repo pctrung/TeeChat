@@ -15,6 +15,25 @@ const chatApi = {
     const url = `${baseApiUrl}/${chatId}/send`;
     return Api.post(url, content);
   },
+  sendImage: (chatId, content) => {
+    const url = `${baseApiUrl}/${chatId}/sendImage`;
+
+    Api.interceptors.request.use(async (config) => {
+      var token = window.localStorage.getItem("token");
+      var newConfig = {};
+      if (token) {
+        newConfig = {
+          ...config,
+          headers: {
+            "content-type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      }
+      return newConfig;
+    });
+    return Api.post(url, content);
+  },
   createGroupChat: (content) => {
     const url = `${baseApiUrl}/group`;
     return Api.post(url, content);

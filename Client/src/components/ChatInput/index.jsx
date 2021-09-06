@@ -1,14 +1,17 @@
 import chatApi from "api/chatApi";
 import EmojiIcon from "assets/icons/emoji.svg";
 import SendIconNormal from "assets/icons/send-icon.svg";
+import ImageIcon from "assets/icons/image-icon.svg";
 import ClickableIcon from "components/ClickableIcon";
 import Picker from "emoji-picker-react";
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import Api from "api/Api";
+import { setIsLoading } from "app/appSlice";
 
 ChatInput.propTypes = {
-  onSubmit: PropTypes.func,
+  chatId: PropTypes.number,
 };
 
 function ChatInput({ chatId }) {
@@ -52,13 +55,32 @@ function ChatInput({ chatId }) {
     };
   }, [isOpenEmoji]);
 
+  async function sendImage(e) {
+    var file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("Image", file);
+
+    dispatch(setIsLoading(true));
+    await chatApi.sendImage(chatId, formData);
+    dispatch(setIsLoading(false));
+  }
   return (
     <div>
       <form
         onSubmit={(e) => onSendMessage(e)}
         className="flex justify-between items-center space-x-1 pl-4 pr-2 md:pr-6 z-0"
       >
-        <div className="relative w-full">
+        <div className="relative w-full flex">
+          <input
+            id="imageFile"
+            type="file"
+            hidden
+            accept="image/png, image/jpg, image/tiff, image/tif, image/jpeg"
+            onChange={sendImage}
+          />
+          <label htmlFor="imageFile">
+            <ClickableIcon className="h-10 w-10 p-2 mr-2" icon={ImageIcon} />
+          </label>
           <input
             value={content}
             onChange={(e) => setContent(e.target.value)}

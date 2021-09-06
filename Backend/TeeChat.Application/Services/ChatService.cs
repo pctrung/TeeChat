@@ -586,15 +586,6 @@ namespace TeeChat.Application.Services
 
                     if (!string.IsNullOrWhiteSpace(fileName))
                     {
-                        if (!string.IsNullOrWhiteSpace(chat.AvatarFileName))
-                        {
-                            var currentFileName = chat.AvatarFileName;
-                            await _storageService.DeleteFileAsync(currentFileName);
-                        }
-                        chat.AvatarFileName = fileName;
-
-                        await _context.SaveChangesAsync();
-
                         var newMessage = new Message()
                         {
                             Sender = sender,

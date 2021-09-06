@@ -55,13 +55,17 @@ function ChatList() {
               <div
                 key={Date.now() + index}
                 className={
-                  "select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100  p-2 rounded-2xl transition-all duration-200 ease-in " +
+                  "select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all duration-200 ease-in " +
                   (selectedId === chat.id ? "bg-gray-100" : "")
                 }
                 onClick={() => handleClick(chat.id)}
               >
                 <ImageCircle
-                  src={chat.groupAvatarUrl ?? friend.avatarUrl}
+                  src={
+                    chat.type === constants.chatType.PRIVATE
+                      ? friend.avatarUrl
+                      : chat.groupAvatarUrl
+                  }
                   size="lg"
                 />
 

@@ -18,7 +18,7 @@ namespace TeeChat.Api
                     .ForMember(des => des.AvatarUrl,
                     act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.AvatarFileName) ? "" : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.AvatarFileName}")));
 
-                CreateMap<AppUser, UserViewModel>(); CreateMap<Chat, ChatViewModel>().ForMember(des => des.GroupAvatarUrl,
+                CreateMap<Chat, ChatViewModel>().ForMember(des => des.GroupAvatarUrl,
                     act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.AvatarFileName) ? "" : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.AvatarFileName}")));
 
                 CreateMap<Message, MessageViewModel>()
