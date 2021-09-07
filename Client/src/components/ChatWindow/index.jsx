@@ -174,14 +174,13 @@ function ChatWindow({ chat }) {
                   key={index + Math.random()}
                   className="flex items-end space-x-2"
                 >
-                  <img
+                  <ImageCircle
                     src={
                       chat.participants
                         .filter((x) => x.userName === message.senderUserName)
-                        .shift()?.avatarUrl ?? DefaultAvatar
+                        .shift()?.avatarUrl
                     }
-                    alt="Avatar"
-                    className="h-8 w-8 rounded-full object-cover"
+                    size="sm"
                   />
                   <div className="flex flex-col w-full items-start">
                     {(showTimeIndexes.includes(index) ||

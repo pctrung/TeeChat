@@ -15,13 +15,17 @@ function ImageCircle({
   alt = "Avatar",
   size = "md",
 }) {
-  const smSize = "h-6 w-6";
+  const xsSize = "h-6 w-6";
+  const smSize = "h-8 w-8";
   const mdSize = "h-12 w-12";
   const lgSize = "h-16 w-16";
   const xlSize = "h-24 w-24";
   const fullSize = "h-full w-full";
   var realSize;
   switch (size) {
+    case "xs":
+      realSize = xsSize;
+      break;
     case "sm":
       realSize = smSize;
       break;
