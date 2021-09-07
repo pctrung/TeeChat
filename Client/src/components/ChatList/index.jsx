@@ -47,7 +47,6 @@ function ChatList() {
                     ?.filter((x) => x.userName !== currentUserName)
                     .shift()
                 : currentUser;
-            console.log(currentUser);
             let lastMessage = {};
             if (chat.messages?.length !== 0) {
               lastMessage = chat.messages?.reduce((a, b) =>
