@@ -1,14 +1,13 @@
 import chatApi from "api/chatApi";
+import { setIsLoading } from "app/appSlice";
 import EmojiIcon from "assets/icons/emoji.svg";
-import SendIconNormal from "assets/icons/send-icon.svg";
 import ImageIcon from "assets/icons/image-icon.svg";
+import SendIconNormal from "assets/icons/send-icon.svg";
 import ClickableIcon from "components/ClickableIcon";
 import Picker from "emoji-picker-react";
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import Api from "api/Api";
-import { setIsLoading } from "app/appSlice";
 
 ChatInput.propTypes = {
   chatId: PropTypes.number,

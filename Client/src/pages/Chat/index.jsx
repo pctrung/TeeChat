@@ -10,12 +10,10 @@ import {
   refreshChats,
   setSelectedId,
 } from "app/chatSlice";
-import { getCurrentUser, updateUser } from "app/userSlice";
+import { updateUser } from "app/userSlice";
 import ChatList from "components/ChatList";
 import ChatWindow from "components/ChatWindow";
 import Header from "components/Header";
-import Loader from "components/Loader";
-import Popup from "components/Popup";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
