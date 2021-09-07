@@ -87,7 +87,7 @@ function ChatWindow({ chat }) {
               className="h-5 w-5 md:hidden cursor-pointer"
               onClick={backToChats}
             />
-            <ImageCircle src={friend?.avatarUrl} />
+            <ImageCircle src={chat.groupAvatarUrl ?? friend?.avatarUrl} />
             <span className="text-lg font-semibold truncate w-60 md:w-96">
               {chat.type === constants.chatType.PRIVATE
                 ? friend?.fullName
@@ -103,7 +103,7 @@ function ChatWindow({ chat }) {
         {/* End header chat window */}
 
         {/* Chat content */}
-        <div className="flex-grow overflow-y-auto px-4 pb-4 pt-2 space-y-1 flex flex-col">
+        <div className="flex-grow overflow-y-auto overflow-x-hidden px-4 pb-4 pt-2 space-y-1 flex flex-col">
           {loading && (
             <div className="text-gray-500 text-center my-2">Loading...</div>
           )}

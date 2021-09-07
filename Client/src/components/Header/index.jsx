@@ -102,7 +102,7 @@ function Header({ logout }) {
             />
             {isOpenMenu && (
               <div className="animate-fade transition-all duration-200 absolute right-0 md:left-0 border border-gray-200 bg-white w-52 rounded-lg shadow-md overflow-hidden p-2 ">
-                <button className="flex space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200">
+                <button className="flex space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95">
                   <img
                     src={DarkModeIcon}
                     alt="Dark mode icon"
@@ -111,7 +111,7 @@ function Header({ logout }) {
                   <span>Dark Mode</span>
                 </button>
                 <button
-                  className="flex space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200"
+                  className="flex space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95"
                   onClick={() => {
                     openConfirmModal("Do you want to log out?", logout);
                   }}

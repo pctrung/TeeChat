@@ -1,21 +1,10 @@
-import chatApi from "api/chatApi";
+import React, { useEffect, useRef, useState } from "react";
+
+import { useDispatch } from "react-redux";
 import userApi from "api/userApi";
-import {
-  setIsLoading,
-  setIsOpenPopup,
-  setPopup,
-  setPopupContent,
-  setPopupTitle,
-} from "app/appSlice";
+import { setIsLoading, setPopup } from "app/appSlice";
 import { updateUser } from "app/userSlice";
 import Button from "components/Button";
-import ConfirmModal from "components/ConfirmModal";
-import ImageCircle from "components/ImageCircle";
-import Popup from "components/Popup";
-import moment from "moment";
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import constants from "utils/constants";
 
 function UserInfo({ isOpen, setIsOpen, currentUser }) {
   const [firstName, setFirstName] = useState("");

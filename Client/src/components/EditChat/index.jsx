@@ -1,9 +1,10 @@
 import chatApi from "api/chatApi";
 import userApi from "api/userApi";
-import { setIsLoading, setPopup } from "app/appSlice";
+import { setIsLoading } from "app/appSlice";
 import Button from "components/Button";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
+import Popup from "components/Popup";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +22,12 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   const [selectedFriendList, setSelectedFriendList] = useState(
     chat.participants,
   );
+
+  const [popup, setPopup] = useState({
+    isOpen: false,
+    content: "",
+    title: "Notification",
+  });
 
   const currentUser = useSelector((state) => state.users.currentUser);
   const ref = useRef();
@@ -167,13 +174,36 @@ function EditChat({ isOpen, setIsOpen, chat }) {
     setIsOpen(false);
     await dispatch(setIsLoading(false));
   }
+
+  async function updateGroupAvatar(e) {
+    var file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("Avatar", file);
+
+    dispatch(setIsLoading(true));
+    await chatApi
+      .updateGroupAvatar(chat.id, formData)
+      .then((response) => {
+        openPopup("Success", "Update group avatar successfully!");
+        dispatch(setIsLoading(false));
+      })
+      .catch((error) => {
+        var message =
+          typeof error === "string" ? error : "Something went wrong!";
+
+        openPopup("Failed", message);
+        dispatch(setIsLoading(false));
+      });
+    dispatch(setIsLoading(false));
+  }
+
   function openPopup(title, content) {
     const popup = {
       isOpen: true,
       title: title,
       content: content,
     };
-    dispatch(setPopup(popup));
+    setPopup(popup);
   }
   function openModal(content) {
     setIsOpenModal(true);
@@ -194,6 +224,12 @@ function EditChat({ isOpen, setIsOpen, chat }) {
           (isOpenFriendList ? "mb-16" : "")
         }
       >
+        <Popup
+          title={popup.title}
+          isOpen={popup.isOpen}
+          content={popup.content}
+          onClick={() => setPopup({ isOpen: false })}
+        />
         <ConfirmModal
           isOpen={isOpenModal}
           closeAction={() => setIsOpenModal(false)}
@@ -308,6 +344,17 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                     </div>
                   ))}
                 </div>
+              </div>
+              <div className="space-y-2 mr-2 flex flex-col">
+                <label htmlFor="avatar" className="text-lg font-semibold ">
+                  Group Avatar
+                </label>
+                <input
+                  id="avatar"
+                  onChange={updateGroupAvatar}
+                  type="file"
+                  accept="image/png, image/jpg, image/tiff, image/tif, image/jpeg"
+                />
               </div>
             </>
           ) : (
