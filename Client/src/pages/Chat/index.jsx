@@ -1,5 +1,6 @@
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import chatApi from "api/chatApi";
+import userApi from "api/userApi";
 import { setIsLoading, setPopup } from "app/appSlice";
 import {
   addChat,
@@ -9,7 +10,7 @@ import {
   refreshChats,
   setSelectedId,
 } from "app/chatSlice";
-import { getCurrentUser } from "app/userSlice";
+import { getCurrentUser, updateUser } from "app/userSlice";
 import ChatList from "components/ChatList";
 import ChatWindow from "components/ChatWindow";
 import Header from "components/Header";
@@ -36,6 +37,7 @@ function Chat() {
 
   useEffect(() => {
     async function fetchData() {
+      dispatch(setIsLoading(true));
       chatApi
         .getAll()
         .then((response) => {
@@ -51,11 +53,24 @@ function Chat() {
           dispatch(setIsLoading(false));
           openPopup("Error", message);
         });
+
+      userApi
+        .getCurrentUser()
+        .then((response) => {
+          dispatch(updateUser(response));
+          dispatch(setIsLoading(false));
+        })
+        .catch((error) => {
+          var message =
+            typeof error === "string"
+              ? error
+              : "Cannot get any chats. Please login and try again!";
+          dispatch(setIsLoading(false));
+          openPopup("Error", message);
+        });
     }
 
-    dispatch(setIsLoading(true));
     fetchData();
-    dispatch(getCurrentUser());
   }, []);
 
   // for realtime
@@ -95,9 +110,12 @@ function Chat() {
             dispatch(action);
           });
         })
-        .catch((e) => {
-          console.error("Connection failed: ", e);
-          openPopup("Connection failed", e);
+        .catch((error) => {
+          var message =
+            typeof error === "string" ? error : "Something went wrong!";
+
+          console.error("Connection failed: ", error);
+          openPopup("Connection failed", message);
         });
     }
     return () => {

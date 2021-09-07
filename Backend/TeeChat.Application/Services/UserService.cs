@@ -150,16 +150,6 @@ namespace TeeChat.Application.Services
                         }
                         isChanged = true;
                         user.AvatarFileName = fileName;
-
-                        var oldClaim = _currentUser.User.FindFirst("avatarUrl");
-                        if (oldClaim != null)
-                        {
-                            await _userManager.ReplaceClaimAsync(user, oldClaim, new Claim("avatarFileName", user.AvatarFileName));
-                        }
-                        else
-                        {
-                            await _userManager.AddClaimAsync(user, new Claim("avatarFileName", user.AvatarFileName));
-                        }
                     }
                 }
                 catch (Exception e)
@@ -189,7 +179,7 @@ namespace TeeChat.Application.Services
             {
                 StatusCode = 200,
                 Message = "Update user successfully"
-            }; ;
+            };
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterRequest request)
@@ -216,13 +206,35 @@ namespace TeeChat.Application.Services
             var result = await _userManager.CreateAsync(user, request.Password);
             await _userManager.AddClaimAsync(user, new Claim("id", user.Id));
             await _userManager.AddClaimAsync(user, new Claim("userName", user.UserName));
-            await _userManager.AddClaimAsync(user, new Claim("firstName", user.LastName));
-            await _userManager.AddClaimAsync(user, new Claim("lastName", user.FirstName));
+            await _userManager.AddClaimAsync(user, new Claim("firstName", user.FirstName));
+            await _userManager.AddClaimAsync(user, new Claim("lastName", user.LastName));
+            await _userManager.AddClaimAsync(user, new Claim("fullName", user.LastName + " " + user.FirstName));
             await _userManager.AddClaimAsync(user, new Claim("email", user.Email));
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.UserName));
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, user.UserName));
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Email, user.Email));
             return result;
+        }
+
+        public async Task<ApiResult<UserViewModel>> GetCurrentUserAsync()
+        {
+            var user = await _context.Users.FindAsync(_currentUser.UserId);
+            if (user == null)
+            {
+                return new ApiResult<UserViewModel>(null)
+                {
+                    StatusCode = 400,
+                    Message = "Something went wrong. Cannot find user: " + _currentUser.UserName
+                };
+            }
+
+            var responseUser = _mapper.Map<UserViewModel>(user);
+
+            return new ApiResult<UserViewModel>(responseUser)
+            {
+                StatusCode = 200,
+                Message = "Get current user successfully"
+            };
         }
     }
 }

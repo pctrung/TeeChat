@@ -14,7 +14,11 @@ import Popup from "components/Popup";
 function Register() {
   const [isChanged, setIsChanged] = useState(false);
   const [isExistsUserName, setIsExistsUserName] = useState(true);
-  const [popup, setPopup] = useState(true);
+  const [popup, setPopup] = useState({
+    isOpen: false,
+    content: "",
+    title: "Notification",
+  });
 
   const dispatch = useDispatch();
   const history = useHistory();

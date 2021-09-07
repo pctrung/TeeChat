@@ -54,11 +54,10 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
       .catch((error) => {
         var message =
           typeof error === "string" ? error : "Something went wrong!";
-
+        dispatch(setIsLoading(false));
         openPopup("Notification", message);
       });
     setIsOpen(false);
-    await dispatch(setIsLoading(false));
   }
   function openPopup(title, content) {
     const popup = {

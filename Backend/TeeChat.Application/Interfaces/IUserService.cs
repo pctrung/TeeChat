@@ -13,6 +13,8 @@ namespace TeeChat.Application.Interfaces
 
         Task<List<UserViewModel>> GetFriendListAsync();
 
+        Task<ApiResult<UserViewModel>> GetCurrentUserAsync();
+
         Task<string> LoginAsync(LoginRequest request);
 
         Task LogoutAsync();

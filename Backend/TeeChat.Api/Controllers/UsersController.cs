@@ -68,6 +68,19 @@ namespace TeeChat.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("current")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUserAsync()
+        {
+            var result = await _userService.GetCurrentUserAsync();
+
+            switch (result.StatusCode)
+            {
+                case 200: return Ok(result.Data);
+                default: return BadRequest(result.Message);
+            }
+        }
+
         [HttpPut]
         [Authorize]
         public async Task<IActionResult> UpdateUserAsync([FromForm] UpdateUserRequest request)

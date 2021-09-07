@@ -21,9 +21,10 @@ function ChatWindow({ chat }) {
 
   let currentUserName = currentUser.userName;
 
-  const friend = chat.participants
-    ?.filter((x) => x.userName !== currentUserName)
-    .shift();
+  const friend =
+    chat.participants.length > 1
+      ? chat.participants?.filter((x) => x.userName !== currentUserName).shift()
+      : currentUser;
 
   function backToChats() {
     const action = setSelectedId(0);

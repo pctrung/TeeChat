@@ -22,6 +22,10 @@ const userApi = {
     const url = `${baseApiUrl}`;
     return Api.get(url);
   },
+  getCurrentUser: () => {
+    const url = `${baseApiUrl}/current`;
+    return Api.get(url);
+  },
   updateUser: (content) => {
     const url = `${baseApiUrl}`;
     Api.interceptors.request.use(async (config) => {

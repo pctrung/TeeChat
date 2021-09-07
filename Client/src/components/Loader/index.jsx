@@ -13,7 +13,7 @@ const Loader = ({ className, isOpen = true }) => {
     isOpen && (
       <div
         className={
-          "z-50  animate-fade flex h-screen w-screen justify-center items-center fixed transition-all duration-200 bg-white " +
+          "z-50  animate-fade flex h-screen w-screen justify-center items-center fixed transition-all duration-200 bg-white bg-opacity-80" +
           (isEnding ? " hidden" : "") +
           (" " + className ?? "")
         }

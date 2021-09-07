@@ -41,10 +41,13 @@ function ChatList() {
               return;
             }
 
-            const friend = chat.participants
-              ?.filter((x) => x.userName !== currentUserName)
-              .shift();
-
+            const friend =
+              chat.participants.length > 1
+                ? chat.participants
+                    ?.filter((x) => x.userName !== currentUserName)
+                    .shift()
+                : currentUser;
+            console.log(currentUser);
             let lastMessage = {};
             if (chat.messages?.length !== 0) {
               lastMessage = chat.messages?.reduce((a, b) =>
@@ -63,7 +66,7 @@ function ChatList() {
                 <ImageCircle
                   src={
                     chat.type === constants.chatType.PRIVATE
-                      ? friend.avatarUrl
+                      ? friend?.avatarUrl
                       : chat.groupAvatarUrl
                   }
                   size="lg"
