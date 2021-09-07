@@ -175,7 +175,11 @@ function ChatWindow({ chat }) {
                   className="flex items-end space-x-2"
                 >
                   <img
-                    src={message.senderAvatarUrl ?? DefaultAvatar}
+                    src={
+                      chat.participants
+                        .filter((x) => x.userName === message.senderUserName)
+                        .shift()?.avatarUrl ?? DefaultAvatar
+                    }
                     alt="Avatar"
                     className="h-8 w-8 rounded-full object-cover"
                   />
