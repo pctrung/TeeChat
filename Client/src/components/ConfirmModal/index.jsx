@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 ConfirmModal.propTypes = {
   title: PropTypes.string,
   isOpen: PropTypes.bool,
-  setIsOpen: PropTypes.bool,
   confirmButtonTitle: PropTypes.string,
   confirmButtonAction: PropTypes.func,
 };
@@ -14,7 +13,7 @@ function ConfirmModal({
   title,
   isOpen,
   content = "Are you sure?",
-  setIsOpen,
+  closeAction,
   confirmButtonTitle,
   confirmButtonAction,
 }) {
@@ -27,7 +26,7 @@ function ConfirmModal({
           </h3>
           <span className="break-words">{content}</span>
           <div className="w-full flex justify-end space-x-2">
-            <Button outline content="No" onClick={() => setIsOpen(false)} />
+            <Button outline content="No" onClick={closeAction} />
             <Button
               content={confirmButtonTitle ?? "Ok"}
               onClick={confirmButtonAction}

@@ -12,6 +12,12 @@ const currentUser = createSlice({
         return state;
       }
     },
+    updateUser: (state, action) => {
+      if (action.payload.userName) {
+        state = action.payload;
+        return state;
+      }
+    },
   },
 });
 
@@ -19,7 +25,7 @@ const reducer = combineReducers({
   currentUser: currentUser.reducer,
 });
 
-export const { getCurrentUser } = currentUser.actions;
+export const { getCurrentUser, updateUser } = currentUser.actions;
 export default reducer;
 
 function decodeCurrentUser() {

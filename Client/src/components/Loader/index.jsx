@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
 const Loader = ({ className, isOpen = true }) => {
-  let circleCommonClasses = "h-3 w-3 bg-green-300 rounded-full";
+  let circleCommonClasses =
+    "h-3 w-3 bg-gradient-to-br from-green-300 to-green-600 shadow-md rounded-full";
   const [isEnding, setIsEnding] = useState(false);
   useEffect(() => {
     return () => {

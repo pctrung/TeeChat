@@ -6,6 +6,8 @@ module.exports = {
       maxWidth: {
         "1/4": "25%",
         "1/2": "50%",
+        "2/3": "66.666667%",
+        "2/5": "40%",
         "3/4": "75%",
         100: "100px",
         150: "150px",
@@ -20,6 +22,8 @@ module.exports = {
       maxHeight: {
         "1/4": "25%",
         "1/2": "50%",
+        "2/3": "66.666667%",
+        "2/5": "40%",
         "3/4": "75%",
         100: "100px",
         150: "150px",
@@ -34,6 +38,8 @@ module.exports = {
       minWidth: {
         "1/4": "25%",
         "1/2": "50%",
+        "2/3": "66.666667%",
+        "2/5": "40%",
         "3/4": "75%",
         100: "100px",
         150: "150px",
@@ -48,6 +54,8 @@ module.exports = {
       minHeight: {
         "1/4": "25%",
         "1/2": "50%",
+        "2/3": "66.666667%",
+        "2/5": "40%",
         "3/4": "75%",
         100: "100px",
         150: "150px",
@@ -77,6 +85,7 @@ module.exports = {
     },
   },
   variants: {
+    gradientColorStops: ["active", "group-hover"],
     transform: ["responsive", "hover", "focus", "active", "group-hover"],
     scale: ["responsive", "hover", "focus", "active", "group-hover"],
     extend: {

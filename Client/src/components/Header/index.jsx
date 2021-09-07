@@ -1,14 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
-
-import NewChatIcon from "assets/icons/new-chat-icon.svg";
-import MenuIcon from "assets/icons/menu-icon.svg";
-import ClickableIcon from "../ClickableIcon";
 import DarkModeIcon from "assets/icons/dark-mode-icon.svg";
+import MenuIcon from "assets/icons/menu-icon.svg";
+import NewChatIcon from "assets/icons/new-chat-icon.svg";
 import SignOutIcon from "assets/icons/sign-out-icon.svg";
-import { useSelector } from "react-redux";
-import ImageCircle from "components/ImageCircle";
+import ConfirmModal from "components/ConfirmModal";
 import CreateChat from "components/CreateChat";
+import ImageCircle from "components/ImageCircle";
+import UserInfo from "components/UserInfo";
+import PropTypes from "prop-types";
+import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import ClickableIcon from "../ClickableIcon";
 
 Header.propTypes = {
   logout: PropTypes.func,
@@ -18,6 +19,13 @@ function Header({ logout }) {
   const currentUser = useSelector((state) => state.users.currentUser);
 
   const [isOpenCreateChat, setIsOpenCreateChat] = useState(false);
+  const [isOpenUserInfo, setIsOpenUserInfo] = useState(false);
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: "",
+    content: "",
+    confirmButtonTitle: "",
+  });
 
   const userAvatar = currentUser.avatarUrl;
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -38,12 +46,48 @@ function Header({ logout }) {
     };
   }, [isOpenMenu]);
 
+  function openConfirmModal(
+    content,
+    confirmButtonAction,
+    confirmButtonTitle = "Yes",
+    title,
+  ) {
+    const confirmModal = {
+      isOpen: true,
+      title: title,
+      content: content,
+      confirmButtonTitle: confirmButtonTitle,
+      confirmButtonAction: confirmButtonAction,
+    };
+    setConfirmModal(confirmModal);
+  }
+
   return (
     <>
+      {confirmModal.isOpen && (
+        <ConfirmModal
+          isOpen={confirmModal.isOpen}
+          closeAction={() => setConfirmModal({ isOpen: false })}
+          title="Are you sure?"
+          content={confirmModal.content}
+          confirmButtonTitle={confirmModal.confirmButtonTitle}
+          confirmButtonAction={confirmModal.confirmButtonAction}
+        />
+      )}
+      <UserInfo
+        currentUser={currentUser}
+        isOpen={isOpenUserInfo}
+        setIsOpen={setIsOpenUserInfo}
+      />
       <CreateChat isOpen={isOpenCreateChat} setIsOpen={setIsOpenCreateChat} />
       <div className="h-24 flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <ImageCircle src={userAvatar} size="md" />
+          <div
+            className="transition-all duration-200 ring ring-green-500 p-1 transform active:scale-95 rounded-full cursor-pointer"
+            onClick={() => setIsOpenUserInfo((x) => !x)}
+          >
+            <ImageCircle src={userAvatar} size="md" />
+          </div>
           <h1 className="font-bold text-3xl">Chats</h1>
         </div>
         <div className="flex space-x-1 items-center">
@@ -68,7 +112,9 @@ function Header({ logout }) {
                 </button>
                 <button
                   className="flex space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200"
-                  onClick={logout}
+                  onClick={() => {
+                    openConfirmModal("Do you want to log out?", logout);
+                  }}
                 >
                   <img
                     src={SignOutIcon}

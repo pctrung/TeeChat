@@ -1,11 +1,6 @@
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import chatApi from "api/chatApi";
-import {
-  setIsLoading,
-  setIsOpenPopup,
-  setPopupContent,
-  setPopupTitle,
-} from "app/appSlice";
+import { setIsLoading, setPopup } from "app/appSlice";
 import {
   addChat,
   addMessage,
@@ -32,10 +27,6 @@ function Chat() {
   const chats = useSelector((state) => state.chats.chats);
   const currentUser = useSelector((state) => state.users.currentUser);
   const selectedId = useSelector((state) => state.chats.selectedId);
-  const isLoading = useSelector((state) => state.app.isLoading);
-  const popupTitle = useSelector((state) => state.app.popupTitle);
-  const isOpenPopup = useSelector((state) => state.app.isOpenPopup);
-  const popupContent = useSelector((state) => state.app.popupContent);
 
   function logout() {
     window.localStorage.removeItem("token");
@@ -44,8 +35,6 @@ function Chat() {
   }
 
   useEffect(() => {
-    dispatch(setIsLoading(true));
-
     async function fetchData() {
       chatApi
         .getAll()
@@ -64,15 +53,10 @@ function Chat() {
         });
     }
 
+    dispatch(setIsLoading(true));
     fetchData();
-
     dispatch(getCurrentUser());
   }, []);
-
-  function onPopupClick() {
-    const action = setIsOpenPopup(false);
-    dispatch(action);
-  }
 
   // for realtime
   useEffect(() => {
@@ -124,23 +108,16 @@ function Chat() {
   }, [connection]);
 
   function openPopup(title, content) {
-    const setIsOpenAction = setIsOpenPopup(true);
-    const setContentAction = setPopupContent(content);
-    const setTileAction = setPopupTitle(title);
-    dispatch(setIsOpenAction);
-    dispatch(setContentAction);
-    dispatch(setTileAction);
+    const popup = {
+      isOpen: true,
+      title: title,
+      content: content,
+    };
+    dispatch(setPopup(popup));
   }
 
   return (
     <>
-      <Loader isOpen={isLoading} className="z-50" />
-      <Popup
-        title={popupTitle}
-        isOpen={isOpenPopup}
-        content={popupContent}
-        onClick={onPopupClick}
-      />
       <div className="animate-fade grid grid-cols-12 h-screen w-screen">
         <div
           className={

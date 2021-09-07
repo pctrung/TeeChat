@@ -1,22 +1,23 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import userApi from "api/userApi";
-import LoginPageImage from "assets/img/login-page.jpg";
-import Button from "components/Button";
-import Loader from "components/Loader";
-import Popup from "components/Popup";
 import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
 import * as yup from "yup";
+
+import userApi from "api/userApi";
+import { setIsLoading } from "app/appSlice";
+import LoginPageImage from "assets/img/login-page.jpg";
+import Button from "components/Button";
+import Popup from "components/Popup";
 
 function Register() {
   const [isChanged, setIsChanged] = useState(false);
-  const [isLoaderOpen, setIsLoaderOpen] = useState(false);
   const [isExistsUserName, setIsExistsUserName] = useState(true);
+  const [popup, setPopup] = useState(true);
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [popupTitle, setPopupTitle] = useState("");
-  const [popupContent, setPopupContent] = useState("");
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   // yup validation
   const schema = yup.object().shape({
@@ -134,14 +135,13 @@ function Register() {
 
   // handle submit
   const onSubmit = (content) => {
-    setIsLoaderOpen(true);
+    dispatch(setIsLoading(true));
 
     userApi
       .register(content)
       .then((response) => {
-        setIsPopupOpen(true);
-        setPopupTitle("Success");
-        setPopupContent(
+        openPopup(
+          "Success",
           <span>
             "Create account successfully! Please{" "}
             <Link className="font-bold text-green-600" to="/login">
@@ -153,28 +153,35 @@ function Register() {
         reset({});
       })
       .catch((error) => {
-        if (typeof error === "string") {
-          setIsPopupOpen(true);
-          setPopupTitle("Create account failed");
-          setPopupContent(error);
-        } else {
-          setIsPopupOpen(true);
-          setPopupTitle("Create account failed");
-          setPopupContent("Cannot create account. Something went wrong!");
-        }
+        const message =
+          typeof error === "string"
+            ? error
+            : "Cannot create account. Something went wrong!";
+        openPopup("Create account failed", message);
       });
-    setIsLoaderOpen(false);
+    dispatch(setIsLoading(false));
   };
+
+  function openPopup(title, content) {
+    const popup = {
+      isOpen: true,
+      title: title,
+      content: content,
+    };
+    setPopup(popup);
+  }
 
   return (
     <>
       <Popup
-        isOpen={isPopupOpen}
-        title={popupTitle}
-        content={popupContent}
-        onClick={() => setIsPopupOpen(false)}
+        title={popup.title}
+        isOpen={popup.isOpen}
+        content={popup.content}
+        onClick={() => {
+          setPopup({ isOpen: false });
+          history.push("/login");
+        }}
       />
-      <Loader isOpen={isLoaderOpen} />
       <div className="z-10 h-screen grid md:grid-cols-7 place-items-center px-6">
         <img
           src={LoginPageImage}

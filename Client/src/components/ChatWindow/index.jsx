@@ -1,17 +1,16 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import moment from "moment";
-import DefaultAvatar from "assets/img/default-avatar.jpg";
-import constants from "utils/constants";
-import LeftArrowIcon from "assets/icons/left-arrow-icon.svg";
-import InfoIcon from "assets/icons/info-icon.svg";
 import { appendMessageToChat, setSelectedId } from "app/chatSlice";
+import InfoIcon from "assets/icons/info-icon.svg";
+import LeftArrowIcon from "assets/icons/left-arrow-icon.svg";
+import DefaultAvatar from "assets/img/default-avatar.jpg";
 import ChatInput from "components/ChatInput";
-import ImageCircle from "components/ImageCircle";
 import ClickableIcon from "components/ClickableIcon";
 import EditChat from "components/EditChat";
+import ImageCircle from "components/ImageCircle";
 import useMessagePagination from "hooks/useMessagePagination";
+import moment from "moment";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import constants from "utils/constants";
 
 function ChatWindow({ chat }) {
   const dispatch = useDispatch();
@@ -61,7 +60,7 @@ function ChatWindow({ chat }) {
   };
 
   useEffect(() => {
-    if (chat.page === 1) {
+    if (chat.page < 2) {
       scrollToBottom();
     }
   }, [chat]);
@@ -136,7 +135,7 @@ function ChatWindow({ chat }) {
                 <>
                   <div
                     key={index + Math.random()}
-                    className="flex flex-col items-end"
+                    className="flex flex-col items-end w-full"
                   >
                     {showTimeIndexes.includes(index) && (
                       <span className="transition-all animate-fade text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
@@ -157,11 +156,11 @@ function ChatWindow({ chat }) {
                       <span
                         onClick={() => handleMessageClick(index)}
                         className={
-                          "text-white rounded-3xl px-4 py-2 break-all rounded-br-none cursor-pointer" +
+                          "text-white rounded-3xl px-5 py-3 break-word rounded-br-none cursor-pointer overflow-x-auto max-w-3/4" +
                           " " +
                           (showTimeIndexes.includes(index)
                             ? "bg-green-600"
-                            : "bg-green-500")
+                            : "bg-gradient-to-br from-green-400 to-green-600 shadow-md")
                         }
                       >
                         {message.content}
@@ -179,24 +178,37 @@ function ChatWindow({ chat }) {
                     alt="Avatar"
                     className="h-8 w-8 rounded-full object-cover"
                   />
-                  <div className="flex flex-col items-start">
-                    <span className="text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis">
-                      {message.senderFullName +
-                        " - " +
-                        moment(
-                          new Date(message.dateCreated),
-                          "YYYYMMDD",
-                        ).calendar() ?? ""}
-                    </span>
+                  <div className="flex flex-col w-full items-start">
+                    {(showTimeIndexes.includes(index) ||
+                      chat.type === constants.chatType.GROUP) && (
+                      <span className="transition-all animate-fade text-sm text-gray-400 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-left">
+                        {message.senderFullName +
+                          " - " +
+                          moment(
+                            new Date(message.dateCreated),
+                            "YYYYMMDD",
+                          ).calendar() ?? ""}
+                      </span>
+                    )}
                     {message.imageUrl ? (
                       <img
+                        onClick={() => handleMessageClick(index)}
                         onClick={() => handleMessageClick(index)}
                         className="max-w-300 rounded-lg shadow cursor-pointer"
                         src={message.imageUrl}
                         alt="Message image"
                       />
                     ) : (
-                      <span className="bg-gray-200 rounded-3xl px-4 py-2 break-all rounded-bl-none">
+                      <span
+                        className={
+                          " rounded-3xl px-5 py-3 break-word rounded-bl-none shadow-sm cursor-pointer overflow-x-auto max-w-3/4" +
+                          " " +
+                          (showTimeIndexes.includes(index)
+                            ? "bg-gray-300"
+                            : "bg-gradient-to-br from-gray-100 to-gray-300")
+                        }
+                        onClick={() => handleMessageClick(index)}
+                      >
                         {message.content}
                       </span>
                     )}

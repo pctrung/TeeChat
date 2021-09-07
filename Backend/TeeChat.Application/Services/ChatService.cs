@@ -321,12 +321,13 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var chats = await _context.Chats
-                .Where(x => x.Participants.Contains(user))
+            var query = _context.Chats
                 .Include(x => x.Participants)
                 .Include(x => x.Messages)
                 .OrderBy(x => x.DateCreated)
-                .AsSplitQuery().ToListAsync();
+                .AsSplitQuery();
+
+            var chats = await query.Where(x => x.Participants.Contains(user)).ToListAsync();
 
             var chatViewModel = new List<ChatViewModel>();
 

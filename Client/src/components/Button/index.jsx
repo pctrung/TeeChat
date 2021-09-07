@@ -21,17 +21,15 @@ function Button({
         onClick={onClick}
         onBlur={onBlur}
         className={
-          "px-4 py-2 rounded-lg transition-all duration-200 disabled:opacity-50 outline-none z-0" +
+          "px-4 py-2 rounded-lg transition-all duration-200 disabled:opacity-50 outline-none z-0 select-none " +
           " " +
           (outline
-            ? "border border-green-500 bg-white text-green-500 hover:text-white "
-            : "bg-green-500 text-white  focus:ring-green-300 ") +
+            ? "border border-green-500 bg-white text-green-500 hover:text-white hover:bg-green-400 active:bg-green-500"
+            : "bg-gradient-to-br from-green-400 to-green-600 text-white active:from-green-500 active:to-green-600  ") +
           " " +
           (className ?? "") +
           " " +
-          (!disabled
-            ? "hover:bg-green-600 active:bg-green-700 active:scale-95 active:transform"
-            : "cursor-default")
+          (!disabled ? "active:scale-95 active:transform" : "cursor-default")
         }
       >
         {content}

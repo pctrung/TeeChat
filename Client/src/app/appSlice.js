@@ -2,7 +2,7 @@ import { combineReducers, createSlice } from "@reduxjs/toolkit";
 
 const isLoading = createSlice({
   name: "isLoading",
-  initialState: true,
+  initialState: false,
   reducers: {
     setIsLoading: (state, action) => {
       state = action.payload;
@@ -11,31 +11,15 @@ const isLoading = createSlice({
   },
 });
 
-const isOpenPopup = createSlice({
-  name: "isOpenPopup",
-  initialState: false,
-  reducers: {
-    setIsOpenPopup: (state, action) => {
-      state = action.payload;
-      return state;
-    },
+const popup = createSlice({
+  name: "popup",
+  initialState: {
+    isOpen: false,
+    content: "",
+    title: "Notification",
   },
-});
-const popupContent = createSlice({
-  name: "popupContent",
-  initialState: "",
   reducers: {
-    setPopupContent: (state, action) => {
-      state = action.payload;
-      return state;
-    },
-  },
-});
-const popupTitle = createSlice({
-  name: "popupTitle",
-  initialState: "",
-  reducers: {
-    setPopupTitle: (state, action) => {
+    setPopup: (state, action) => {
       state = action.payload;
       return state;
     },
@@ -43,14 +27,10 @@ const popupTitle = createSlice({
 });
 
 const reducer = combineReducers({
-  isOpenPopup: isOpenPopup.reducer,
   isLoading: isLoading.reducer,
-  popupContent: popupContent.reducer,
-  popupTitle: popupTitle.reducer,
+  popup: popup.reducer,
 });
 
 export const { setIsLoading } = isLoading.actions;
-export const { setIsOpenPopup } = isOpenPopup.actions;
-export const { setPopupContent } = popupContent.actions;
-export const { setPopupTitle } = popupTitle.actions;
+export const { setPopup } = popup.actions;
 export default reducer;

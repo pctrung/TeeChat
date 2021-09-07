@@ -70,7 +70,7 @@ namespace TeeChat.Api.Controllers
 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> UpdateUserAsync([FromForm]UpdateUserRequest request)
+        public async Task<IActionResult> UpdateUserAsync([FromForm] UpdateUserRequest request)
         {
             var result = await _userService.UpdateUserAsync(request);
 

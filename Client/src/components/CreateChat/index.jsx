@@ -1,10 +1,9 @@
 import chatApi from "api/chatApi";
 import userApi from "api/userApi";
-import { setIsLoading } from "app/appSlice";
+import { setIsLoading, setPopup } from "app/appSlice";
 import { setSelectedId } from "app/chatSlice";
 import Button from "components/Button";
 import ImageCircle from "components/ImageCircle";
-import Popup from "components/Popup";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import constants from "utils/constants";
@@ -21,10 +20,6 @@ function CreateChat({ isOpen, setIsOpen }) {
   const ref = useRef();
   const friendListRef = useRef();
   const dispatch = useDispatch();
-
-  const [popupTitle, setPopupTitle] = useState("");
-  const [isOpenPopup, setIsOpenPopup] = useState(false);
-  const [popupContent, setPopupContent] = useState("");
 
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
@@ -81,7 +76,7 @@ function CreateChat({ isOpen, setIsOpen }) {
   }, [selectedFriendList, groupName, selectedMode]);
 
   async function handleCreateGroup() {
-    await dispatch(setIsLoading(true));
+    dispatch(setIsLoading(true));
 
     if (isValidButton) {
       if (selectedMode === constants.chatType.GROUP) {
@@ -130,12 +125,15 @@ function CreateChat({ isOpen, setIsOpen }) {
           });
       }
     }
-    await dispatch(setIsLoading(false));
+    dispatch(setIsLoading(false));
   }
   function openPopup(title, content) {
-    setIsOpenPopup(true);
-    setPopupContent(content);
-    setPopupTitle(title);
+    const popup = {
+      isOpen: true,
+      title: title,
+      content: content,
+    };
+    dispatch(setPopup(popup));
   }
   return isOpen ? (
     <div className="animate-fade fixed grid place-items-center h-screen w-screen px-4 z-30">
@@ -147,19 +145,13 @@ function CreateChat({ isOpen, setIsOpen }) {
           (isOpenFriendList ? "mb-16" : "")
         }
       >
-        <Popup
-          title={popupTitle}
-          isOpen={isOpenPopup}
-          content={popupContent}
-          onClick={() => setIsOpenPopup(false)}
-        />
         <div className="flex px-10 pt-6 pb-5 space-x-7 justify-between h-full items-center">
           <h3 className="font-semibold text-2xl text-green-600">New chat!</h3>
 
           <div className="relative flex rounded-md items-center border border-green-500 cursor-pointer">
             <div
               className={
-                "absolute bg-green-500 w-1/2 h-full rounded-md transition-all duration-200 z-0" +
+                "absolute bg-gradient-to-br from-green-400 to-green-600 w-1/2 h-full rounded-md transition-all duration-200 z-0" +
                 " " +
                 (selectedMode === constants.chatType.GROUP
                   ? "transform translate-x-full left-0"
@@ -168,7 +160,7 @@ function CreateChat({ isOpen, setIsOpen }) {
             ></div>
             <span
               className={
-                " px-3 py-2 z-10 text-sm" +
+                " px-3 py-2 z-10 text-sm select-none " +
                 " " +
                 (selectedMode === constants.chatType.PRIVATE
                   ? "text-white"
@@ -180,7 +172,7 @@ function CreateChat({ isOpen, setIsOpen }) {
             </span>
             <span
               className={
-                " px-3 py-2 z-10 text-sm" +
+                " px-3 py-2 z-10 text-sm select-none " +
                 " " +
                 (selectedMode === constants.chatType.GROUP
                   ? "text-white"

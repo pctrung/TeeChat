@@ -1,6 +1,6 @@
-import React from "react";
 import DefaultAvatar from "assets/img/default-avatar.jpg";
 import PropTypes from "prop-types";
+import React from "react";
 
 ImageCircle.propTypes = {
   src: PropTypes.string,
@@ -38,15 +38,19 @@ function ImageCircle({
       realSize = mdSize;
   }
   return (
-    <div>
+    <>
       <img
         className={
-          realSize + " " + "rounded-full object-cover " + " " + className ?? ""
+          realSize +
+            " " +
+            "select-none  rounded-full object-cover " +
+            " " +
+            className ?? ""
         }
         src={!src || src === "" ? DefaultAvatar : src}
         alt={alt}
       />
-    </div>
+    </>
   );
 }
 

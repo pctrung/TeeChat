@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import moment from "moment";
-import constants from "utils/constants";
-import { useDispatch, useSelector } from "react-redux";
 import { setSelectedId } from "app/chatSlice";
 import ImageCircle from "components/ImageCircle";
+import moment from "moment";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import constants from "utils/constants";
 
 function ChatList() {
   const chats = useSelector((state) => state.chats.chats);
@@ -75,13 +75,17 @@ function ChatList() {
                       ? friend?.fullName
                       : chat.name ?? constants.NO_NAME_GROUP}
                   </span>
-                  <span className="text-sm text-gray-500 truncate">
-                    {(lastMessage.content ? lastMessage.content + " • " : "") +
-                      moment(
+                  <div className="flex">
+                    <span className="mr-2 text-sm max-w-150 text-gray-500 truncate">
+                      {lastMessage.content ?? ""}
+                    </span>
+                    <span className="text-sm flex-grow text-gray-500 truncate">
+                      {moment(
                         new Date(lastMessage.dateCreated ?? chat.dateCreated),
                         "YYYYMMDD",
                       ).fromNow()}
-                  </span>
+                    </span>
+                  </div>
                 </div>
               </div>
             );

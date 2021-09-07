@@ -114,6 +114,7 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<UserViewModel>> UpdateUserAsync(UpdateUserRequest request)
         {
+            bool isChanged = false;
             var user = await _context.Users.FindAsync(_currentUser.UserId);
             if (user == null)
             {
@@ -126,10 +127,12 @@ namespace TeeChat.Application.Services
 
             if (!string.IsNullOrWhiteSpace(request.FirstName))
             {
+                isChanged = true;
                 user.FirstName = request.FirstName;
             }
             if (!string.IsNullOrWhiteSpace(request.LastName))
             {
+                isChanged = true;
                 user.LastName = request.LastName;
             }
             if (request.Avatar != null)
@@ -145,7 +148,18 @@ namespace TeeChat.Application.Services
                             var currentFileName = user.AvatarFileName;
                             await _storageService.DeleteFileAsync(currentFileName);
                         }
+                        isChanged = true;
                         user.AvatarFileName = fileName;
+
+                        var oldClaim = _currentUser.User.FindFirst("avatarUrl");
+                        if (oldClaim != null)
+                        {
+                            await _userManager.ReplaceClaimAsync(user, oldClaim, new Claim("avatarFileName", user.AvatarFileName));
+                        }
+                        else
+                        {
+                            await _userManager.AddClaimAsync(user, new Claim("avatarFileName", user.AvatarFileName));
+                        }
                     }
                 }
                 catch (Exception e)
@@ -159,17 +173,17 @@ namespace TeeChat.Application.Services
             }
 
             await _context.SaveChangesAsync();
-            var responseUser = _mapper.Map<UserViewModel>(user);
 
-            var oldClaim = _currentUser.User.FindFirst("avatarUrl");
-            if (oldClaim != null)
+            if (!isChanged)
             {
-                await _userManager.ReplaceClaimAsync(user, oldClaim, new Claim("avatarFileName", user.AvatarFileName));
+                return new ApiResult<UserViewModel>(null)
+                {
+                    StatusCode = 400,
+                    Message = "Nothing is changed!"
+                };
             }
-            else
-            {
-                await _userManager.AddClaimAsync(user, new Claim("avatarFileName", user.AvatarFileName));
-            }
+
+            var responseUser = _mapper.Map<UserViewModel>(user);
 
             return new ApiResult<UserViewModel>(responseUser)
             {

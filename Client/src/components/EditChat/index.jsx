@@ -1,10 +1,9 @@
 import chatApi from "api/chatApi";
 import userApi from "api/userApi";
-import { setIsLoading } from "app/appSlice";
+import { setIsLoading, setPopup } from "app/appSlice";
 import Button from "components/Button";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
-import Popup from "components/Popup";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,10 +12,6 @@ import constants from "utils/constants";
 function EditChat({ isOpen, setIsOpen, chat }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
-
-  const [popupTitle, setPopupTitle] = useState("");
-  const [isOpenPopup, setIsOpenPopup] = useState(false);
-  const [popupContent, setPopupContent] = useState("");
 
   const [groupName, setGroupName] = useState(chat.name);
   const [keyword, setKeyword] = useState("");
@@ -173,9 +168,12 @@ function EditChat({ isOpen, setIsOpen, chat }) {
     await dispatch(setIsLoading(false));
   }
   function openPopup(title, content) {
-    setIsOpenPopup(true);
-    setPopupContent(content);
-    setPopupTitle(title);
+    const popup = {
+      isOpen: true,
+      title: title,
+      content: content,
+    };
+    dispatch(setPopup(popup));
   }
   function openModal(content) {
     setIsOpenModal(true);
@@ -196,16 +194,9 @@ function EditChat({ isOpen, setIsOpen, chat }) {
           (isOpenFriendList ? "mb-16" : "")
         }
       >
-        <Popup
-          title={popupTitle}
-          isOpen={isOpenPopup}
-          content={popupContent}
-          onClick={() => setIsOpenPopup(false)}
-        />
-
         <ConfirmModal
           isOpen={isOpenModal}
-          setIsOpen={setIsOpenModal}
+          closeAction={() => setIsOpenModal(false)}
           title="Are you sure?"
           content={modalContent}
           confirmButtonTitle="Yes"
