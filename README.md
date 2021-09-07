@@ -8,6 +8,8 @@ My pet project - A chat application for TeeApp social media
  - Redux
 
  ## UI
-![Desktop - 2](https://user-images.githubusercontent.com/44517184/132318240-13ea0c1f-2ad0-49db-8d18-a523d71fa396.png)
+ - Dribble: https://dribbble.com/shots/16398002-TeeChat
+<img width="2828" alt="TeeChat" src="https://user-images.githubusercontent.com/44517184/132330120-7ae4142b-2fce-4e88-8df2-04fdcfae34cc.png">
+
 
 
