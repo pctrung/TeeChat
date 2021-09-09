@@ -9,23 +9,59 @@
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
+    transition: all;
+    duration: 0.2s;
   }
 
   /* Track */
   ::-webkit-scrollbar-track {
     border-radius: 100vh;
-    background: #edf2f7;
+    transition: all;
+    duration: 0.2s;
   }
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
+    background: #e9eaee;
     border-radius: 100vh;
     border: 0px solid #edf2f7;
+    transition: all;
+    duration: 0.2s;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #a0aec0;
+    background: #e2e3e8;
+    transition: all;
+    duration: 0.2s;
+  }
+  ::-webkit-scrollbar-thumb:active {
+    background: #dadadf;
+    transition: all;
+    duration: 0.2s;
+  }
+
+  /* Dark mode */
+
+  /* Handle */
+  .dark ::-webkit-scrollbar-thumb {
+    background: #1f2937;
+    border-radius: 100vh;
+    border: 0px solid #edf2f7;
+    transition: all;
+    duration: 0.2s;
+  }
+
+  /* Handle on hover */
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #2a384c;
+    transition: all;
+    duration: 0.2s;
+  }
+  /* Handle on active */
+  .dark ::-webkit-scrollbar-thumb:active {
+    background: #212d3f;
+    transition: all;
+    duration: 0.2s;
   }
 }

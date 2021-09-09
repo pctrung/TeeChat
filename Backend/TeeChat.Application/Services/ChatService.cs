@@ -213,7 +213,7 @@ namespace TeeChat.Application.Services
                 return new ApiResult<CreateChatResponse>(null)
                 {
                     StatusCode = 400,
-                    Message = $"Already exists chat with username: {participant.LastName} {participant.FirstName}. Please open in chat list!"
+                    Message = $"Already exists chat with user: {participant.LastName} {participant.FirstName}. Please open in chat list!"
                 };
             }
 

@@ -1,8 +1,13 @@
 module.exports = {
   purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {
+      color: {
+        "dark-primary": "#18191a",
+        "dark-secondary": "#242526",
+        "dark-hover": "#303031",
+      },
       maxWidth: {
         "1/4": "25%",
         "1/2": "50%",
@@ -85,7 +90,7 @@ module.exports = {
     },
   },
   variants: {
-    gradientColorStops: ["active", "group-hover"],
+    gradientColorStops: ["active", "group-hover", "dark"],
     transform: ["responsive", "hover", "focus", "active", "group-hover"],
     scale: ["responsive", "hover", "focus", "active", "group-hover"],
     extend: {

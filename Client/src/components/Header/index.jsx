@@ -6,6 +6,7 @@ import ConfirmModal from "components/ConfirmModal";
 import CreateChat from "components/CreateChat";
 import ImageCircle from "components/ImageCircle";
 import UserInfo from "components/UserInfo";
+import useDarkMode from "hooks/useDarkMode";
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -26,6 +27,8 @@ function Header({ logout }) {
     content: "",
     confirmButtonTitle: "",
   });
+
+  const { darkMode, setDarkMode } = useDarkMode();
 
   const userAvatar = currentUser.avatarUrl;
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -90,28 +93,33 @@ function Header({ logout }) {
           </div>
           <h1 className="font-bold text-3xl">Chats</h1>
         </div>
-        <div className="flex space-x-1 items-center">
+        <div className="flex space-x-2 items-center">
           <ClickableIcon
             icon={NewChatIcon}
             onClick={() => setIsOpenCreateChat(true)}
+            className="dark:bg-gray-600"
           />
           <div className="relative" ref={ref}>
             <ClickableIcon
               icon={MenuIcon}
               onClick={() => setIsOpenMenu(!isOpenMenu)}
+              className="dark:bg-gray-600"
             />
             {isOpenMenu && (
-              <div className="animate-fade transition-all duration-200 absolute right-0 md:left-0 border border-gray-200 bg-white w-52 rounded-lg shadow-md overflow-hidden p-2 ">
-                <button className="flex space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95">
+              <div className="animate-fade transition-all duration-200 absolute right-0 md:left-0 border border-gray-200 bg-white w-52 rounded-lg shadow-md overflow-hidden p-2 dark:bg-gray-800 dark:border-gray-700 mt-2 select-none">
+                <button
+                  className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95 dark:hover:bg-gray-700"
+                  onClick={() => setDarkMode(!darkMode)}
+                >
                   <img
                     src={DarkModeIcon}
                     alt="Dark mode icon"
-                    className="w-6 h-6"
+                    className="w-8 h-8 dark:bg-gray-600 rounded-full p-1"
                   />
                   <span>Dark Mode</span>
                 </button>
                 <button
-                  className="flex space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95"
+                  className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95 dark:hover:bg-gray-700"
                   onClick={() => {
                     openConfirmModal("Do you want to log out?", logout);
                   }}
@@ -119,7 +127,7 @@ function Header({ logout }) {
                   <img
                     src={SignOutIcon}
                     alt="Dark mode icon"
-                    className="w-6 h-6"
+                    className="w-8 h-8 dark:bg-gray-600 rounded-full p-1"
                   />
                   <span>Log Out</span>
                 </button>

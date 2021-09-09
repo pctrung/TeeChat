@@ -1,7 +1,6 @@
 import { appendMessageToChat, setSelectedId } from "app/chatSlice";
 import InfoIcon from "assets/icons/info-icon.svg";
 import LeftArrowIcon from "assets/icons/left-arrow-icon.svg";
-import DefaultAvatar from "assets/img/default-avatar.jpg";
 import ChatInput from "components/ChatInput";
 import ClickableIcon from "components/ClickableIcon";
 import EditChat from "components/EditChat";
@@ -80,7 +79,7 @@ function ChatWindow({ chat }) {
       />
       <div className="flex flex-col w-full h-full pb-4">
         {/* Header chat window */}
-        <div className="w-full border-b-2 border-gray-200 flex justify-between items-center md:p-4 p-3">
+        <div className="w-full border-b-2 border-gray-200 dark:border-gray-700 flex justify-between items-center md:p-4 p-3">
           <div className="flex justify-between items-center space-x-3">
             <img
               src={LeftArrowIcon}
@@ -89,7 +88,7 @@ function ChatWindow({ chat }) {
               onClick={backToChats}
             />
             <ImageCircle src={chat.groupAvatarUrl ?? friend?.avatarUrl} />
-            <span className="text-lg font-semibold truncate w-60 md:w-96">
+            <span className="text-lg font-semibold dark:text-gray-200 truncate w-60 md:w-96">
               {chat.type === constants.chatType.PRIVATE
                 ? friend?.fullName
                 : chat.name ?? constants.NO_NAME_GROUP}
@@ -111,7 +110,7 @@ function ChatWindow({ chat }) {
           {hasMore && !loading && (
             <div className="flex">
               <button
-                className="mx-auto px-4 bg-gray-200 py-2 rounded-lg transform active:scale-95 hover:bg-gray-300 text-sm transition-all duration-200"
+                className="mx-auto px-4 bg-gray-200 py-2 rounded-lg transform active:scale-95 hover:bg-gray-300 dark:hover:bg-gray-800 dark:bg-gray-700 dark:text-gray-300 text-sm transition-all duration-200"
                 onClick={loadMore}
               >
                 Load more messages...
@@ -160,8 +159,8 @@ function ChatWindow({ chat }) {
                           "text-white rounded-3xl px-5 py-3 break-word rounded-br-none cursor-pointer overflow-x-auto max-w-3/4" +
                           " " +
                           (showTimeIndexes.includes(index)
-                            ? "bg-green-600"
-                            : "bg-gradient-to-br from-green-400 to-green-600 shadow-md")
+                            ? "bg-green-600 dark:bg-green-800"
+                            : "bg-gradient-to-br from-green-400 to-green-600 dark:from-green-500 dark:to-green-800 shadow-md")
                         }
                       >
                         {message.content}
@@ -208,8 +207,8 @@ function ChatWindow({ chat }) {
                           " rounded-3xl px-5 py-3 break-word rounded-bl-none shadow-sm cursor-pointer overflow-x-auto max-w-3/4" +
                           " " +
                           (showTimeIndexes.includes(index)
-                            ? "bg-gray-300"
-                            : "bg-gradient-to-br from-gray-100 to-gray-300")
+                            ? "bg-gray-300 dark:bg-gray-700"
+                            : "bg-gradient-to-br from-gray-100 to-gray-300 dark:from-gray-500 dark:to-gray-600 ")
                         }
                         onClick={() => handleMessageClick(index)}
                       >

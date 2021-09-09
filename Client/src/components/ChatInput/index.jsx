@@ -85,7 +85,7 @@ function ChatInput({ chatId }) {
             onChange={(e) => setContent(e.target.value)}
             type="text"
             placeholder="Aa"
-            className="bg-gray-200 rounded-3xl w-full py-2 px-4 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 relative"
+            className="bg-gray-200 dark:bg-gray-800 rounded-3xl w-full py-2 px-4 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 relative"
           />
           <div ref={ref} position="relative">
             <ClickableIcon
