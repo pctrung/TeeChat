@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function useDarkMode() {
   const [darkMode, setDarkMode] = useState(false);
