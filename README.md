@@ -5,9 +5,11 @@ Now available at https://pctrung.github.io/TeeChat/
 
  ## Tech Stack
  - ASP.NET Core 5.0
- - Entity Framework Core
  - ReactJs
+ - TailwindCSS
  - Redux
+ - SQL Server
+ - Entity Framework Core
 
  ## UI
 - TeeApp:
