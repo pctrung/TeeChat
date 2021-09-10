@@ -21,7 +21,7 @@ function App() {
   }
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Loader isOpen={isLoading} className="z-50" />
         <Popup
           title={popup.title}

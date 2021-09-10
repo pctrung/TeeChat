@@ -1,8 +1,20 @@
+import jwt from "jwt-decode";
 import Api from "./Api.js";
 
 const baseApiUrl = "/users";
 
 const userApi = {
+  isLogin: () => {
+    var token = window.localStorage.getItem("token");
+    if (token && typeof token !== "undefined") {
+      if (jwt(token).exp < Date.now() / 1000) {
+        localStorage.clear();
+        return true;
+      }
+      return false;
+    }
+    return false;
+  },
   login: (content) => {
     const url = `${baseApiUrl}/login`;
     return Api.post(url, content);

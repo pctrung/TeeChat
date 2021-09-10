@@ -34,6 +34,10 @@ function Chat() {
   }
 
   useEffect(() => {
+    if (!userApi.isLogin()) {
+      history.push("/login");
+    }
+
     async function fetchData() {
       dispatch(setIsLoading(true));
       chatApi
