@@ -79,7 +79,7 @@ function ChatWindow({ chat }) {
       />
       <div className="flex flex-col w-full h-full pb-4">
         {/* Header chat window */}
-        <div className="w-full border-b-2 border-gray-200 dark:border-gray-700 flex justify-between items-center md:p-4 p-3">
+        <div className="w-full border-b border-gray-300 dark:border-gray-700 flex justify-between items-center md:p-4 p-3">
           <div className="flex justify-between items-center space-x-3">
             <img
               src={LeftArrowIcon}
@@ -116,7 +116,7 @@ function ChatWindow({ chat }) {
           {hasMore && !loading && (
             <div className="flex">
               <button
-                className="mx-auto px-4 bg-gray-200 py-2 rounded-lg transform active:scale-95 hover:bg-gray-300 dark:hover:bg-gray-800 dark:bg-gray-700 dark:text-gray-300 text-sm transition-all duration-200"
+                className="mx-auto px-4 bg-gray-200 py-2 rounded-lg transform active:scale-95 hover:bg-gray-300 dark:hover:bg-gray-800 dark:bg-gray-700 dark:text-gray-300 text-xs md:text-sm transition-all duration-200"
                 onClick={loadMore}
               >
                 Load more messages...
@@ -124,7 +124,7 @@ function ChatWindow({ chat }) {
             </div>
           )}
           {!hasMore && (
-            <div className="text-gray-500 text-sm text-center mb-2">
+            <div className="text-gray-500 text-xs md:text-sm text-center mb-2">
               Date created:{" "}
               {moment(new Date(chat.dateCreated), "YYYYMMDD").format(
                 "MMMM Do YYYY, h:mm:ss a",
