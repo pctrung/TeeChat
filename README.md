@@ -3,7 +3,7 @@ My pet project - A chat application for TeeApp social media
 
 Now available at https://pctrung.github.io/TeeChat/
 
- ## Technologies
+ ## Tech Stack
  - ASP.NET Core 5.0
  - Entity Framework Core
  - ReactJs
