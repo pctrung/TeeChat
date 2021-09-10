@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/TeeChat/static/css/main.6ce402c0.chunk.css",
-    "main.js": "/TeeChat/static/js/main.032eaeff.chunk.js",
-    "main.js.map": "/TeeChat/static/js/main.032eaeff.chunk.js.map",
+    "main.css": "/TeeChat/static/css/main.522b1e3c.chunk.css",
+    "main.js": "/TeeChat/static/js/main.87290bc0.chunk.js",
+    "main.js.map": "/TeeChat/static/js/main.87290bc0.chunk.js.map",
     "runtime-main.js": "/TeeChat/static/js/runtime-main.3d1cac0c.js",
     "runtime-main.js.map": "/TeeChat/static/js/runtime-main.3d1cac0c.js.map",
     "static/js/2.5ad6d0d8.chunk.js": "/TeeChat/static/js/2.5ad6d0d8.chunk.js",
     "static/js/2.5ad6d0d8.chunk.js.map": "/TeeChat/static/js/2.5ad6d0d8.chunk.js.map",
     "index.html": "/TeeChat/index.html",
-    "static/css/main.6ce402c0.chunk.css.map": "/TeeChat/static/css/main.6ce402c0.chunk.css.map",
+    "static/css/main.522b1e3c.chunk.css.map": "/TeeChat/static/css/main.522b1e3c.chunk.css.map",
     "static/js/2.5ad6d0d8.chunk.js.LICENSE.txt": "/TeeChat/static/js/2.5ad6d0d8.chunk.js.LICENSE.txt",
     "static/media/dark-mode-icon.8e1e7759.svg": "/TeeChat/static/media/dark-mode-icon.8e1e7759.svg",
     "static/media/default-avatar.ae67bd1e.jpg": "/TeeChat/static/media/default-avatar.ae67bd1e.jpg",
@@ -19,6 +19,7 @@
     "static/media/info-icon.b4879a5e.svg": "/TeeChat/static/media/info-icon.b4879a5e.svg",
     "static/media/left-arrow-icon.07714e5b.svg": "/TeeChat/static/media/left-arrow-icon.07714e5b.svg",
     "static/media/login-page.dc5637a7.jpg": "/TeeChat/static/media/login-page.dc5637a7.jpg",
+    "static/media/logo.9e043262.svg": "/TeeChat/static/media/logo.9e043262.svg",
     "static/media/menu-icon.02afc26a.svg": "/TeeChat/static/media/menu-icon.02afc26a.svg",
     "static/media/new-chat-icon.8f8e0f2b.svg": "/TeeChat/static/media/new-chat-icon.8f8e0f2b.svg",
     "static/media/not-found.500f302c.jpg": "/TeeChat/static/media/not-found.500f302c.jpg",
@@ -28,7 +29,7 @@
   "entrypoints": [
     "static/js/runtime-main.3d1cac0c.js",
     "static/js/2.5ad6d0d8.chunk.js",
-    "static/css/main.6ce402c0.chunk.css",
-    "static/js/main.032eaeff.chunk.js"
+    "static/css/main.522b1e3c.chunk.css",
+    "static/js/main.87290bc0.chunk.js"
   ]
 }
