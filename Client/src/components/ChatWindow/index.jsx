@@ -87,7 +87,13 @@ function ChatWindow({ chat }) {
               className="h-5 w-5 md:hidden cursor-pointer"
               onClick={backToChats}
             />
-            <ImageCircle src={chat.groupAvatarUrl ?? friend?.avatarUrl} />
+            <ImageCircle
+              src={
+                chat.groupAvatarUrl !== ""
+                  ? chat.groupAvatarUrl
+                  : friend?.avatarUrl
+              }
+            />
             <span className="text-lg font-semibold dark:text-gray-200 truncate w-60 md:w-96">
               {chat.type === constants.chatType.PRIVATE
                 ? friend?.fullName

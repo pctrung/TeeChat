@@ -140,8 +140,8 @@ function Chat() {
       <div className="dark:bg-gray-900 dark:text-white  animate-fade grid grid-cols-12 h-screen w-screen">
         <div
           className={
-            "dark:bg-gray-900 animate-fade lg:col-span-3 md:col-span-4 col-span-12 flex flex-col h-screen border-r-2 px-4 dark:border-gray-700 border-gray-200 " +
-            (selectedId !== 0 ? " hidden" : "")
+            "dark:bg-gray-900 animate-fade lg:col-span-3 md:col-span-4 col-span-12 md:flex flex-col h-screen border-r-2 px-4 dark:border-gray-700 border-gray-200 " +
+            (selectedId !== 0 ? " hidden" : "flex")
           }
         >
           <Header logout={logout} />
