@@ -141,7 +141,6 @@ namespace TeeChat.Api
 
             services.AddSignalR();
 
-            var clientAppUrl = Configuration["ClientAppUrl"];
             services.AddCors(options =>
             {
                 options.AddPolicy("ClientPermission", policy =>
@@ -149,8 +148,7 @@ namespace TeeChat.Api
                     policy
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .WithOrigins(clientAppUrl)
-                        .WithMethods("GET", "POST")
+                        .SetIsOriginAllowed(hostName => true)
                         .AllowCredentials();
                 });
             });
