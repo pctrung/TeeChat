@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/TeeChat/static/css/main.ce84812b.chunk.css",
-    "main.js": "/TeeChat/static/js/main.cd315b36.chunk.js",
-    "main.js.map": "/TeeChat/static/js/main.cd315b36.chunk.js.map",
+    "main.js": "/TeeChat/static/js/main.8009ae36.chunk.js",
+    "main.js.map": "/TeeChat/static/js/main.8009ae36.chunk.js.map",
     "runtime-main.js": "/TeeChat/static/js/runtime-main.3d1cac0c.js",
     "runtime-main.js.map": "/TeeChat/static/js/runtime-main.3d1cac0c.js.map",
     "static/js/2.5114229a.chunk.js": "/TeeChat/static/js/2.5114229a.chunk.js",
@@ -29,6 +29,6 @@
     "static/js/runtime-main.3d1cac0c.js",
     "static/js/2.5114229a.chunk.js",
     "static/css/main.ce84812b.chunk.css",
-    "static/js/main.cd315b36.chunk.js"
+    "static/js/main.8009ae36.chunk.js"
   ]
 }
