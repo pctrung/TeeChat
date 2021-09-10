@@ -1,7 +1,7 @@
 # TeeChat
 My pet project - A chat application for TeeApp social media
 
-## Available now in https://pctrung.github.io/TeeChat/
+Now available at https://pctrung.github.io/TeeChat/
 
  ## Technologies
  - ASP.NET Core 5.0
