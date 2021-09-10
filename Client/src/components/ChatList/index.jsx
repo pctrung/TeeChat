@@ -28,7 +28,7 @@ function ChatList() {
         placeholder="Search chat"
         onChange={(e) => setKeyword(e.target.value)}
       />
-      <div className="h-full space-y-2 overflow-y-auto dark:bg-gray-900">
+      <div className="h-full overflow-x-hidden space-y-2 overflow-y-auto dark:bg-gray-900">
         {chats &&
           getCurrentChats(chats, keyword).map((chat, index) => {
             const currentUserName = currentUser.userName;
