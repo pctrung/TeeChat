@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/TeeChat/static/css/main.ce84812b.chunk.css",
-    "main.js": "/TeeChat/static/js/main.a50602f4.chunk.js",
-    "main.js.map": "/TeeChat/static/js/main.a50602f4.chunk.js.map",
+    "main.js": "/TeeChat/static/js/main.abc340e0.chunk.js",
+    "main.js.map": "/TeeChat/static/js/main.abc340e0.chunk.js.map",
     "runtime-main.js": "/TeeChat/static/js/runtime-main.3d1cac0c.js",
     "runtime-main.js.map": "/TeeChat/static/js/runtime-main.3d1cac0c.js.map",
-    "static/js/2.44cd90b5.chunk.js": "/TeeChat/static/js/2.44cd90b5.chunk.js",
-    "static/js/2.44cd90b5.chunk.js.map": "/TeeChat/static/js/2.44cd90b5.chunk.js.map",
+    "static/js/2.040a6b2e.chunk.js": "/TeeChat/static/js/2.040a6b2e.chunk.js",
+    "static/js/2.040a6b2e.chunk.js.map": "/TeeChat/static/js/2.040a6b2e.chunk.js.map",
     "index.html": "/TeeChat/index.html",
     "static/css/main.ce84812b.chunk.css.map": "/TeeChat/static/css/main.ce84812b.chunk.css.map",
-    "static/js/2.44cd90b5.chunk.js.LICENSE.txt": "/TeeChat/static/js/2.44cd90b5.chunk.js.LICENSE.txt",
+    "static/js/2.040a6b2e.chunk.js.LICENSE.txt": "/TeeChat/static/js/2.040a6b2e.chunk.js.LICENSE.txt",
     "static/media/dark-mode-icon.8e1e7759.svg": "/TeeChat/static/media/dark-mode-icon.8e1e7759.svg",
     "static/media/default-avatar.ae67bd1e.jpg": "/TeeChat/static/media/default-avatar.ae67bd1e.jpg",
     "static/media/emoji.21d0cbf4.svg": "/TeeChat/static/media/emoji.21d0cbf4.svg",
@@ -27,8 +27,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.3d1cac0c.js",
-    "static/js/2.44cd90b5.chunk.js",
+    "static/js/2.040a6b2e.chunk.js",
     "static/css/main.ce84812b.chunk.css",
-    "static/js/main.a50602f4.chunk.js"
+    "static/js/main.abc340e0.chunk.js"
   ]
 }
