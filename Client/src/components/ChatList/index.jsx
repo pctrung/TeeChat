@@ -28,7 +28,7 @@ function ChatList() {
         placeholder="Search chat"
         onChange={(e) => setKeyword(e.target.value)}
       />
-      <div className="h-full overflow-x-hidden space-y-2 overflow-y-auto dark:bg-gray-900">
+      <div className="h-full overflow-x-hidden space-y-2 overflow-y-auto dark:bg-gray-900 pr-2 ">
         {chats &&
           getCurrentChats(chats, keyword).map((chat, index) => {
             const currentUserName = currentUser.userName;
@@ -57,7 +57,8 @@ function ChatList() {
               <div
                 key={Date.now() + index}
                 className={
-                  "select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all duration-200 ease-in dark:hover:bg-gray-800 dark:text-gray-200 " +
+                  "select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all duration-200 ease-in dark:hover:bg-gray-800 dark:text-gray-200" +
+                  " " +
                   (selectedId === chat.id ? "bg-gray-100 dark:bg-gray-800" : "")
                 }
                 onClick={() => handleClick(chat.id)}
