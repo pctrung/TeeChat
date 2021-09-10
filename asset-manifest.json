@@ -1,0 +1,34 @@
+{
+  "files": {
+    "main.css": "/teechat/static/css/main.ab7fb833.chunk.css",
+    "main.js": "/teechat/static/js/main.e7aba0f0.chunk.js",
+    "main.js.map": "/teechat/static/js/main.e7aba0f0.chunk.js.map",
+    "runtime-main.js": "/teechat/static/js/runtime-main.4b34bbae.js",
+    "runtime-main.js.map": "/teechat/static/js/runtime-main.4b34bbae.js.map",
+    "static/js/2.b96e4ec9.chunk.js": "/teechat/static/js/2.b96e4ec9.chunk.js",
+    "static/js/2.b96e4ec9.chunk.js.map": "/teechat/static/js/2.b96e4ec9.chunk.js.map",
+    "index.html": "/teechat/index.html",
+    "static/css/main.ab7fb833.chunk.css.map": "/teechat/static/css/main.ab7fb833.chunk.css.map",
+    "static/js/2.b96e4ec9.chunk.js.LICENSE.txt": "/teechat/static/js/2.b96e4ec9.chunk.js.LICENSE.txt",
+    "static/media/dark-mode-icon.8e1e7759.svg": "/teechat/static/media/dark-mode-icon.8e1e7759.svg",
+    "static/media/default-avatar.ae67bd1e.jpg": "/teechat/static/media/default-avatar.ae67bd1e.jpg",
+    "static/media/emoji.21d0cbf4.svg": "/teechat/static/media/emoji.21d0cbf4.svg",
+    "static/media/error.c72c9a3e.jpg": "/teechat/static/media/error.c72c9a3e.jpg",
+    "static/media/forbid.7d678d5c.jpg": "/teechat/static/media/forbid.7d678d5c.jpg",
+    "static/media/image-icon.c8ad9f46.svg": "/teechat/static/media/image-icon.c8ad9f46.svg",
+    "static/media/info-icon.b4879a5e.svg": "/teechat/static/media/info-icon.b4879a5e.svg",
+    "static/media/left-arrow-icon.07714e5b.svg": "/teechat/static/media/left-arrow-icon.07714e5b.svg",
+    "static/media/login-page.dc5637a7.jpg": "/teechat/static/media/login-page.dc5637a7.jpg",
+    "static/media/menu-icon.02afc26a.svg": "/teechat/static/media/menu-icon.02afc26a.svg",
+    "static/media/new-chat-icon.8f8e0f2b.svg": "/teechat/static/media/new-chat-icon.8f8e0f2b.svg",
+    "static/media/not-found.500f302c.jpg": "/teechat/static/media/not-found.500f302c.jpg",
+    "static/media/send-icon.666dadc9.svg": "/teechat/static/media/send-icon.666dadc9.svg",
+    "static/media/sign-out-icon.0e12494d.svg": "/teechat/static/media/sign-out-icon.0e12494d.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4b34bbae.js",
+    "static/js/2.b96e4ec9.chunk.js",
+    "static/css/main.ab7fb833.chunk.css",
+    "static/js/main.e7aba0f0.chunk.js"
+  ]
+}
