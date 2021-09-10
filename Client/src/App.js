@@ -1,9 +1,11 @@
-import { setPopup } from "app/appSlice";
-import Loader from "components/Loader";
-import Popup from "components/Popup";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+
+import userApi from "api/userApi";
+import { setPopup } from "app/appSlice";
+import Loader from "components/Loader";
+import Popup from "components/Popup";
 import Chat from "./pages/Chat";
 import Forbid from "./pages/Forbid";
 import Login from "./pages/Login";
@@ -31,15 +33,13 @@ function App() {
         />
 
         <Switch>
-          <Redirect exact from="/" to="/chats" />
-
-          <Route path="/chats" component={Chat} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-          <Route path="/notfound" component={NotFound} />
           <Route path="/forbid" component={Forbid} />
           <Route path="/ServerError" component={ServerError} />
-          <Route component={Chat} />
+          <PrivateRoute path="/chats" component={Chat} />
+          <PrivateRoute exact path="/" component={Chat} />
+          <Route path="*" component={NotFound} />
         </Switch>
       </BrowserRouter>
     </>
@@ -47,3 +47,21 @@ function App() {
 }
 
 export default App;
+
+function PrivateRoute({ component: Component, ...rest }) {
+  const isLogin = window.localStorage.getItem("token") ? true : false;
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        isLogin === true ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{ pathname: "/login", state: { from: props.location } }}
+          />
+        )
+      }
+    />
+  );
+}

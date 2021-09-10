@@ -10,7 +10,7 @@ function NotFound({ message }) {
       <span className=" font-bold text-2xl md:text-3xl text-center">
         {message ?? "Not found resources"}
       </span>
-      <Link to="/">
+      <Link to="/chats">
         <Button content="Return home page" />
       </Link>
     </div>

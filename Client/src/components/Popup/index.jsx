@@ -11,7 +11,7 @@ Popup.propTypes = {
 function Popup({
   title = "Notification",
   isOpen,
-  content = "Something went wrong!",
+  content = "Oops! Something went wrong!",
   onClick,
 }) {
   return (

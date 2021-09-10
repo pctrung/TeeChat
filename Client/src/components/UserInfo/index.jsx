@@ -53,7 +53,7 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
       })
       .catch((error) => {
         var message =
-          typeof error === "string" ? error : "Something went wrong!";
+          typeof error === "string" ? error : "Oops! Something went wrong!";
         dispatch(setIsLoading(false));
         openPopup("Notification", message);
       });

@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import * as yup from "yup";
 
+import Logo from "logo.svg";
 import userApi from "api/userApi";
 import { setIsLoading } from "app/appSlice";
 import LoginPageImage from "assets/img/login-page.jpg";
@@ -160,7 +161,7 @@ function Register() {
         const message =
           typeof error === "string"
             ? error
-            : "Cannot create account. Something went wrong!";
+            : "Cannot create account. Oops! Something went wrong!";
         openPopup("Create account failed", message);
       });
     dispatch(setIsLoading(false));
@@ -194,13 +195,14 @@ function Register() {
         />
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="container rounded-2xl flex flex-col py-10 md:w-full md:col-span-4 md:px-20 lg:px-30"
+          className="container rounded-2xl flex flex-col py-10 md:w-full md:col-span-4 md:px-20 lg:px-48"
         >
+          <img src={Logo} alt="login" className="h-20 w-20 mx-auto mb-3" />
           <h1 className="text-3xl font-bold text-primary text-green-600 text-center mb-8">
             Sign up to TeeChat
           </h1>
           <div className="mb-3 grid grid-cols-2 place-items-start ">
-            <div className="col-span-1 space-y-2 mr-2">
+            <div className="col-span-1 space-y-2 mr-2 w-full">
               <label htmlFor="fistName" className="text-lg font-semibold ">
                 First Name <span className="text-red-500">*</span>
               </label>
@@ -213,7 +215,7 @@ function Register() {
                 {errors.firstName?.message}
               </div>
             </div>
-            <div className="col-span-1 space-y-2 ml-2">
+            <div className="col-span-1 space-y-2 ml-2 w-full">
               <label htmlFor="lastName" className="text-lg font-semibold ">
                 Last Name <span className="text-red-500">*</span>
               </label>

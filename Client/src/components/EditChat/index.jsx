@@ -166,7 +166,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
       .then((response) => {})
       .catch((error) => {
         var message =
-          typeof error === "string" ? error : "Something went wrong!";
+          typeof error === "string" ? error : "Oops! Something went wrong!";
 
         openPopup("Failed", message);
       });
@@ -189,7 +189,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
       })
       .catch((error) => {
         var message =
-          typeof error === "string" ? error : "Something went wrong!";
+          typeof error === "string" ? error : "Oops! Something went wrong!";
 
         openPopup("Failed", message);
         dispatch(setIsLoading(false));

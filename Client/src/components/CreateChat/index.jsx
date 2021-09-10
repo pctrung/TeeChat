@@ -95,7 +95,7 @@ function CreateChat({ isOpen, setIsOpen }) {
           })
           .catch((error) => {
             const message =
-              typeof error === "string" ? error : "Something went wrong!";
+              typeof error === "string" ? error : "Oops! Something went wrong!";
 
             openPopup("Failed", message);
           });
@@ -117,7 +117,7 @@ function CreateChat({ isOpen, setIsOpen }) {
           })
           .catch((error) => {
             var message =
-              typeof error === "string" ? error : "Something went wrong!";
+              typeof error === "string" ? error : "Oops! Something went wrong!";
 
             setSelectedFriendList([]);
             setGroupName("");

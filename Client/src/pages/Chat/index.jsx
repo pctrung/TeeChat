@@ -17,6 +17,7 @@ import Header from "components/Header";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import Logo from "logo.svg";
 
 function Chat() {
   const [connection, setConnection] = useState(null);
@@ -34,10 +35,6 @@ function Chat() {
   }
 
   useEffect(() => {
-    if (!userApi.isLogin()) {
-      history.push("/login");
-    }
-
     async function fetchData() {
       dispatch(setIsLoading(true));
       chatApi
@@ -114,7 +111,9 @@ function Chat() {
         })
         .catch((error) => {
           var message =
-            typeof error === "string" ? error : "Something went wrong!";
+            typeof error === "string"
+              ? error
+              : "Cannot connect to server! Please contact administrator.";
 
           console.error("Connection failed: ", error);
           openPopup("Connection failed", message);
@@ -141,7 +140,7 @@ function Chat() {
       <div className="dark:bg-gray-900 dark:text-white  animate-fade grid grid-cols-12 h-screen w-screen">
         <div
           className={
-            "animate-fade lg:col-span-3 md:col-span-4 col-span-12 md:flex flex-col h-screen border-r-2 px-4 dark:border-gray-700 border-gray-200 " +
+            "dark:bg-gray-900 animate-fade lg:col-span-3 md:col-span-4 col-span-12 md:flex flex-col h-screen border-r-2 px-4 dark:border-gray-700 border-gray-200 " +
             (selectedId !== 0 ? " hidden" : "")
           }
         >
@@ -150,12 +149,19 @@ function Chat() {
         </div>
         {!selectedId ? (
           chats?.length === 0 ? (
-            <div className="animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex h-full w-full ">
-              You do not have any chats, please create a chat
+            <div className="animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex flex-col h-full w-full ">
+              <img src={Logo} className="w-32 h-32 mb-3" />
+              You do not have any chats, please start a chat!
             </div>
           ) : (
-            <div className="animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex h-full w-full ">
-              Select a chat to start
+            <div className="animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex flex-col h-full w-full ">
+              <img src={Logo} className="w-32 h-32 mb-3" />
+              <span>
+                {" "}
+                Welcome to{" "}
+                <span className="text-green-600 font-bold">TeeChat!</span>{" "}
+                Select a chat to start.{" "}
+              </span>
             </div>
           )
         ) : (

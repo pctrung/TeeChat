@@ -10,7 +10,7 @@ function Forbid({ message }) {
       <span className="font-bold text-2xl md:text-3xl text-center">
         {message ?? "You don't have permission to access this resources"}
       </span>
-      <Link to="/">
+      <Link to="/chats">
         <Button content="Return home page" />
       </Link>
     </div>
