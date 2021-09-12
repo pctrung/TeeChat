@@ -239,7 +239,9 @@ function EditChat({ isOpen, setIsOpen, chat }) {
           confirmButtonAction={submitEditChat}
         />
         <div className="flex px-10 pt-6 pb-5 space-x-7 justify-between h-full items-center">
-          <h3 className="font-semibold text-2xl text-green-600">Chat info!</h3>
+          <h3 className="font-semibold text-2xl text-green-600 dark:text-green-400">
+            Chat info!
+          </h3>
         </div>
         <div className="px-10 space-y-4">
           {chat.type === constants.chatType.GROUP ? (

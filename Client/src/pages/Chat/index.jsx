@@ -159,7 +159,9 @@ function Chat() {
               <span>
                 {" "}
                 Welcome to{" "}
-                <span className="text-green-600 font-bold">TeeChat!</span>{" "}
+                <span className="text-green-600 dark:text-green-400 font-bold">
+                  TeeChat!
+                </span>{" "}
                 Select a chat to start.{" "}
               </span>
             </div>

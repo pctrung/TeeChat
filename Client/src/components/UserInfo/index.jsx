@@ -77,7 +77,9 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
         }
       >
         <div className="flex px-10 pt-6 pb-5 space-x-7 justify-between h-full items-center">
-          <h3 className="font-semibold text-2xl text-green-600">User info!</h3>
+          <h3 className="font-semibold text-2xl text-green-600 dark:text-green-400">
+            User info!
+          </h3>
         </div>
         <div className="px-10 space-y-4">
           <div className="mb-3 grid grid-cols-2 place-items-start ">

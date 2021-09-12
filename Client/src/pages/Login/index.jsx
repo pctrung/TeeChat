@@ -61,7 +61,7 @@ function Login() {
       >
         <img src={Logo} alt="login" className="h-20 w-20 mx-auto mb-3" />
         <h1 className="text-3xl font-bold text-primary text-green-600 text-center mb-8">
-          Login to TeeChat
+          Login to TeeChat!
         </h1>
 
         {error && (

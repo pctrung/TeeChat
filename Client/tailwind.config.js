@@ -3,10 +3,11 @@ module.exports = {
   darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {
-      color: {
-        "dark-primary": "#18191a",
+      colors: {
+        "dark-main": "#18191A",
         "dark-secondary": "#242526",
-        "dark-hover": "#303031",
+        "dark-third": "#3A3B3C",
+        "dark-txt": "#B8BBBF",
       },
       maxWidth: {
         "1/4": "25%",

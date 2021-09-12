@@ -146,12 +146,14 @@ function CreateChat({ isOpen, setIsOpen }) {
         }
       >
         <div className="flex px-10 pt-6 pb-5 space-x-7 justify-between h-full items-center">
-          <h3 className="font-semibold text-2xl text-green-600">New chat!</h3>
+          <h3 className="font-semibold text-2xl text-green-600 dark:text-green-400">
+            New chat!
+          </h3>
 
-          <div className="relative flex rounded-md items-center border border-green-500 cursor-pointer">
+          <div className="relative flex rounded-lg items-center border border-green-500 cursor-pointer">
             <div
               className={
-                "absolute bg-gradient-to-br from-green-400 to-green-600 w-1/2 h-full rounded-md transition-all duration-200 z-0" +
+                "absolute bg-gradient-to-br from-green-400 to-green-600 w-1/2 h-full rounded-lg transition-all duration-200 z-0" +
                 " " +
                 (selectedMode === constants.chatType.GROUP
                   ? "transform translate-x-full left-0"
@@ -164,7 +166,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                 " " +
                 (selectedMode === constants.chatType.PRIVATE
                   ? "text-white"
-                  : " text-green-600")
+                  : " text-green-600 dark:text-green-400")
               }
               onClick={() => setSelectedMode(constants.chatType.PRIVATE)}
             >
@@ -176,7 +178,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                 " " +
                 (selectedMode === constants.chatType.GROUP
                   ? "text-white"
-                  : " text-green-600")
+                  : " text-green-600 dark:text-green-400")
               }
               onClick={() => setSelectedMode(constants.chatType.GROUP)}
             >
