@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
-import userApi from "api/userApi";
+import jwt from "jwt-decode";
 import { setPopup } from "app/appSlice";
 import Loader from "components/Loader";
 import Popup from "components/Popup";
@@ -49,7 +49,16 @@ function App() {
 export default App;
 
 function PrivateRoute({ component: Component, ...rest }) {
-  const isLogin = window.localStorage.getItem("token") ? true : false;
+  var isLogin = false;
+  const token = window.localStorage.getItem("token");
+  if (token) {
+    if (!isTokenExpired(token)) {
+      isLogin = true;
+    } else {
+      window.localStorage.removeItem("token");
+    }
+  }
+
   return (
     <Route
       {...rest}
@@ -64,4 +73,11 @@ function PrivateRoute({ component: Component, ...rest }) {
       }
     />
   );
+}
+
+function isTokenExpired(token) {
+  if (jwt(token).exp < Date.now() / 1000) {
+    localStorage.clear();
+    return true;
+  }
 }

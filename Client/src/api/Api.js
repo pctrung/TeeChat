@@ -33,6 +33,7 @@ Api.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
+          window.localStorage.removeItem("token");
           window.location.href = "/login";
           break;
         case 403:
