@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import * as yup from "yup";
 
-import Logo from "logo.svg";
+import Logo from "logo.png";
 import userApi from "api/userApi";
 import { setIsLoading } from "app/appSlice";
 import LoginPageImage from "assets/img/login-page.jpg";

@@ -17,7 +17,7 @@ import Header from "components/Header";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import Logo from "logo.svg";
+import Logo from "logo.png";
 
 function Chat() {
   const [connection, setConnection] = useState(null);

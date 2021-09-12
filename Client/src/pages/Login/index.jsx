@@ -2,7 +2,7 @@ import Button from "components/Button";
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import LoginPageImage from "assets/img/login-page.jpg";
-import Logo from "logo.svg";
+import Logo from "logo.png";
 import userApi from "api/userApi";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "app/userSlice";
