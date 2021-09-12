@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/TeeChat/static/css/main.26e0034a.chunk.css",
-    "main.js": "/TeeChat/static/js/main.773f718e.chunk.js",
-    "main.js.map": "/TeeChat/static/js/main.773f718e.chunk.js.map",
+    "main.js": "/TeeChat/static/js/main.2f95cbe8.chunk.js",
+    "main.js.map": "/TeeChat/static/js/main.2f95cbe8.chunk.js.map",
     "runtime-main.js": "/TeeChat/static/js/runtime-main.3d1cac0c.js",
     "runtime-main.js.map": "/TeeChat/static/js/runtime-main.3d1cac0c.js.map",
     "static/css/2.cb2870d7.chunk.css": "/TeeChat/static/css/2.cb2870d7.chunk.css",
@@ -21,7 +21,7 @@
     "static/media/info-icon.b4879a5e.svg": "/TeeChat/static/media/info-icon.b4879a5e.svg",
     "static/media/left-arrow-icon.07714e5b.svg": "/TeeChat/static/media/left-arrow-icon.07714e5b.svg",
     "static/media/login-page.dc5637a7.jpg": "/TeeChat/static/media/login-page.dc5637a7.jpg",
-    "static/media/logo.09f04cc4.png": "/TeeChat/static/media/logo.09f04cc4.png",
+    "static/media/logo.2a8dee36.png": "/TeeChat/static/media/logo.2a8dee36.png",
     "static/media/not-found.500f302c.jpg": "/TeeChat/static/media/not-found.500f302c.jpg",
     "static/media/send-icon.666dadc9.svg": "/TeeChat/static/media/send-icon.666dadc9.svg"
   },
@@ -30,6 +30,6 @@
     "static/css/2.cb2870d7.chunk.css",
     "static/js/2.06b4ea60.chunk.js",
     "static/css/main.26e0034a.chunk.css",
-    "static/js/main.773f718e.chunk.js"
+    "static/js/main.2f95cbe8.chunk.js"
   ]
 }
