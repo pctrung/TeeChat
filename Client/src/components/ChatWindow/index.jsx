@@ -79,7 +79,7 @@ function ChatWindow({ chat }) {
       />
       <div className="flex flex-col w-full h-full pb-4">
         {/* Header chat window */}
-        <div className="w-full border-b border-gray-300 dark:border-gray-700 flex justify-between items-center md:p-4 p-3">
+        <div className="w-full border-b border-gray-300 dark:border-dark-third flex justify-between items-center md:p-4 p-3">
           <div className="flex justify-between items-center space-x-3">
             <img
               src={LeftArrowIcon}
@@ -94,7 +94,7 @@ function ChatWindow({ chat }) {
                   : friend?.avatarUrl
               }
             />
-            <span className="text-lg font-semibold dark:text-gray-200 truncate w-60 md:w-96">
+            <span className="text-lg font-semibold dark:text-dark-txt truncate w-60 md:w-96">
               {chat.type === constants.chatType.PRIVATE
                 ? friend?.fullName
                 : chat.name ?? constants.NO_NAME_GROUP}
@@ -116,7 +116,7 @@ function ChatWindow({ chat }) {
           {hasMore && !loading && (
             <div className="flex">
               <button
-                className="mx-auto px-4 bg-gray-200 py-2 rounded-lg transform active:scale-95 hover:bg-gray-300 dark:hover:bg-gray-800 dark:bg-gray-700 dark:text-gray-300 text-xs md:text-sm transition-all duration-200"
+                className="mx-auto px-4 bg-gray-200 py-2 rounded-lg transform active:scale-95 hover:bg-gray-300 dark:hover:bg-dark-hover dark:bg-dark-third dark:text-gray-300 text-xs md:text-sm transition-all duration-200"
                 onClick={loadMore}
               >
                 Load more messages...
@@ -213,7 +213,7 @@ function ChatWindow({ chat }) {
                           " rounded-3xl px-5 py-3 break-word rounded-bl-none shadow-sm cursor-pointer overflow-x-auto max-w-3/4" +
                           " " +
                           (showTimeIndexes.includes(index)
-                            ? "bg-gray-300 dark:bg-gray-700"
+                            ? "bg-gray-300 dark:bg-dark-third"
                             : "bg-gradient-to-br from-gray-100 to-gray-300 dark:from-gray-500 dark:to-gray-600 ")
                         }
                         onClick={() => handleMessageClick(index)}

@@ -24,11 +24,11 @@ function ChatList() {
     <>
       <input
         type="search"
-        className="my-3 rounded-3xl bg-gray-100 px-4 py-2 focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 outline-none transition-all duration-200 w-full dark:bg-gray-700 dark:text-white"
+        className="my-3 rounded-3xl bg-gray-100 px-4 py-2 focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 outline-none transition-all duration-200 w-full dark:bg-dark-secondary dark:text-white"
         placeholder="Search chat"
         onChange={(e) => setKeyword(e.target.value)}
       />
-      <div className="h-full overflow-x-hidden space-y-2 overflow-y-auto dark:bg-gray-900 pr-2 ">
+      <div className="h-full overflow-x-hidden space-y-2 overflow-y-auto pr-2 ">
         {chats &&
           getCurrentChats(chats, keyword).map((chat, index) => {
             const currentUserName = currentUser.userName;
@@ -57,9 +57,11 @@ function ChatList() {
               <div
                 key={Date.now() + index}
                 className={
-                  "select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all duration-200 ease-in dark:hover:bg-gray-800 dark:text-gray-200" +
+                  "select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all duration-150 ease-in dark:hover:bg-dark-secondary dark:text-dark-txt" +
                   " " +
-                  (selectedId === chat.id ? "bg-gray-100 dark:bg-gray-800" : "")
+                  (selectedId === chat.id
+                    ? "bg-gray-100 dark:bg-dark-secondary"
+                    : "")
                 }
                 onClick={() => handleClick(chat.id)}
               >
@@ -73,7 +75,7 @@ function ChatList() {
                 />
 
                 <div className="font-primary flex flex-col px-3 py-2 justify-between truncate">
-                  <span className="text-gray-800 truncate dark:text-gray-200">
+                  <span className="text-gray-800 truncate dark:text-dark-txt">
                     {chat.type === constants.chatType.PRIVATE
                       ? friend?.fullName
                       : chat.name ?? constants.NO_NAME_GROUP}

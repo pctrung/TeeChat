@@ -4,9 +4,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "dark-main": "#18191A",
+        "dark-primary": "#18191A",
         "dark-secondary": "#242526",
         "dark-third": "#3A3B3C",
+        "dark-hover": "#454849",
         "dark-txt": "#B8BBBF",
       },
       maxWidth: {

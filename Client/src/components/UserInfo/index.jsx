@@ -69,11 +69,11 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
   }
 
   return isOpen ? (
-    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 z-30">
+    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
       <div
         ref={ref}
         className={
-          "md:px-5 md:py-3 flex flex-col dark:bg-gray-800 dark:border-gray-700 bg-white rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300"
+          "md:px-5 md:py-3 flex flex-col dark:bg-dark-secondary dark:border-dark-third bg-white rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300"
         }
       >
         <div className="flex px-10 pt-6 pb-5 space-x-7 justify-between h-full items-center">
@@ -86,7 +86,7 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
             <div className="col-span-1 space-y-2 mr-2">
               <label
                 htmlFor="fistName"
-                className="text-lg font-semibold dark:text-gray-200"
+                className="text-lg font-semibold dark:text-dark-txt"
               >
                 First Name <span className="text-red-500">*</span>
               </label>
@@ -95,13 +95,13 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 type="text"
-                className="bg-gray-100 dark:bg-gray-700 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200"
+                className="bg-gray-100 dark:bg-dark-third rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200"
               />
             </div>
             <div className="col-span-1 space-y-2 ml-2">
               <label
                 htmlFor="lastName"
-                className="text-lg font-semibold dark:text-gray-200"
+                className="text-lg font-semibold dark:text-dark-txt"
               >
                 Last Name <span className="text-red-500">*</span>
               </label>
@@ -110,14 +110,14 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 type="text"
-                className="bg-gray-100 dark:bg-gray-700 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 mb-2"
+                className="bg-gray-100 dark:bg-dark-third rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 mb-2"
               />
             </div>
           </div>
           <div className="space-y-2 mr-2 flex flex-col">
             <label
               htmlFor="avatar"
-              className="text-lg font-semibold dark:text-gray-200"
+              className="text-lg font-semibold dark:text-dark-txt"
             >
               Avatar
             </label>

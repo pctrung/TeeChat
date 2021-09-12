@@ -97,29 +97,29 @@ function Header({ logout }) {
           <ClickableIcon
             icon={NewChatIcon}
             onClick={() => setIsOpenCreateChat(true)}
-            className="dark:bg-gray-600"
+            className="dark:bg-dark-third"
           />
           <div className="relative" ref={ref}>
             <ClickableIcon
               icon={MenuIcon}
               onClick={() => setIsOpenMenu(!isOpenMenu)}
-              className="dark:bg-gray-600"
+              className="dark:bg-dark-third"
             />
             {isOpenMenu && (
-              <div className="animate-fade transition-all duration-200 absolute right-0 md:left-0 border border-gray-200 bg-white w-52 rounded-lg shadow-md overflow-hidden p-2 dark:bg-gray-800 dark:border-gray-700 mt-2 select-none">
+              <div className="animate-fade transition-all duration-200 absolute right-0 md:left-0 border border-gray-200 bg-white w-52 rounded-lg shadow-md overflow-hidden p-2 dark:bg-dark-secondary dark:border-dark-third mt-2 select-none">
                 <button
-                  className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95 dark:hover:bg-gray-700"
+                  className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95 dark:hover:bg-dark-third"
                   onClick={() => setDarkMode(!darkMode)}
                 >
                   <img
                     src={DarkModeIcon}
                     alt="Dark mode icon"
-                    className="w-8 h-8 dark:bg-gray-600 rounded-full p-1"
+                    className="w-8 h-8 dark:bg-dark-hover dark:text-dark-txt rounded-full p-1"
                   />
                   <span>Dark Mode</span>
                 </button>
                 <button
-                  className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95 dark:hover:bg-gray-700"
+                  className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95 dark:hover:bg-dark-third"
                   onClick={() => {
                     openConfirmModal("Do you want to log out?", logout);
                   }}
@@ -127,7 +127,7 @@ function Header({ logout }) {
                   <img
                     src={SignOutIcon}
                     alt="Dark mode icon"
-                    className="w-8 h-8 dark:bg-gray-600 rounded-full p-1"
+                    className="w-8 h-8 dark:bg-dark-hover dark:text-dark-txt rounded-full p-1"
                   />
                   <span>Log Out</span>
                 </button>

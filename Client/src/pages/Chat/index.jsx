@@ -137,10 +137,10 @@ function Chat() {
 
   return (
     <>
-      <div className="dark:bg-gray-900 dark:text-white  animate-fade grid grid-cols-12 h-screen w-screen">
+      <div className="dark:bg-dark-primary dark:text-white  animate-fade grid grid-cols-12 h-screen w-screen">
         <div
           className={
-            "dark:bg-gray-900 animate-fade lg:col-span-3 md:col-span-4 col-span-12 md:flex flex-col h-screen border-r px-4 dark:border-gray-700 border-gray-300 " +
+            "animate-fade lg:col-span-3 md:col-span-4 col-span-12 md:flex flex-col h-screen border-r px-4 dark:border-dark-third border-gray-300 pt-1 md:pt-2 " +
             (selectedId !== 0 ? " hidden" : "flex")
           }
         >
@@ -149,25 +149,35 @@ function Chat() {
         </div>
         {!selectedId ? (
           chats?.length === 0 ? (
-            <div className="animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex flex-col h-full w-full ">
+            <div className="dark:bg-black animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex flex-col h-full w-full ">
               <img src={Logo} className="w-32 h-32 mb-3" />
-              You do not have any chats, please start a chat!
-            </div>
-          ) : (
-            <div className="animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex flex-col h-full w-full ">
-              <img src={Logo} className="w-32 h-32 mb-3" />
-              <span>
+              <span className="text-center">
                 {" "}
                 Welcome to{" "}
                 <span className="text-green-600 dark:text-green-400 font-bold">
                   TeeChat!
                 </span>{" "}
+                <br />
+                You do not have any chats, please start a chat!{" "}
+              </span>
+              <span></span>
+            </div>
+          ) : (
+            <div className="dark:bg-black animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex flex-col h-full w-full ">
+              <img src={Logo} className="w-32 h-32 mb-3" />
+              <span className="text-center">
+                {" "}
+                Welcome to{" "}
+                <span className="text-green-600 dark:text-green-400 font-bold">
+                  TeeChat!
+                </span>{" "}
+                <br />
                 Select a chat to start.{" "}
               </span>
             </div>
           )
         ) : (
-          <div className="animate-fade lg:col-span-9 md:col-span-8 col-span-12 flex h-screen w-full overflow-y-auto">
+          <div className="dark:bg-black animate-fade lg:col-span-9 md:col-span-8 col-span-12 flex h-screen w-full overflow-y-auto">
             <ChatWindow chat={chats.find((chat) => chat.id === selectedId)} />
           </div>
         )}

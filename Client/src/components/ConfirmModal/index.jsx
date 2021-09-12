@@ -19,12 +19,12 @@ function ConfirmModal({
 }) {
   return (
     isOpen && (
-      <div className="px-4 animate-fade h-screen fixed inset-0 w-screen flex justify-center items-center bg-gray-500 dark:bg-gray-900 dark:bg-opacity-50 bg-opacity-30 z-50">
-        <div className="bg-white dark:bg-gray-800 dark:border-gray-500 py-8 px-8 w-full md:w-2/3 lg:w-2/5 flex flex-col justify-between items-start rounded-xl space-y-6">
-          <h3 className="font-semibold text-2xl break-words dark:text-gray-200">
+      <div className="px-4 animate-fade h-screen fixed inset-0 w-screen flex justify-center items-center bg-gray-500 dark:bg-dark-primary dark:bg-opacity-50 bg-opacity-30 z-50">
+        <div className="bg-white dark:bg-dark-secondary dark:border-dark-third py-8 px-8 w-full md:w-2/3 lg:w-2/5 flex flex-col justify-between items-start rounded-xl space-y-6">
+          <h3 className="font-semibold text-2xl break-words dark:text-dark-txt">
             {title !== "" ? title : "Notification"}
           </h3>
-          <span className="break-words dark:text-gray-200">{content}</span>
+          <span className="break-words dark:text-dark-txt">{content}</span>
           <div className="w-full flex justify-end space-x-2">
             <Button outline content="No" onClick={closeAction} />
             <Button
