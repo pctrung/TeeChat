@@ -47,7 +47,7 @@ function ImageCircle({
         className={
           realSize +
             " " +
-            "select-none  rounded-full object-cover " +
+            "select-none bg-white rounded-full object-cover " +
             " " +
             className ?? ""
         }

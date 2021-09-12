@@ -136,7 +136,7 @@ function CreateChat({ isOpen, setIsOpen }) {
     dispatch(setPopup(popup));
   }
   return isOpen ? (
-    <div className="animate-fade fixed grid place-items-center h-screen w-screen px-4 z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
+    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
       <div
         ref={ref}
         className={

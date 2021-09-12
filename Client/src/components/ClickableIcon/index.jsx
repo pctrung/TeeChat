@@ -6,7 +6,7 @@ ClickableIcon.propTypes = {
   alt: PropTypes.string,
 };
 
-function ClickableIcon({ className, icon, alt, onClick, onBlur }) {
+function ClickableIcon({ className, icon, iconClass, alt, onClick, onBlur }) {
   return (
     <>
       <div
@@ -17,12 +17,22 @@ function ClickableIcon({ className, icon, alt, onClick, onBlur }) {
           (className ?? "")
         }
       >
-        <img
-          alt={alt ?? "Clickable Icon"}
-          src={icon}
-          onClick={onClick}
-          className="w-full"
-        />
+        {icon ? (
+          <img
+            alt={alt ?? "Clickable Icon"}
+            src={icon}
+            onClick={onClick}
+            className="w-full"
+          />
+        ) : (
+          <i
+            className={
+              "text-center align-middle text-xl text-black dark:text-dark-txt w-7 h-7 " +
+              " " +
+              iconClass
+            }
+          ></i>
+        )}
       </div>
     </>
   );

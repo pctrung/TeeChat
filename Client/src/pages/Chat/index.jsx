@@ -150,7 +150,7 @@ function Chat() {
         {!selectedId ? (
           chats?.length === 0 ? (
             <div className="dark:bg-black animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex flex-col h-full w-full ">
-              <img src={Logo} className="w-32 h-32 mb-3" />
+              <img src={Logo} className="w-32 h-32 mb-3" alt="logo" />
               <span className="text-center">
                 {" "}
                 Welcome to{" "}
@@ -164,7 +164,7 @@ function Chat() {
             </div>
           ) : (
             <div className="dark:bg-black animate-fade hidden text-lg items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 md:flex flex-col h-full w-full ">
-              <img src={Logo} className="w-32 h-32 mb-3" />
+              <img src={Logo} className="w-32 h-32 mb-3" alt="logo" />
               <span className="text-center">
                 {" "}
                 Welcome to{" "}
@@ -177,7 +177,7 @@ function Chat() {
             </div>
           )
         ) : (
-          <div className="dark:bg-black animate-fade lg:col-span-9 md:col-span-8 col-span-12 flex h-screen w-full overflow-y-auto">
+          <div className="dark:bg-dark-primary md:dark:bg-black animate-fade lg:col-span-9 md:col-span-8 col-span-12 flex h-screen w-full overflow-y-auto">
             <ChatWindow chat={chats.find((chat) => chat.id === selectedId)} />
           </div>
         )}

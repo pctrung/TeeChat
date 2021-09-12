@@ -81,7 +81,7 @@ function ChatList() {
                       : chat.name ?? constants.NO_NAME_GROUP}
                   </span>
                   <div className="flex">
-                    <span className="mr-2 text-sm max-w-150 text-gray-500 truncate">
+                    <span className="mr-2 text-sm max-w-200 md:max-w-100 text-gray-500 truncate">
                       {lastMessage.content ?? ""}
                     </span>
                     <span className="text-sm flex-grow text-gray-500 truncate">

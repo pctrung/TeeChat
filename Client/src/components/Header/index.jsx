@@ -1,7 +1,3 @@
-import DarkModeIcon from "assets/icons/dark-mode-icon.svg";
-import MenuIcon from "assets/icons/menu-icon.svg";
-import NewChatIcon from "assets/icons/new-chat-icon.svg";
-import SignOutIcon from "assets/icons/sign-out-icon.svg";
 import ConfirmModal from "components/ConfirmModal";
 import CreateChat from "components/CreateChat";
 import ImageCircle from "components/ImageCircle";
@@ -95,15 +91,15 @@ function Header({ logout }) {
         </div>
         <div className="flex space-x-2 items-center">
           <ClickableIcon
-            icon={NewChatIcon}
+            iconClass="bx bxs-edit"
             onClick={() => setIsOpenCreateChat(true)}
-            className="dark:bg-dark-third"
+            className="dark:bg-dark-third bg-gray-100"
           />
           <div className="relative" ref={ref}>
             <ClickableIcon
-              icon={MenuIcon}
+              iconClass="bx bx-dots-horizontal-rounded"
               onClick={() => setIsOpenMenu(!isOpenMenu)}
-              className="dark:bg-dark-third"
+              className="dark:bg-dark-third bg-gray-100"
             />
             {isOpenMenu && (
               <div className="animate-fade transition-all duration-200 absolute right-0 md:left-0 border border-gray-200 bg-white w-52 rounded-lg shadow-md overflow-hidden p-2 dark:bg-dark-secondary dark:border-dark-third mt-2 select-none">
@@ -111,11 +107,9 @@ function Header({ logout }) {
                   className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95 dark:hover:bg-dark-third"
                   onClick={() => setDarkMode(!darkMode)}
                 >
-                  <img
-                    src={DarkModeIcon}
-                    alt="Dark mode icon"
-                    className="w-8 h-8 dark:bg-dark-hover dark:text-dark-txt rounded-full p-1"
-                  />
+                  <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
+                    <i className="bx bx-moon text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                  </span>
                   <span>Dark Mode</span>
                 </button>
                 <button
@@ -124,11 +118,9 @@ function Header({ logout }) {
                     openConfirmModal("Do you want to log out?", logout);
                   }}
                 >
-                  <img
-                    src={SignOutIcon}
-                    alt="Dark mode icon"
-                    className="w-8 h-8 dark:bg-dark-hover dark:text-dark-txt rounded-full p-1"
-                  />
+                  <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
+                    <i className="bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                  </span>
                   <span>Log Out</span>
                 </button>
               </div>

@@ -12,6 +12,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
+    "boxicons": "^2.0.9",
     "emoji-picker-react": "^3.4.8",
     "gh-pages": "^3.2.3",
     "jwt-decode": "^3.1.2",
