@@ -12,7 +12,7 @@ namespace TeeChat.Models.RequestModels.Users
         [Required(ErrorMessage = "Please enter password")]
         [DataType(DataType.Password)]
         [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,}$",
-            ErrorMessage = "Passwords must be at least 6 characters, one digit, one uppercase, one non alphanumeric character")]
+            ErrorMessage = "Passwords must be at least 8 characters, one digit, one uppercase, one non alphanumeric character")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Please enter confirmation password")]
