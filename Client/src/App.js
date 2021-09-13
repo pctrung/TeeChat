@@ -49,15 +49,7 @@ function App() {
 export default App;
 
 function PrivateRoute({ component: Component, ...rest }) {
-  var isLogin = false;
-  const token = window.localStorage.getItem("token");
-  if (token) {
-    if (!isTokenExpired(token)) {
-      isLogin = true;
-    } else {
-      window.localStorage.removeItem("token");
-    }
-  }
+  var isLogin = window.localStorage.getItem("token") ? true : false;
 
   return (
     <Route
