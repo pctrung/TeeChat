@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import chatApi from "api/chatApi";
+import useChatApi from "./useChatApi";
 
 export default function useMessagePagination(currentChat, page) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [appendChat, setAppendChat] = useState({});
   const [hasMore, setHasMore] = useState(false);
+
+  const chatApi = useChatApi();
 
   useEffect(() => {
     if (page > 1 && hasMore) {

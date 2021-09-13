@@ -1,16 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import * as yup from "yup";
-
-import Logo from "logo.png";
-import userApi from "api/userApi";
-import { setIsLoading } from "app/appSlice";
 import LoginPageImage from "assets/img/login-page.jpg";
 import Button from "components/Button";
 import Popup from "components/Popup";
+import useUserApi from "hooks/useUserApi";
+import Logo from "logo.png";
+import React, { useEffect, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { Link, useHistory } from "react-router-dom";
+import * as yup from "yup";
 
 function Register() {
   const [isChanged, setIsChanged] = useState(false);
@@ -21,8 +18,8 @@ function Register() {
     title: "Notification",
   });
 
-  const dispatch = useDispatch();
   const history = useHistory();
+  const userApi = useUserApi();
 
   // yup validation
   const schema = yup.object().shape({
@@ -140,31 +137,19 @@ function Register() {
 
   // handle submit
   const onSubmit = (content) => {
-    dispatch(setIsLoading(true));
-
-    userApi
-      .register(content)
-      .then((response) => {
-        openPopup(
-          "Success",
-          <span>
-            "Create account successfully! Please{" "}
-            <Link className="font-bold text-green-600" to="/login">
-              log in
-            </Link>
-            !"
-          </span>,
-        );
-        reset({});
-      })
-      .catch((error) => {
-        const message =
-          typeof error === "string"
-            ? error
-            : "Cannot create account. Oops! Something went wrong!";
-        openPopup("Create account failed", message);
-      });
-    dispatch(setIsLoading(false));
+    userApi.register(content).then((response) => {
+      openPopup(
+        "Success",
+        <span>
+          "Create account successfully! Please{" "}
+          <Link className="font-bold text-green-600" to="/login">
+            log in
+          </Link>
+          !"
+        </span>,
+      );
+      reset({});
+    });
   };
 
   function openPopup(title, content) {

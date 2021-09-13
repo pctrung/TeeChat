@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-
-import { useDispatch } from "react-redux";
-import userApi from "api/userApi";
-import { setIsLoading, setPopup } from "app/appSlice";
+import { setPopup } from "app/appSlice";
 import { updateUser } from "app/userSlice";
 import Button from "components/Button";
+import useUserApi from "hooks/useUserApi";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 
 function UserInfo({ isOpen, setIsOpen, currentUser }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [avatar, setAvatar] = useState({});
 
+  const userApi = useUserApi();
   const ref = useRef();
   const dispatch = useDispatch();
 
@@ -37,26 +37,16 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
   }, [currentUser]);
 
   async function submit() {
-    await dispatch(setIsLoading(true));
-
     const request = new FormData();
     request.append("Avatar", avatar);
     request.append("FirstName", firstName);
     request.append("LastName", lastName);
 
-    userApi
-      .updateUser(request)
-      .then((response) => {
-        dispatch(updateUser(response));
-        dispatch(setIsLoading(false));
-        openPopup("Success", "Update info successfully!");
-      })
-      .catch((error) => {
-        var message =
-          typeof error === "string" ? error : "Oops! Something went wrong!";
-        dispatch(setIsLoading(false));
-        openPopup("Notification", message);
-      });
+    userApi.updateUser(request).then((response) => {
+      dispatch(updateUser(response));
+      openPopup("Success", "Update info successfully!");
+    });
+
     setIsOpen(false);
   }
   function openPopup(title, content) {

@@ -1,7 +1,4 @@
 import { HubConnectionBuilder } from "@microsoft/signalr";
-import chatApi from "api/chatApi";
-import userApi from "api/userApi";
-import { setIsLoading, setPopup } from "app/appSlice";
 import {
   addChat,
   addMessage,
@@ -14,10 +11,12 @@ import { updateUser } from "app/userSlice";
 import ChatList from "components/ChatList";
 import ChatWindow from "components/ChatWindow";
 import Header from "components/Header";
+import useChatApi from "hooks/useChatApi";
+import useUserApi from "hooks/useUserApi";
+import Logo from "logo.png";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import Logo from "logo.png";
 
 function Chat() {
   const [connection, setConnection] = useState(null);
@@ -28,6 +27,9 @@ function Chat() {
   const currentUser = useSelector((state) => state.users.currentUser);
   const selectedId = useSelector((state) => state.chats.selectedId);
 
+  const chatApi = useChatApi();
+  const userApi = useUserApi();
+
   function logout() {
     window.localStorage.removeItem("token");
     connection.stop();
@@ -36,37 +38,18 @@ function Chat() {
 
   useEffect(() => {
     async function fetchData() {
-      dispatch(setIsLoading(true));
       chatApi
         .getAll()
         .then((response) => {
-          const refreshChatAction = refreshChats(response.data);
-          dispatch(refreshChatAction);
-          dispatch(setIsLoading(false));
+          dispatch(refreshChats(response.data));
         })
         .catch((error) => {
-          var message =
-            typeof error === "string"
-              ? error
-              : "Cannot get any chats. Please login and try again!";
-          dispatch(setIsLoading(false));
-          openPopup("Error", message);
+          console.error("Connection failed: ", error);
         });
 
-      userApi
-        .getCurrentUser()
-        .then((response) => {
-          dispatch(updateUser(response));
-          dispatch(setIsLoading(false));
-        })
-        .catch((error) => {
-          var message =
-            typeof error === "string"
-              ? error
-              : "Cannot get any chats. Please login and try again!";
-          dispatch(setIsLoading(false));
-          openPopup("Error", message);
-        });
+      userApi.getCurrentUser().then((response) => {
+        dispatch(updateUser(response));
+      });
     }
 
     fetchData();
@@ -86,38 +69,27 @@ function Chat() {
 
   useEffect(() => {
     if (connection && !connection.connectionStarted) {
-      connection
-        .start()
-        .then((result) => {
-          connection.on("ReceiveMessage", (response) => {
-            const action = addMessage(response);
-            dispatch(action);
-          });
-          connection.on("ReceiveChat", (chat) => {
-            const action = addChat(chat);
-            dispatch(action);
-            if (chat.creatorUserName === currentUser.userName) {
-              dispatch(setSelectedId(chat.id));
-            }
-          });
-          connection.on("ReceiveUpdatedChat", (chat) => {
-            const action = editChat(chat);
-            dispatch(action);
-          });
-          connection.on("ReceiveUpdatedGroupAvatar", (response) => {
-            const action = editGroupAvatar(response);
-            dispatch(action);
-          });
-        })
-        .catch((error) => {
-          var message =
-            typeof error === "string"
-              ? error
-              : "Cannot connect to server! Please contact administrator.";
-
-          console.error("Connection failed: ", error);
-          openPopup("Connection failed", message);
+      connection.start().then((result) => {
+        connection.on("ReceiveMessage", (response) => {
+          const action = addMessage(response);
+          dispatch(action);
         });
+        connection.on("ReceiveChat", (chat) => {
+          const action = addChat(chat);
+          dispatch(action);
+          if (chat.creatorUserName === currentUser.userName) {
+            dispatch(setSelectedId(chat.id));
+          }
+        });
+        connection.on("ReceiveUpdatedChat", (chat) => {
+          const action = editChat(chat);
+          dispatch(action);
+        });
+        connection.on("ReceiveUpdatedGroupAvatar", (response) => {
+          const action = editGroupAvatar(response);
+          dispatch(action);
+        });
+      });
     }
     return () => {
       if (connection && connection.connectionStarted) {
@@ -126,21 +98,12 @@ function Chat() {
     };
   }, [connection]);
 
-  function openPopup(title, content) {
-    const popup = {
-      isOpen: true,
-      title: title,
-      content: content,
-    };
-    dispatch(setPopup(popup));
-  }
-
   return (
     <>
       <div className="dark:bg-dark-primary dark:text-white  animate-fade grid grid-cols-12 h-screen w-screen">
         <div
           className={
-            "animate-fade lg:col-span-3 md:col-span-4 col-span-12 md:flex flex-col h-screen border-r px-4 dark:border-dark-third border-gray-300 pt-1 md:pt-2 " +
+            "animate-fade lg:col-span-3 md:col-span-4 col-span-12 md:flex flex-col h-screen border-r px-4 dark:border-dark-third border-gray-300 pt-1" +
             (selectedId !== 0 ? " hidden" : "flex")
           }
         >

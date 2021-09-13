@@ -1,13 +1,11 @@
-import chatApi from "api/chatApi";
-import { setIsLoading } from "app/appSlice";
 import EmojiIcon from "assets/icons/emoji.svg";
 import ImageIcon from "assets/icons/image-icon.svg";
 import SendIconNormal from "assets/icons/send-icon.svg";
 import ClickableIcon from "components/ClickableIcon";
 import Picker from "emoji-picker-react";
+import useChatApi from "hooks/useChatApi";
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 
 ChatInput.propTypes = {
   chatId: PropTypes.number,
@@ -18,24 +16,24 @@ function ChatInput({ chatId }) {
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
   const ref = useRef();
-  const dispatch = useDispatch();
+
+  const chatApi = useChatApi();
 
   async function onSendMessage(e) {
     e.preventDefault();
     if (!content) {
       return;
     }
+    setContent("");
 
     var request = { content };
     await chatApi.sendMessage(chatId, request);
-
-    setContent("");
   }
 
   const onEmojiClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject);
-    if (chosenEmoji?.emoji) {
-      setContent(content + chosenEmoji?.emoji);
+    if (emojiObject?.emoji) {
+      setContent(content + emojiObject?.emoji);
     }
   };
 
@@ -59,9 +57,7 @@ function ChatInput({ chatId }) {
     const formData = new FormData();
     formData.append("Image", file);
 
-    dispatch(setIsLoading(true));
     await chatApi.sendImage(chatId, formData);
-    dispatch(setIsLoading(false));
   }
   return (
     <div>

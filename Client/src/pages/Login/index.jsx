@@ -1,12 +1,11 @@
-import Button from "components/Button";
-import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import LoginPageImage from "assets/img/login-page.jpg";
-import Logo from "logo.png";
-import userApi from "api/userApi";
-import { useDispatch } from "react-redux";
 import { getCurrentUser } from "app/userSlice";
-import { setIsLoading } from "app/appSlice";
+import LoginPageImage from "assets/img/login-page.jpg";
+import Button from "components/Button";
+import useUserApi from "hooks/useUserApi";
+import Logo from "logo.png";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -15,6 +14,8 @@ function Login() {
   const [isDirty, setIsDirty] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const userApi = useUserApi();
 
   useEffect(() => {
     if (username && password) {
@@ -26,8 +27,6 @@ function Login() {
   function login(e) {
     e.preventDefault();
 
-    dispatch(setIsLoading(true));
-
     const request = { username, password };
     setError("");
 
@@ -37,7 +36,6 @@ function Login() {
         dispatch(getCurrentUser());
         window.localStorage.setItem("token", response);
         history.push("/chats");
-        dispatch(setIsLoading(false));
       })
       .catch((error) => {
         var message =
@@ -45,7 +43,6 @@ function Login() {
             ? error
             : "Username or password is incorrect";
         setError(message);
-        dispatch(setIsLoading(false));
       });
   }
   return (

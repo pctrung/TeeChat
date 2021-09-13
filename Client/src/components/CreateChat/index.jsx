@@ -1,9 +1,8 @@
-import chatApi from "api/chatApi";
-import userApi from "api/userApi";
-import { setIsLoading, setPopup } from "app/appSlice";
 import { setSelectedId } from "app/chatSlice";
 import Button from "components/Button";
 import ImageCircle from "components/ImageCircle";
+import useChatApi from "hooks/useChatApi";
+import useUserApi from "hooks/useUserApi";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import constants from "utils/constants";
@@ -20,6 +19,9 @@ function CreateChat({ isOpen, setIsOpen }) {
   const ref = useRef();
   const friendListRef = useRef();
   const dispatch = useDispatch();
+
+  const chatApi = useChatApi();
+  const userApi = useUserApi();
 
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
@@ -76,65 +78,37 @@ function CreateChat({ isOpen, setIsOpen }) {
   }, [selectedFriendList, groupName, selectedMode]);
 
   async function handleCreateGroup() {
-    dispatch(setIsLoading(true));
-
     if (isValidButton) {
       if (selectedMode === constants.chatType.GROUP) {
         const request = {
           participantUserNames: selectedFriendList.map((x) => x.userName),
           name: groupName,
         };
-        chatApi
-          .createGroupChat(request)
-          .then((response) => {
-            if (response.id) {
-              dispatch(setSelectedId(response.id));
-            }
-            setSelectedFriendList([]);
-            setGroupName("");
-          })
-          .catch((error) => {
-            const message =
-              typeof error === "string" ? error : "Oops! Something went wrong!";
-
-            openPopup("Failed", message);
-          });
+        chatApi.createGroupChat(request).then((response) => {
+          if (response.id) {
+            dispatch(setSelectedId(response.id));
+          }
+          setSelectedFriendList([]);
+          setGroupName("");
+        });
       } else if (selectedMode === constants.chatType.PRIVATE) {
         const request = {
           participantUserName: selectedFriendList
             .map((x) => x.userName)
             .shift(),
         };
-        chatApi
-          .createPrivateChat(request)
-          .then((response) => {
-            if (response.id) {
-              dispatch(setSelectedId(response.id));
-            }
-            setSelectedFriendList([]);
-            setGroupName("");
-            setIsOpen(false);
-          })
-          .catch((error) => {
-            var message =
-              typeof error === "string" ? error : "Oops! Something went wrong!";
-
-            setSelectedFriendList([]);
-            setGroupName("");
-            openPopup("Failed", message);
-          });
+        chatApi.createPrivateChat(request).then((response) => {
+          if (response.id) {
+            dispatch(setSelectedId(response.id));
+          }
+          setSelectedFriendList([]);
+          setGroupName("");
+          setIsOpen(false);
+        });
       }
     }
-    dispatch(setIsLoading(false));
   }
-  function openPopup(title, content) {
-    const popup = {
-      isOpen: true,
-      title: title,
-      content: content,
-    };
-    dispatch(setPopup(popup));
-  }
+
   return isOpen ? (
     <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
       <div

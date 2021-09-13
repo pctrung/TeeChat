@@ -21,8 +21,10 @@ function ChatWindow({ chat }) {
   let currentUserName = currentUser.userName;
 
   const friend =
-    chat.participants.length > 1
-      ? chat.participants?.filter((x) => x.userName !== currentUserName).shift()
+    chat?.participants.length > 1
+      ? chat?.participants
+          ?.filter((x) => x.userName !== currentUserName)
+          .shift()
       : currentUser;
 
   function backToChats() {
@@ -156,7 +158,7 @@ function ChatWindow({ chat }) {
                         onClick={() => handleMessageClick(index)}
                         className="max-w-300 rounded-lg shadow transition-all duration-200 cursor-pointer"
                         src={message.imageUrl}
-                        alt="Message image"
+                        alt="Message"
                       />
                     ) : (
                       <span
@@ -181,7 +183,7 @@ function ChatWindow({ chat }) {
                 >
                   <ImageCircle
                     src={
-                      chat.participants
+                      chat?.participants
                         .filter((x) => x.userName === message.senderUserName)
                         .shift()?.avatarUrl
                     }
@@ -202,10 +204,9 @@ function ChatWindow({ chat }) {
                     {message.imageUrl ? (
                       <img
                         onClick={() => handleMessageClick(index)}
-                        onClick={() => handleMessageClick(index)}
                         className="max-w-300 rounded-lg shadow cursor-pointer"
                         src={message.imageUrl}
-                        alt="Message image"
+                        alt="Message"
                       />
                     ) : (
                       <span

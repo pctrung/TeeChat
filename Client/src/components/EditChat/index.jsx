@@ -1,13 +1,12 @@
-import chatApi from "api/chatApi";
-import userApi from "api/userApi";
-import { setIsLoading } from "app/appSlice";
 import Button from "components/Button";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
 import Popup from "components/Popup";
+import useChatApi from "hooks/useChatApi";
+import useUserApi from "hooks/useUserApi";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import constants from "utils/constants";
 
 function EditChat({ isOpen, setIsOpen, chat }) {
@@ -23,6 +22,9 @@ function EditChat({ isOpen, setIsOpen, chat }) {
     chat.participants,
   );
 
+  const chatApi = useChatApi();
+  const userApi = useUserApi();
+
   const [popup, setPopup] = useState({
     isOpen: false,
     content: "",
@@ -32,7 +34,6 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   const currentUser = useSelector((state) => state.users.currentUser);
   const ref = useRef();
   const friendListRef = useRef();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
@@ -80,7 +81,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   }, [chat]);
 
   async function handleEditChat() {
-    var currentParticipantUserNames = chat.participants.map((x) => x.userName);
+    var currentParticipantUserNames = chat?.participants.map((x) => x.userName);
     var selectedParticipantUserNames = selectedFriendList.map(
       (x) => x.userName,
     );
@@ -94,7 +95,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
         participantFullNamesToAdd.push(user.fullName);
       }
     });
-    chat.participants.forEach((user) => {
+    chat?.participants.forEach((user) => {
       if (!selectedParticipantUserNames.some((x) => x === user.userName)) {
         participantFullNamesToRemove.push(user.fullName);
         participantUserNamesToRemove.push(user.userName);
@@ -134,9 +135,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
     }
   }
   async function submitEditChat() {
-    await dispatch(setIsLoading(true));
-
-    var currentParticipantUserNames = chat.participants.map((x) => x.userName);
+    var currentParticipantUserNames = chat?.participants.map((x) => x.userName);
     var selectedParticipantUserNames = selectedFriendList.map(
       (x) => x.userName,
     );
@@ -161,18 +160,10 @@ function EditChat({ isOpen, setIsOpen, chat }) {
       participantUserNamesToRemove,
     };
 
-    chatApi
-      .updateGroupChat(chat.id, request)
-      .then((response) => {})
-      .catch((error) => {
-        var message =
-          typeof error === "string" ? error : "Oops! Something went wrong!";
+    chatApi.updateGroupChat(chat.id, request);
 
-        openPopup("Failed", message);
-      });
     closeModal();
     setIsOpen(false);
-    await dispatch(setIsLoading(false));
   }
 
   async function updateGroupAvatar(e) {
@@ -180,21 +171,9 @@ function EditChat({ isOpen, setIsOpen, chat }) {
     const formData = new FormData();
     formData.append("Avatar", file);
 
-    dispatch(setIsLoading(true));
-    await chatApi
-      .updateGroupAvatar(chat.id, formData)
-      .then((response) => {
-        openPopup("Success", "Update group avatar successfully!");
-        dispatch(setIsLoading(false));
-      })
-      .catch((error) => {
-        var message =
-          typeof error === "string" ? error : "Oops! Something went wrong!";
-
-        openPopup("Failed", message);
-        dispatch(setIsLoading(false));
-      });
-    dispatch(setIsLoading(false));
+    await chatApi.updateGroupAvatar(chat.id, formData).then((response) => {
+      openPopup("Success", "Update group avatar successfully!");
+    });
   }
 
   function openPopup(title, content) {

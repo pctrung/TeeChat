@@ -34,7 +34,7 @@ function ChatList() {
             const currentUserName = currentUser.userName;
 
             // check current user still exist in chat (remove participant case)
-            var isValid = chat.participants.some(
+            var isValid = chat?.participants.some(
               (x) => x.userName === currentUserName,
             );
             if (!isValid) {
@@ -42,8 +42,8 @@ function ChatList() {
             }
 
             const friend =
-              chat.participants.length > 1
-                ? chat.participants
+              chat?.participants.length > 1
+                ? chat?.participants
                     ?.filter((x) => x.userName !== currentUserName)
                     .shift()
                 : currentUser;
@@ -137,7 +137,7 @@ function sortChat(chats) {
 function searchChat(chats, keyword) {
   if (chats) {
     return chats.filter((chat) => {
-      let isValid = chat.participants.some((x) => {
+      let isValid = chat?.participants.some((x) => {
         if (x.fullName.toLowerCase().includes(keyword.toLowerCase())) {
           return true;
         }
