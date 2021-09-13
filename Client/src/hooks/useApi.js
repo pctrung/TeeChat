@@ -40,7 +40,6 @@ export default function useApi() {
     },
     (error) => {
       if (error.response) {
-        console.error(error.response);
         dispatch(setIsLoading(false));
 
         switch (error.response.status) {
