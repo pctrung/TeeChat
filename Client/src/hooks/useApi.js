@@ -56,8 +56,8 @@ export default function useApi() {
             break;
           default:
             var message =
-              typeof error === "string"
-                ? error
+              typeof error?.response?.data === "string"
+                ? error?.response?.data
                 : "Oops, something went wrong! Please contact administrator.";
 
             openPopup("Error", message);
