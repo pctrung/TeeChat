@@ -197,7 +197,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                   />
                   {isOpenFriendList && (
                     <>
-                      <div className="animate-fade absolute top-full bg-white dark:bg-dark-third border border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl">
+                      <div className="animate-fade absolute top-full bg-white dark:bg-dark-secondary dark:border-dark-hover border border-gray-300 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl">
                         <h4 className="font-semibold mb-2 dark:text-gray-200">
                           Friend list
                         </h4>
@@ -214,6 +214,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                                 (selected) => selected.userName === x.userName,
                               ),
                           )
+                          .sort((a, b) => a.fullName.localeCompare(b.fullName))
                           .map((friend, index) => (
                             <div
                               onClick={() => {
@@ -228,7 +229,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                                 }
                               }}
                               key={Math.random() + index}
-                              className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-hover bg-gray-100 hover:bg-green-200 dark:hover:bg-green-600 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
+                              className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-third bg-gray-100 hover:bg-green-200 dark:hover:bg-green-600 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                             >
                               <ImageCircle size="xs" src={friend.avatarUrl} />
                               <span className="break-full w-full overflow-ellipsis truncate">
@@ -251,28 +252,30 @@ function CreateChat({ isOpen, setIsOpen }) {
                     {"(At least 2 people. Click to remove)"}
                   </span>
                 </label>
-                <div className="bg-white dark:bg-dark-third border dark:border-dark-third border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none">
-                  {selectedFriendList.map((friend, index) => (
-                    <div
-                      onClick={() => {
-                        var result = [...selectedFriendList];
-                        var i = result.findIndex(
-                          (x) => x.userName === friend.userName,
-                        );
-                        if (i >= 0) {
-                          result.splice(i, 1);
-                          setSelectedFriendList(result);
-                        }
-                      }}
-                      key={Math.random() + index}
-                      className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-hover bg-gray-100 hover:bg-red-200 dark:hover:bg-red-500 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
-                    >
-                      <ImageCircle size="xs" src={friend.avatarUrl} />
-                      <span className="break-full w-full overflow-ellipsis truncate">
-                        {friend.fullName ?? "Unknown"}
-                      </span>
-                    </div>
-                  ))}
+                <div className="bg-white dark:bg-dark-secondary border dark:border-dark-hover border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none">
+                  {selectedFriendList
+                    .sort((a, b) => a.fullName.localeCompare(b.fullName))
+                    .map((friend, index) => (
+                      <div
+                        onClick={() => {
+                          var result = [...selectedFriendList];
+                          var i = result.findIndex(
+                            (x) => x.userName === friend.userName,
+                          );
+                          if (i >= 0) {
+                            result.splice(i, 1);
+                            setSelectedFriendList(result);
+                          }
+                        }}
+                        key={Math.random() + index}
+                        className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-third bg-gray-100 hover:bg-red-200 dark:hover:bg-red-500 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
+                      >
+                        <ImageCircle size="xs" src={friend.avatarUrl} />
+                        <span className="break-full w-full overflow-ellipsis truncate">
+                          {friend.fullName ?? "Unknown"}
+                        </span>
+                      </div>
+                    ))}
                 </div>
               </div>
             </>
@@ -296,11 +299,12 @@ function CreateChat({ isOpen, setIsOpen }) {
                 />
                 {isOpenFriendList && (
                   <>
-                    <div className="animate-fade absolute top-full bg-white dark:bg-dark-third border border-gray-400 border-opacity-50 rounded-lg w-full space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl py-4 md:px-8 px-6 ">
+                    <div className="animate-fade absolute top-full bg-white dark:bg-dark-secondary dark:border-dark-hover border border-gray-400 border-opacity-50 rounded-lg w-full space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl py-4 md:px-8 px-6 ">
                       <h4 className="font-semibold mb-2 text-start dark:text-gray-200">
                         Friend list
                       </h4>
                       {friendList
+                        .sort((a, b) => a.fullName.localeCompare(b.fullName))
                         .filter(
                           (x) =>
                             (x.fullName
@@ -322,7 +326,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                               setSelectedFriendList(result);
                             }}
                             key={Math.random() + index}
-                            className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-hover bg-gray-100 hover:bg-green-200 dark:hover:bg-green-600 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
+                            className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-third bg-gray-100 hover:bg-green-200 dark:hover:bg-green-600 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                           >
                             <ImageCircle size="xs" src={friend.avatarUrl} />
                             <span className="break-full w-full overflow-ellipsis truncate">
@@ -344,8 +348,8 @@ function CreateChat({ isOpen, setIsOpen }) {
                     {"(Click to remove)"}
                   </span>
                 </label>
-                <div className="bg-white dark:bg-dark-third border dark:border-dark-third border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none ">
-                  {selectedFriendList.map((friend, index) => {
+                <div className="bg-white dark:bg-dark-secondary border dark:border-dark-hover border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none ">
+                  {[...selectedFriendList].map((friend, index) => {
                     if (index === 0) {
                       return (
                         <div
@@ -360,7 +364,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                             }
                           }}
                           key={Math.random() + index}
-                          className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-hover bg-gray-100 hover:bg-red-200 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300 dark:hover:bg-red-500"
+                          className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-third bg-gray-100 hover:bg-red-200 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300 dark:hover:bg-red-500"
                         >
                           <ImageCircle size="xs" src={friend.avatarUrl} />
                           <span className="break-full w-full overflow-ellipsis truncate">
