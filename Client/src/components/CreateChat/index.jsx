@@ -110,24 +110,24 @@ function CreateChat({ isOpen, setIsOpen }) {
   }
 
   return isOpen ? (
-    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
+    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 py-10  z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
       <div
         ref={ref}
         className={
-          "md:px-5 md:py-3 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300" +
+          "md:px-5 md:py-3 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 max-h-full overflow-y-auto" +
           " " +
           (isOpenFriendList ? "mb-16" : "")
         }
       >
-        <div className="flex px-10 pt-6 pb-5 space-x-7 justify-between h-full items-center">
+        <div className="flex px-10 pt-6 pb-5 space-x-5 justify-between h-full items-center">
           <h3 className="font-semibold text-2xl text-green-600 dark:text-green-400">
             New chat!
           </h3>
 
-          <div className="relative flex rounded-lg items-center border border-green-500 cursor-pointer">
+          <div className="relative flex rounded-lg items-center border border-green-500 cursor-pointer overflow-hidden">
             <div
               className={
-                "absolute bg-gradient-to-br from-green-400 to-green-600 w-1/2 h-full rounded-lg transition-all duration-200 z-0" +
+                "absolute bg-gradient-to-br from-green-400 to-green-600 w-1/2 h-full rounded transition-all duration-200 z-0" +
                 " " +
                 (selectedMode === constants.chatType.GROUP
                   ? "transform translate-x-full left-0"

@@ -194,11 +194,11 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   }
 
   return isOpen ? (
-    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
+    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 py-10 z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
       <div
         ref={ref}
         className={
-          "md:px-5 md:py-3 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300" +
+          "md:px-5 md:py-3 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 max-h-full overflow-y-auto" +
           " " +
           (isOpenFriendList ? "mb-16" : "")
         }
@@ -349,6 +349,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                   id="avatar"
                   onChange={updateGroupAvatar}
                   type="file"
+                  className="w-full"
                   accept="image/png, image/jpg, image/tiff, image/tif, image/jpeg"
                 />
               </div>

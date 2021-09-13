@@ -100,7 +100,7 @@ function Chat() {
 
   return (
     <>
-      <div className="dark:bg-dark-primary dark:text-white  animate-fade grid grid-cols-12 h-screen w-screen">
+      <div className="dark:bg-dark-primary dark:text-white  animate-fade grid grid-cols-12 h-screen w-screen overflow-hidden">
         <div
           className={
             "animate-fade lg:col-span-3 md:col-span-4 col-span-12 md:flex flex-col h-screen border-r px-4 dark:border-dark-third border-gray-300 pt-1" +
