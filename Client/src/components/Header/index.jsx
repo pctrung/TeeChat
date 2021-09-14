@@ -79,7 +79,7 @@ function Header({ logout }) {
         setIsOpen={setIsOpenUserInfo}
       />
       <CreateChat isOpen={isOpenCreateChat} setIsOpen={setIsOpenCreateChat} />
-      <div className="h-24 flex justify-between items-center">
+      <div className="pb-1 pt-4 flex justify-between items-center">
         <div className="flex items-center space-x-3">
           <div
             className="transition-all duration-200 ring ring-green-500 p-1 transform active:scale-95 rounded-full cursor-pointer"

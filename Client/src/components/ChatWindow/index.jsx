@@ -146,7 +146,7 @@ function ChatWindow({ chat }) {
                     className="flex flex-col items-end w-full"
                   >
                     {showTimeIndexes.includes(index) && (
-                      <span className="transition-all animate-fade text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
+                      <span className="transition-all animate-fade text-xs md:text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
                         {moment(
                           new Date(message.dateCreated),
                           "YYYYMMDD",
@@ -156,7 +156,7 @@ function ChatWindow({ chat }) {
                     {message.imageUrl ? (
                       <img
                         onClick={() => handleMessageClick(index)}
-                        className="max-w-300 rounded-lg shadow transition-all duration-200 cursor-pointer"
+                        className="md:max-w-300 max-w-200 rounded-lg shadow transition-all duration-200 cursor-pointer"
                         src={message.imageUrl}
                         alt="Message"
                       />
@@ -164,7 +164,7 @@ function ChatWindow({ chat }) {
                       <span
                         onClick={() => handleMessageClick(index)}
                         className={
-                          "text-white rounded-3xl px-5 py-3 break-word rounded-br-none cursor-pointer overflow-x-auto max-w-3/4" +
+                          "text-white rounded-3xl md:px-5 md:py-3 px-3 py-2 break-word rounded-br-none cursor-pointer overflow-x-auto max-w-3/4 text-sm md:text-base" +
                           " " +
                           (showTimeIndexes.includes(index)
                             ? "bg-green-600 dark:bg-green-800"
@@ -192,7 +192,7 @@ function ChatWindow({ chat }) {
                   <div className="flex flex-col w-full items-start">
                     {(showTimeIndexes.includes(index) ||
                       chat.type === constants.chatType.GROUP) && (
-                      <span className="transition-all animate-fade text-sm text-gray-400 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-left">
+                      <span className="transition-all animate-fade text-xs md:text-sm text-gray-400 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-left">
                         {message.senderFullName +
                           " - " +
                           moment(
@@ -204,14 +204,14 @@ function ChatWindow({ chat }) {
                     {message.imageUrl ? (
                       <img
                         onClick={() => handleMessageClick(index)}
-                        className="max-w-300 rounded-lg shadow cursor-pointer"
+                        className="md:max-w-300 max-w-200 rounded-lg shadow cursor-pointer"
                         src={message.imageUrl}
                         alt="Message"
                       />
                     ) : (
                       <span
                         className={
-                          " rounded-3xl px-5 py-3 break-word rounded-bl-none shadow-sm cursor-pointer overflow-x-auto max-w-3/4" +
+                          " rounded-3xl md:px-5 md:py-3 px-3 py-2 break-word rounded-bl-none shadow-sm cursor-pointer overflow-x-auto max-w-3/4 text-sm md:text-base" +
                           " " +
                           (showTimeIndexes.includes(index)
                             ? "bg-gray-300 dark:bg-dark-third"

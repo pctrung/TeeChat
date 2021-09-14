@@ -198,7 +198,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
       <div
         ref={ref}
         className={
-          "md:px-5 md:py-3 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 max-h-full overflow-y-auto" +
+          "px-6 md:px-14 md:py-6 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 max-h-full overflow-y-auto" +
           " " +
           (isOpenFriendList ? "mb-16" : "")
         }
@@ -217,18 +217,18 @@ function EditChat({ isOpen, setIsOpen, chat }) {
           confirmButtonTitle="Yes"
           confirmButtonAction={submitEditChat}
         />
-        <div className="flex px-10 pt-6 pb-5 space-x-7 justify-between h-full items-center">
-          <h3 className="font-semibold text-2xl text-green-600 dark:text-green-400">
+        <div className="flex pt-6 pb-5 h-full">
+          <h3 className="font-semibold text-lg md:text-2xl text-green-600 dark:text-green-400">
             Chat info!
           </h3>
         </div>
-        <div className="px-10 space-y-4">
+        <div className="space-y-2 md:space-y-4">
           {chat.type === constants.chatType.GROUP ? (
             <>
               <div className="space-y-2">
                 <label
                   htmlFor="groupName"
-                  className="font-semibold dark:text-dark-txt text-lg"
+                  className="font-semibold dark:text-dark-txt text-base md:text-lg"
                 >
                   Group name <span className="text-red-500">*</span>
                 </label>
@@ -243,7 +243,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
               <div ref={friendListRef} className="space-y-2">
                 <label
                   htmlFor="search"
-                  className="font-semibold dark:text-dark-txt text-lg"
+                  className="font-semibold dark:text-dark-txt text-base md:text-lg"
                 >
                   Add Members
                 </label>
@@ -259,8 +259,10 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                   />
                   {isOpenFriendList && (
                     <>
-                      <div className="animate-fade absolute top-full bg-white dark:bg-dark-third border border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl">
-                        <h4 className="font-semibold mb-2">Friend list</h4>
+                      <div className="animate-fade absolute top-full bg-white dark:bg-dark-third border border-gray-400 border-opacity-50 rounded-lg w-full md:py-4 py-2 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl ">
+                        <h4 className="font-semibold dark:text-gray-200 mb-2">
+                          Friend list
+                        </h4>
                         {friendList
                           .filter(
                             (x) =>
@@ -292,7 +294,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                               className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-hover bg-gray-100 hover:bg-green-200 dark:hover:bg-green-600 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                             >
                               <ImageCircle size="xs" src={friend.avatarUrl} />
-                              <span className="break-full w-full overflow-ellipsis truncate">
+                              <span className="break-full w-full overflow-ellipsis truncate md:text-base text-sm">
                                 {friend.fullName ?? "Unknown"}
                               </span>
                             </div>
@@ -305,7 +307,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
               <div className="space-y-2">
                 <label
                   htmlFor="search"
-                  className="font-semibold dark:text-dark-txt text-lg"
+                  className="font-semibold text-base md:text-lg dark:text-dark-txt"
                 >
                   Members <span className="text-red-500">*</span>{" "}
                   <span className="text-sm text-gray-400">
@@ -331,7 +333,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                         className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2 dark:hover:bg-red-500 dark:bg-dark-hover bg-gray-100 hover:bg-red-200 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                       >
                         <ImageCircle size="xs" src={friend.avatarUrl} />
-                        <span className="break-full w-full overflow-ellipsis truncate">
+                        <span className="break-full w-full overflow-ellipsis truncate md:text-base text-sm">
                           {friend.fullName ?? "Unknown"}
                         </span>
                       </div>
@@ -341,7 +343,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
               <div className="space-y-2 mr-2 flex flex-col">
                 <label
                   htmlFor="avatar"
-                  className="dark:text-dark-txt text-lg font-semibold "
+                  className="dark:text-dark-txt text-base md:text-lg font-semibold "
                 >
                   Group Avatar
                 </label>
@@ -371,7 +373,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
             </div>
           )}
         </div>
-        <div className="flex justify-end px-10 py-6 space-x-4">
+        <div className="flex justify-end py-6 space-x-4">
           <div className="space-x-2 flex items-center">
             <Button outline content="Close" onClick={() => setIsOpen(false)} />
             {chat.type === constants.chatType.GROUP ? (

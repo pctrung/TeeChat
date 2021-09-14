@@ -21,10 +21,10 @@ function Button({
         onClick={onClick}
         onBlur={onBlur}
         className={
-          "px-4 py-2 rounded-lg transition-all duration-200 disabled:opacity-50 outline-none z-0 select-none " +
+          "px-4 py-2 rounded-lg transition-all text-sm md:text-base duration-200 disabled:opacity-50 outline-none z-0 select-none " +
           " " +
           (outline
-            ? "border border-green-500 bg-white dark:bg-transparent dark:hover:bg-green-500 text-green-500 hover:text-white hover:bg-green-400 active:bg-green-500"
+            ? "ring-inset ring-1 ring-green-500 bg-white dark:bg-transparent dark:hover:bg-green-500 text-green-500 hover:text-white hover:bg-green-400 active:bg-green-500"
             : "bg-gradient-to-br from-green-400 to-green-600 text-white active:from-green-500 active:to-green-600  ") +
           " " +
           (className ?? "") +

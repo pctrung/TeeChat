@@ -63,10 +63,10 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
       <div
         ref={ref}
         className={
-          "w-full md:w-5/6 lg:w-2/5 md:px-14 px-10 md:py-3 flex flex-col dark:bg-dark-secondary dark:border-dark-third bg-white rounded-xl shadow-xl border border-gray-300 transition-all duration-300"
+          "w-full md:w-5/6 lg:w-2/5 md:px-14 px-6 md:py-6 flex flex-col dark:bg-dark-secondary dark:border-dark-third bg-white rounded-xl shadow-xl border border-gray-300 transition-all duration-300"
         }
       >
-        <h3 className="pt-6 pb-5 font-semibold text-2xl text-green-600 dark:text-green-400">
+        <h3 className="pt-6 pb-5 font-semibold text-lg md:text-2xl text-green-600 dark:text-green-400">
           User info!
         </h3>
         <div className="space-y-4">
@@ -74,7 +74,7 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
             <div className="md:col-span-1 md:mr-2 space-y-2">
               <label
                 htmlFor="fistName"
-                className="text-lg font-semibold dark:text-dark-txt"
+                className="md:text-lg font-semibold dark:text-dark-txt"
               >
                 First Name <span className="text-red-500">*</span>
               </label>
@@ -89,7 +89,7 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
             <div className="md:col-span-1 md:ml-2 space-y-2">
               <label
                 htmlFor="lastName"
-                className="text-lg font-semibold dark:text-dark-txt"
+                className="md:text-lg font-semibold dark:text-dark-txt"
               >
                 Last Name <span className="text-red-500">*</span>
               </label>
@@ -104,7 +104,7 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
             <div className="space-y-2 flex flex-col">
               <label
                 htmlFor="avatar"
-                className="text-lg font-semibold dark:text-dark-txt"
+                className="md:text-lg font-semibold md:mt-4 dark:text-dark-txt"
               >
                 Avatar
               </label>

@@ -15,7 +15,7 @@ function ImageCircle({
   alt = "Avatar",
   size = "md",
 }) {
-  const xsSize = "h-6 w-6";
+  const xsSize = "md:h-6 md:w-6 h-5 w-5";
   const smSize = "h-8 w-8";
   const mdSize = "h-12 w-12";
   const lgSize = "h-16 w-16";
