@@ -63,7 +63,7 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
       <div
         ref={ref}
         className={
-          "w-full md:w-5/6 lg:w-2/5 md:px-14 px-10 md:py-3 flex flex-col dark:bg-dark-secondary dark:border-dark-third bg-white rounded-xl shadow-xl border border-gray-300 transition-all duration-300 max-h-full overflow-y-auto"
+          "w-full md:w-5/6 lg:w-2/5 md:px-14 px-10 md:py-3 flex flex-col dark:bg-dark-secondary dark:border-dark-third bg-white rounded-xl shadow-xl border border-gray-300 transition-all duration-300"
         }
       >
         <h3 className="pt-6 pb-5 font-semibold text-2xl text-green-600 dark:text-green-400">

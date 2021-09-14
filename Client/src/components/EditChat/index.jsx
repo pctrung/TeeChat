@@ -237,7 +237,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value)}
                   type="text"
-                  className="dark:bg-dark-third bg-gray-100  rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 mb-2 "
+                  className="dark:bg-dark-third bg-gray-100 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 mb-2 "
                 />
               </div>
               <div ref={friendListRef} className="space-y-2">
@@ -259,7 +259,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                   />
                   {isOpenFriendList && (
                     <>
-                      <div className="animate-fade absolute top-full bg-white dark:bg-dark-third border border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl">
+                      <div className="animate-fade absolute top-full bg-white dark:bg-dark-third border border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl">
                         <h4 className="font-semibold mb-2">Friend list</h4>
                         {friendList
                           .filter(
@@ -312,7 +312,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                     {"(Click to remove)"}
                   </span>
                 </label>
-                <div className="bg-white border dark:bg-dark-third dark:border-dark-third border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none">
+                <div className="bg-white border dark:bg-dark-third dark:border-dark-third border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none">
                   {[...selectedFriendList]
                     .sort((a, b) => a.fullName.localeCompare(b.fullName))
                     .map((friend, index) => (

@@ -114,7 +114,7 @@ function CreateChat({ isOpen, setIsOpen }) {
       <div
         ref={ref}
         className={
-          "md:px-5 md:py-3 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 max-h-full overflow-y-auto" +
+          "md:px-5 md:py-3 py-6 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 max-h-full overflow-y-auto" +
           " " +
           (isOpenFriendList ? "mb-16" : "")
         }
@@ -197,7 +197,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                   />
                   {isOpenFriendList && (
                     <>
-                      <div className="animate-fade absolute top-full bg-white dark:bg-dark-secondary dark:border-dark-hover border border-gray-300 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl">
+                      <div className="animate-fade absolute top-full bg-white dark:bg-dark-secondary dark:border-dark-hover border border-gray-300 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl">
                         <h4 className="font-semibold mb-2 dark:text-gray-200">
                           Friend list
                         </h4>
@@ -252,7 +252,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                     {"(At least 2 people. Click to remove)"}
                   </span>
                 </label>
-                <div className="bg-white dark:bg-dark-secondary border dark:border-dark-hover border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none">
+                <div className="bg-white dark:bg-dark-secondary border dark:border-dark-hover border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none">
                   {selectedFriendList
                     .sort((a, b) => a.fullName.localeCompare(b.fullName))
                     .map((friend, index) => (
@@ -299,7 +299,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                 />
                 {isOpenFriendList && (
                   <>
-                    <div className="animate-fade absolute top-full bg-white dark:bg-dark-secondary dark:border-dark-hover border border-gray-400 border-opacity-50 rounded-lg w-full space-y-1 max-h-72 overflow-y-auto select-none z-10 shadow-xl py-4 md:px-8 px-6 ">
+                    <div className="animate-fade absolute top-full bg-white dark:bg-dark-secondary dark:border-dark-hover border border-gray-400 border-opacity-50 rounded-lg w-full space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl py-4 md:px-8 px-6 ">
                       <h4 className="font-semibold mb-2 text-start dark:text-gray-200">
                         Friend list
                       </h4>
@@ -348,7 +348,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                     {"(Click to remove)"}
                   </span>
                 </label>
-                <div className="bg-white dark:bg-dark-secondary border dark:border-dark-hover border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-72 overflow-y-auto select-none ">
+                <div className="bg-white dark:bg-dark-secondary border dark:border-dark-hover border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none ">
                   {[...selectedFriendList].map((friend, index) => {
                     if (index === 0) {
                       return (
