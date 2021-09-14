@@ -1,4 +1,4 @@
-# TeeChat
+# TeeChat!
 My pet project - A chat application for TeeApp social media
 
 Now available at https://pctrung.github.io/TeeChat/
