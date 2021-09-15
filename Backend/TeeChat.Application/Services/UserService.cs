@@ -91,7 +91,7 @@ namespace TeeChat.Application.Services
             var token = new JwtSecurityToken(issuer,
                 issuer,
                 claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddDays(60),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
