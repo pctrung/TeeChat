@@ -384,5 +384,4 @@ FodyWeavers.xsd
 
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
-Client/.env
+yarn-error.log* 
