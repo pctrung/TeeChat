@@ -23,7 +23,7 @@ const chats = createSlice({
         return chat.id === updatedChatId;
       });
       if (index >= 0) {
-        state[index].groupAvatarUrl = action.payload.groupAvatarUrl;
+        state[index].groupAvatarUrl = action.payload?.groupAvatarUrl;
       }
     },
     appendMessageToChat: (state, action) => {

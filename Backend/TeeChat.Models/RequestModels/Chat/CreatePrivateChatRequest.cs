@@ -4,7 +4,7 @@ namespace TeeChat.Models.RequestModels.Chat
 {
     public class CreatePrivateChatRequest
     {
-        [Required(ErrorMessage = "Participant username cannot be null")]
+        [Required(ErrorMessage = "Please select a member to start!")]
         public string ParticipantUserName { get; set; }
     }
 }

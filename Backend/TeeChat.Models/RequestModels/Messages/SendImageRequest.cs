@@ -5,7 +5,7 @@ namespace TeeChat.Models.RequestModels.Messages
 {
     public class SendImageRequest
     {
-        [Required(ErrorMessage = "Image cannot be null or empty")]
+        [Required(ErrorMessage = "Image cannot be null")]
         public IFormFile Image { get; set; }
     }
 }

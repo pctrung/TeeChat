@@ -112,6 +112,14 @@ namespace TeeChat.Application.Services
                     Message = "Group chat participant require at least 3 people"
                 };
             }
+            if (string.IsNullOrWhiteSpace(request.Name))
+            {
+                return new ApiResult<CreateChatResponse>(null)
+                {
+                    StatusCode = 400,
+                    Message = "Please enter group name"
+                };
+            }
 
             // add participants
             var participants = await _context.Users.Where(x => !x.UserName.Equals(_currentUser.UserName) && request.ParticipantUserNames.Contains(x.UserName)).ToListAsync();
@@ -152,7 +160,7 @@ namespace TeeChat.Application.Services
             chat.CreatorUserName = _currentUser.UserName;
             chat.CreatorUserName = _currentUser.FullName;
             chat.DateCreated = DateTime.Now;
-            chat.Name = request.Name;
+            chat.Name = request.Name.Trim();
 
             await _context.Chats.AddAsync(chat);
 
@@ -385,9 +393,9 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            if (!string.IsNullOrEmpty(request.NewGroupName))
+            if (!string.IsNullOrWhiteSpace(request.NewGroupName))
             {
-                chat.Name = request.NewGroupName;
+                chat.Name = request.NewGroupName.Trim();
             }
             // notify all participant about updated chat
             var participantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList();

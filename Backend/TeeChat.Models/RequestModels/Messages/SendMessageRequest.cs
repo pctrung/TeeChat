@@ -4,7 +4,7 @@ namespace TeeChat.Models.RequestModels.Messages
 {
     public class SendMessageRequest
     {
-        [Required(ErrorMessage = "Content cannot be null or empty")]
+        [Required(ErrorMessage = "Please enter message content!")]
         public string Content { get; set; }
     }
 }

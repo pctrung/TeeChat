@@ -16,6 +16,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   const [groupName, setGroupName] = useState(chat.name);
   const [keyword, setKeyword] = useState("");
 
+  const [isValidButton, setIsValidButton] = useState(false);
   const [friendList, setFriendList] = useState([]);
   const [isOpenFriendList, setIsOpenFriendList] = useState(false);
   const [selectedFriendList, setSelectedFriendList] = useState(
@@ -35,6 +36,9 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   const ref = useRef();
   const friendListRef = useRef();
 
+  useEffect(() => {
+    setIsValidButton(groupName?.trim() ? true : false);
+  }, [groupName]);
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       // If the menu is open and the clicked target is not within the menu,
@@ -377,7 +381,11 @@ function EditChat({ isOpen, setIsOpen, chat }) {
           <div className="space-x-2 flex items-center">
             <Button outline content="Close" onClick={() => setIsOpen(false)} />
             {chat.type === constants.chatType.GROUP ? (
-              <Button content="Save" onClick={() => handleEditChat()} />
+              <Button
+                disabled={!isValidButton}
+                content="Save"
+                onClick={() => handleEditChat()}
+              />
             ) : (
               ""
             )}

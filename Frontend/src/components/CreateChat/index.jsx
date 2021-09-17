@@ -70,7 +70,7 @@ function CreateChat({ isOpen, setIsOpen }) {
 
   useEffect(() => {
     if (selectedMode === constants.chatType.GROUP) {
-      var result = selectedFriendList?.length >= 2 && groupName;
+      var result = selectedFriendList?.length >= 2 && groupName?.trim();
       setIsValidButton(result);
     } else if (selectedMode === constants.chatType.PRIVATE) {
       setIsValidButton(selectedFriendList?.length !== 0 ? true : false);

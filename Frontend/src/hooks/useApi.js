@@ -90,6 +90,6 @@ function objToString(obj) {
   for (const val of Object.values(obj)) {
     str += `${val.toString()}, `;
   }
-  str.substring(str.length - 2, str.length);
+  str.substring(str.length - 3, str.length);
   return str;
 }

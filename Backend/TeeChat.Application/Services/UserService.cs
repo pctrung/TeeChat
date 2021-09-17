@@ -42,7 +42,7 @@ namespace TeeChat.Application.Services
 
         public async Task<bool> CheckUserNameExistsAsync(string userName)
         {
-            if (!string.IsNullOrEmpty(userName))
+            if (!string.IsNullOrWhiteSpace(userName))
             {
                 return await _context.Users.AnyAsync(x => x.UserName.Equals(userName));
             }

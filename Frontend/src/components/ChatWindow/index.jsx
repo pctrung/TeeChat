@@ -91,8 +91,8 @@ function ChatWindow({ chat }) {
             />
             <ImageCircle
               src={
-                chat.groupAvatarUrl !== ""
-                  ? chat.groupAvatarUrl
+                chat?.groupAvatarUrl !== ""
+                  ? chat?.groupAvatarUrl
                   : friend?.avatarUrl
               }
             />

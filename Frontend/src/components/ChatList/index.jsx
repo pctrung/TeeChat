@@ -69,7 +69,7 @@ function ChatList() {
                   src={
                     chat.type === constants.chatType.PRIVATE
                       ? friend?.avatarUrl
-                      : chat.groupAvatarUrl
+                      : chat?.groupAvatarUrl
                   }
                   size="lg"
                 />

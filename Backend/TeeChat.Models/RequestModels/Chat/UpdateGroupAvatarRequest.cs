@@ -5,7 +5,7 @@ namespace TeeChat.Models.RequestModels.Chat
 {
     public class UpdateGroupAvatarRequest
     {
-        [Required(ErrorMessage = "Avatar file cannot be null")]
+        [Required(ErrorMessage = "Please upload avatar file")]
         public IFormFile Avatar { get; set; }
     }
 }
