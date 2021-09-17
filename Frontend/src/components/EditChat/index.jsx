@@ -14,14 +14,14 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
-  const [groupName, setGroupName] = useState(chat.name);
+  const [groupName, setGroupName] = useState(chat?.name);
   const [keyword, setKeyword] = useState("");
 
   const [isValidButton, setIsValidButton] = useState(false);
   const [friendList, setFriendList] = useState([]);
   const [isOpenFriendList, setIsOpenFriendList] = useState(false);
   const [selectedFriendList, setSelectedFriendList] = useState(
-    chat.participants,
+    chat?.participants,
   );
 
   const chatApi = useChatApi();
@@ -82,8 +82,8 @@ function EditChat({ isOpen, setIsOpen, chat }) {
     });
   }, []);
   useEffect(() => {
-    setSelectedFriendList(chat.participants);
-    setGroupName(chat.name);
+    setSelectedFriendList(chat?.participants);
+    setGroupName(chat?.name);
   }, [chat]);
 
   async function handleEditChat() {
@@ -166,7 +166,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
       participantUserNamesToRemove,
     };
 
-    chatApi.updateGroupChat(chat.id, request);
+    chatApi.updateGroupChat(chat?.id, request);
 
     const isLeaveGroup = participantUserNamesToRemove.some(
       (x) => x === currentUser.userName,
@@ -184,7 +184,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
     const formData = new FormData();
     formData.append("Avatar", file);
 
-    await chatApi.updateGroupAvatar(chat.id, formData).then((response) => {
+    await chatApi.updateGroupAvatar(chat?.id, formData).then((response) => {
       openPopup("Success", "Update group avatar successfully!");
     });
   }
@@ -373,12 +373,12 @@ function EditChat({ isOpen, setIsOpen, chat }) {
             <div ref={friendListRef} className="space-y-2">
               <div className="font-bold dark:text-dark-txt">
                 Created user:{" "}
-                <span className="font-normal">{chat.creatorUserName}</span>
+                <span className="font-normal">{chat?.creatorUserName}</span>
               </div>
               <div className="font-bold dark:text-dark-txt">
                 Created date:{" "}
                 <span className="font-normal">
-                  {moment(new Date(chat.dateCreated), "YYYYMMDD").format(
+                  {moment(new Date(chat?.dateCreated), "YYYYMMDD").format(
                     "MMMM Do YYYY, h:mm:ss a",
                   )}
                 </span>

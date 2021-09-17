@@ -49,7 +49,7 @@ const chats = createSlice({
       }
     },
     refreshChats: (state, action) => {
-      state = action.payload;
+      state = action.payload ?? [];
       return state;
     },
     addMessage: (state, action) => {

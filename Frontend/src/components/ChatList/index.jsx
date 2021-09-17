@@ -50,7 +50,7 @@ function ChatList() {
             let lastMessage = {};
             if (chat.messages?.length !== 0) {
               lastMessage = chat.messages?.reduce((a, b) =>
-                a.dateCreated > b.dateCreated ? a : b,
+                a?.dateCreated > b?.dateCreated ? a : b,
               );
             }
             return (
@@ -96,7 +96,7 @@ function ChatList() {
                     </span>
                     <span className="text-sm text-gray-500 truncate flex-shrink-0">
                       {moment(
-                        new Date(lastMessage.dateCreated ?? chat.dateCreated),
+                        new Date(lastMessage?.dateCreated ?? chat?.dateCreated),
                         "YYYYMMDD",
                       )
                         .fromNow()
@@ -140,17 +140,17 @@ function sortChat(chats) {
       // check if chat no message => return date created of chat
       if (chatA.messages?.length !== 0) {
         lastMessageA = chatA.messages?.reduce((a, b) => {
-          return a.dateCreated > b.dateCreated ? a : b;
+          return a?.dateCreated > b?.dateCreated ? a : b;
         });
       } else {
-        lastMessageA.dateCreated = chatA.dateCreated;
+        lastMessageA.dateCreated = chatA?.dateCreated;
       }
       if (chatB.messages?.length !== 0) {
         lastMessageB = chatB.messages?.reduce((a, b) =>
-          a.dateCreated > b.dateCreated ? a : b,
+          a?.dateCreated > b?.dateCreated ? a : b,
         );
       } else {
-        lastMessageB.dateCreated = chatB.dateCreated;
+        lastMessageB.dateCreated = chatB?.dateCreated;
       }
 
       return lastMessageA?.dateCreated < lastMessageB?.dateCreated ? 1 : -1;

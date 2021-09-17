@@ -55,8 +55,8 @@ function ChatWindow({ chat }) {
 
   useEffect(() => {
     if (chat?.numOfUnreadMessages > 0) {
-      chatApi.readMessage(chat.id).then((res) => {
-        dispatch(readMessage(chat.id));
+      chatApi.readMessage(chat?.id).then((res) => {
+        dispatch(readMessage(chat?.id));
       });
     }
   }, [chat]);
@@ -72,13 +72,13 @@ function ChatWindow({ chat }) {
   };
 
   useEffect(() => {
-    if (chat.page < 2) {
+    if (chat?.page < 2) {
       scrollToBottom();
     }
   }, [chat]);
 
   function loadMore() {
-    if (page < chat.pageCount) {
+    if (page < chat?.pageCount) {
       setPage((prevPage) => prevPage + 1);
     }
   }
@@ -138,7 +138,7 @@ function ChatWindow({ chat }) {
           {!hasMore && (
             <div className="text-gray-500 text-xs md:text-sm text-center mb-2">
               Date created:{" "}
-              {moment(new Date(chat.dateCreated), "YYYYMMDD").format(
+              {moment(new Date(chat?.dateCreated), "YYYYMMDD").format(
                 "MMMM Do YYYY, h:mm:ss a",
               )}
             </div>
@@ -146,7 +146,7 @@ function ChatWindow({ chat }) {
           <div>{error && "Error"}</div>
           {[...chat?.messages]
             ?.sort((messageA, messageB) => {
-              return messageA.dateCreated > messageB.dateCreated ? 1 : -1;
+              return messageA?.dateCreated > messageB?.dateCreated ? 1 : -1;
             })
             .map((message, index) =>
               message.senderUserName === currentUser.userName ? (
@@ -158,7 +158,7 @@ function ChatWindow({ chat }) {
                     {showTimeIndexes.includes(index) && (
                       <span className="transition-all animate-fade text-xs md:text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
                         {moment(
-                          new Date(message.dateCreated),
+                          new Date(message?.dateCreated),
                           "YYYYMMDD",
                         ).calendar() ?? ""}
                       </span>
@@ -206,7 +206,7 @@ function ChatWindow({ chat }) {
                         {message.senderFullName +
                           " - " +
                           moment(
-                            new Date(message.dateCreated),
+                            new Date(message?.dateCreated),
                             "YYYYMMDD",
                           ).calendar() ?? ""}
                       </span>
@@ -240,7 +240,7 @@ function ChatWindow({ chat }) {
         </div>
         {/* End chat content */}
 
-        <ChatInput chatId={chat.id} />
+        <ChatInput chatId={chat?.id} />
       </div>
     </>
   );
