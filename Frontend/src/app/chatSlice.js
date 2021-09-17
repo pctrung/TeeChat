@@ -5,7 +5,10 @@ const chats = createSlice({
   initialState: [],
   reducers: {
     addChat: (state, action) => {
-      state.push(action.payload);
+      var isExists = state.some((chat) => chat.id === action.payload.id);
+      if (!isExists) {
+        state.push(action.payload);
+      }
     },
     editChat: (state, action) => {
       const updatedChat = action.payload;

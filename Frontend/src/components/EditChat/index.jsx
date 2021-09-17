@@ -1,3 +1,4 @@
+import { setSelectedId } from "app/chatSlice";
 import Button from "components/Button";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
@@ -6,7 +7,7 @@ import useChatApi from "hooks/useChatApi";
 import useUserApi from "hooks/useUserApi";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import constants from "utils/constants";
 
 function EditChat({ isOpen, setIsOpen, chat }) {
@@ -33,6 +34,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   });
 
   const currentUser = useSelector((state) => state.users.currentUser);
+  const dispatch = useDispatch();
   const ref = useRef();
   const friendListRef = useRef();
 
@@ -165,6 +167,13 @@ function EditChat({ isOpen, setIsOpen, chat }) {
     };
 
     chatApi.updateGroupChat(chat.id, request);
+
+    const isLeaveGroup = participantUserNamesToRemove.some(
+      (x) => x === currentUser.userName,
+    );
+    if (isLeaveGroup) {
+      dispatch(setSelectedId(0));
+    }
 
     closeModal();
     setIsOpen(false);

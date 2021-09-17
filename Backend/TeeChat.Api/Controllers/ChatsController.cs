@@ -60,7 +60,7 @@ namespace TeeChat.Api.Controllers
                 case 201:
                     {
                         await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveChat(result.Data.Chat);
-                        return Created("", result);
+                        return Created("", result.Data.Chat);
                     }
                 case 200: return Ok(result);
                 case 403: return Forbid();
@@ -79,7 +79,7 @@ namespace TeeChat.Api.Controllers
                 case 201:
                     {
                         await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveChat(result.Data.Chat);
-                        return Created("", result);
+                        return Created("", result.Data.Chat);
                     }
                 case 200: return Ok(result);
                 case 403: return Forbid();

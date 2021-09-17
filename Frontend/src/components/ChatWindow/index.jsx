@@ -89,9 +89,9 @@ function ChatWindow({ chat }) {
         setIsOpen={setIsOpenInfoPopup}
         chat={chat}
       />
-      <div className="flex flex-col w-full h-full pb-4">
+      <div className="flex flex-col w-full h-full pb-4 flex-shrink-0 min-w-0">
         {/* Header chat window */}
-        <div className="w-full border-b border-gray-300 dark:border-dark-third flex justify-between items-center md:p-4 md:py-7 p-3 py-5 overflow-hidden">
+        <div className="w-full border-b border-gray-300 dark:border-dark-third flex justify-between items-center md:p-3 md:px-4 p-2 px-3 flex-shrink-0 overflow-hidden">
           <div className="flex min-w-0 justify-start items-center space-x-3">
             <img
               src={LeftArrowIcon}
@@ -109,7 +109,7 @@ function ChatWindow({ chat }) {
             <span className="text-lg font-semibold dark:text-dark-txt truncate overflow-hidden">
               {chat?.type === constants.chatType.PRIVATE
                 ? friend?.fullName
-                : chat.name ?? constants.NO_NAME_GROUP}
+                : chat?.name ?? constants.NO_NAME_GROUP}
             </span>
           </div>
           <ClickableIcon
@@ -121,7 +121,7 @@ function ChatWindow({ chat }) {
         {/* End header chat window */}
 
         {/* Chat content */}
-        <div className="flex-grow overflow-y-auto overflow-x-hidden px-4 pb-4 pt-2 space-y-1 flex flex-col">
+        <div className="flex-grow overflow-y-auto overflow-x-hidden px-4 pb-4 pt-2 space-y-1 flex flex-col min-w-0">
           {loading && (
             <div className="text-gray-500 text-center my-2">Loading...</div>
           )}
@@ -144,7 +144,7 @@ function ChatWindow({ chat }) {
             </div>
           )}
           <div>{error && "Error"}</div>
-          {[...chat.messages]
+          {[...chat?.messages]
             ?.sort((messageA, messageB) => {
               return messageA.dateCreated > messageB.dateCreated ? 1 : -1;
             })

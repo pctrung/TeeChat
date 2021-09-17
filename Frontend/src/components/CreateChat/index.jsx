@@ -90,6 +90,7 @@ function CreateChat({ isOpen, setIsOpen }) {
           }
           setSelectedFriendList([]);
           setGroupName("");
+          setIsOpen(false);
         });
       } else if (selectedMode === constants.chatType.PRIVATE) {
         const request = {

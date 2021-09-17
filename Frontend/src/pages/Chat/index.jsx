@@ -74,7 +74,7 @@ function Chat() {
         connection.on("ReceiveMessage", (response) => {
           const action = addMessage(response);
           dispatch(action);
-          if (response.chatId && selectedId !== response.id) {
+          if (response.chatId && selectedId !== response.chatId) {
             dispatch(addNotification(response.chatId));
           }
         });

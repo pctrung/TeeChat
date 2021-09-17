@@ -214,34 +214,30 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var isExists = _context.Chats.Where(x => x.Type == ChatType.PRIVATE).Any(x => x.Participants.Contains(currentUser) && x.Participants.Contains(participant));
+            var chat = await _context.Chats
+                .Where(x => x.Type == ChatType.PRIVATE && x.Participants.Contains(currentUser) && x.Participants.Contains(participant))
+                .FirstOrDefaultAsync();
 
-            if (isExists)
+            bool isExistChat = chat != null;
+
+            if (!isExistChat)
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = $"Already exists chat with user: {participant.LastName} {participant.FirstName}. Please open in chat list!"
-                };
+                chat = new Chat();
+                chat.Type = ChatType.PRIVATE;
+                chat.Participants = new List<AppUser>() { participant };
+                chat.Participants.Add(currentUser);
+                chat.CreatorUserName = _currentUser.UserName;
+                chat.DateCreated = DateTime.Now;
+                await _context.Chats.AddAsync(chat);
+                await _context.SaveChangesAsync();
             }
-
-            var chat = new Chat();
-            chat.Type = ChatType.PRIVATE;
-            chat.Participants = new List<AppUser>() { participant };
-            chat.Participants.Add(currentUser);
-            chat.CreatorUserName = _currentUser.UserName;
-            chat.DateCreated = DateTime.Now;
-
-            await _context.Chats.AddAsync(chat);
-
-            await _context.SaveChangesAsync();
 
             if (chat.Id != 0)
             {
                 var result = new CreateChatResponse()
                 {
                     Chat = _mapper.Map<ChatViewModel>(chat),
-                    ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+                    ParticipantUserNamesToNotify = isExistChat ? new List<string> { currentUser.UserName } : chat.Participants.Select(x => x.UserName).ToList()
                 };
 
                 return new ApiResult<CreateChatResponse>(result)

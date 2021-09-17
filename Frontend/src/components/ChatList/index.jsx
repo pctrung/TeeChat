@@ -92,7 +92,7 @@ function ChatList() {
                     >
                       {chat?.type === constants.chatType.PRIVATE
                         ? friend?.fullName
-                        : chat.name ?? constants.NO_NAME_GROUP}
+                        : chat?.name ?? constants.NO_NAME_GROUP}
                     </span>
                     <span className="text-sm text-gray-500 truncate flex-shrink-0">
                       {moment(
@@ -171,7 +171,7 @@ function searchChat(chats, keyword) {
         return false;
       });
       return (
-        isValid || chat.name?.toLowerCase().includes(keyword.toLowerCase())
+        isValid || chat?.name?.toLowerCase().includes(keyword.toLowerCase())
       );
     });
   }
