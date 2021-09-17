@@ -118,9 +118,9 @@ function Register() {
   useEffect(() => {
     const onChange = () => {
       var isValid =
-        watch.firstName &&
-        watch.lastName &&
-        watch.userName &&
+        watch.firstName?.trim() &&
+        watch.lastName?.trim() &&
+        watch.userName?.trim() &&
         watch.email &&
         watch.password &&
         watch.confirmPassword;

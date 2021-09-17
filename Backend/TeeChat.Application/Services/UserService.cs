@@ -128,12 +128,12 @@ namespace TeeChat.Application.Services
             if (!string.IsNullOrWhiteSpace(request.FirstName))
             {
                 isChanged = true;
-                user.FirstName = request.FirstName;
+                user.FirstName = request.FirstName.Trim();
             }
             if (!string.IsNullOrWhiteSpace(request.LastName))
             {
                 isChanged = true;
-                user.LastName = request.LastName;
+                user.LastName = request.LastName.Trim();
             }
             if (request.Avatar != null)
             {
@@ -196,9 +196,9 @@ namespace TeeChat.Application.Services
 
             var user = new AppUser()
             {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                UserName = request.Username,
+                FirstName = request.FirstName.Trim(),
+                LastName = request.LastName.Trim(),
+                UserName = request.Username.Trim(),
                 CreatedDate = DateTime.Now,
                 Email = request.Email
             };

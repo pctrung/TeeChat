@@ -59,7 +59,12 @@ export default function useApi() {
                 ? error.response?.data
                 : "Oops, something went wrong! Please contact administrator.";
 
-            openPopup("Error", message);
+            // for model binding error
+            message = error.response?.data?.errors
+              ? objToString(error.response?.data?.errors)
+              : message;
+
+            openPopup("Notification", message);
             return Promise.reject(error.response?.data);
         }
       }
@@ -77,4 +82,14 @@ export default function useApi() {
   }
 
   return Api;
+}
+
+// utils function for model binding convert
+function objToString(obj) {
+  let str = "";
+  for (const val of Object.values(obj)) {
+    str += `${val.toString()}, `;
+  }
+  str.substring(str.length - 2, str.length);
+  return str;
 }
