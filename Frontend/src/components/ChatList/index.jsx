@@ -57,7 +57,7 @@ function ChatList() {
               <div
                 key={Date.now() + index}
                 className={
-                  "select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all duration-150 ease-in dark:hover:bg-dark-secondary dark:text-dark-txt" +
+                  "relative select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all duration-150 ease-in dark:hover:bg-dark-secondary dark:text-dark-txt" +
                   " " +
                   (selectedId === chat.id
                     ? "bg-gray-100 dark:bg-dark-secondary"
@@ -65,9 +65,16 @@ function ChatList() {
                 }
                 onClick={() => handleClick(chat.id)}
               >
+                {chat.numOfUnreadMessages > 0 && (
+                  <span className="w-6 h-6 absolute right-2 top-1/2 transform -translate-y-1/2 text-xs font-bold p-1 bg-green-500 dark:bg-green-600 text-white rounded-full  text-center align-middle">
+                    {chat.numOfUnreadMessages > 9
+                      ? "9+"
+                      : chat.numOfUnreadMessages}
+                  </span>
+                )}
                 <ImageCircle
                   src={
-                    chat.type === constants.chatType.PRIVATE
+                    chat?.type === constants.chatType.PRIVATE
                       ? friend?.avatarUrl
                       : chat?.groupAvatarUrl
                   }
@@ -75,13 +82,25 @@ function ChatList() {
                 />
 
                 <div className="font-primary flex flex-col px-3 py-2 justify-between truncate">
-                  <span className="text-gray-800 truncate dark:text-dark-txt">
-                    {chat.type === constants.chatType.PRIVATE
+                  <span
+                    className={
+                      "text-gray-800 truncate dark:text-dark-txt " +
+                      " " +
+                      (chat.numOfUnreadMessages > 0 ? "font-bold" : "")
+                    }
+                  >
+                    {chat?.type === constants.chatType.PRIVATE
                       ? friend?.fullName
                       : chat.name ?? constants.NO_NAME_GROUP}
                   </span>
                   <div className="flex">
-                    <span className="mr-2 text-sm max-w-200 md:max-w-100 text-gray-500 truncate">
+                    <span
+                      className={
+                        "mr-2 text-sm max-w-200 md:max-w-100 text-gray-500 truncate" +
+                        " " +
+                        (chat.numOfUnreadMessages > 0 ? "font-bold" : "")
+                      }
+                    >
                       {lastMessage.content ?? ""}
                     </span>
                     <span className="text-sm flex-grow text-gray-500 truncate">
@@ -138,7 +157,10 @@ function searchChat(chats, keyword) {
   if (chats) {
     return chats.filter((chat) => {
       let isValid = chat?.participants.some((x) => {
-        if (x.fullName.toLowerCase().includes(keyword.toLowerCase())) {
+        if (
+          x.fullName.toLowerCase().includes(keyword.toLowerCase()) ||
+          x?.userName.toLowerCase().includes(keyword.toLowerCase())
+        ) {
           return true;
         }
         return false;

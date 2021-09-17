@@ -9,9 +9,8 @@ namespace TeeChat.Data.Configurations
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
             builder.ToTable("Users");
-            builder.Property(x => x.LastName).IsRequired();
-            builder.Property(x => x.FirstName).IsRequired();
-            builder.Property(x => x.Email).IsRequired();
+            builder.Property(x => x.LastName).HasMaxLength(50).IsRequired();
+            builder.Property(x => x.FirstName).HasMaxLength(50).IsRequired();
         }
     }
 }

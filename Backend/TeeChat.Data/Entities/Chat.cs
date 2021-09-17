@@ -11,8 +11,8 @@ namespace TeeChat.Data.Entities
         public string CreatorUserName { get; set; }
         public string AvatarFileName { get; set; }
         public ChatType Type { get; set; }
-        public virtual List<AppUser> Participants { get; set; }
-        public virtual List<Message> Messages { get; set; }
+        public List<AppUser> Participants { get; set; }
+        public List<Message> Messages { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

@@ -262,7 +262,13 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<ChatViewModel>> GetByIdAsync(int chatId, GetChatRequest request)
         {
-            var chat = await _context.Chats.Include(x => x.Participants).Include(x => x.Messages).Where(x => x.Id == chatId).AsSplitQuery().FirstOrDefaultAsync();
+            var chat = await _context.Chats
+                .Include(x => x.Participants)
+                .Include(x => x.Messages)
+                .ThenInclude(x => x.ReadByUsers)
+                .Where(x => x.Id == chatId)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
             if (chat == null)
             {
                 return new ApiResult<ChatViewModel>(null)
@@ -282,7 +288,19 @@ namespace TeeChat.Application.Services
                 };
             }
 
+            var currentUser = await _context.Users.FindAsync(_currentUser.UserId);
+            if (currentUser == null)
+            {
+                return new ApiResult<ChatViewModel>(null)
+                {
+                    StatusCode = 404,
+                    Message = "Something went wrong with current user"
+                };
+            }
+
             chat.Messages = chat.Messages.AsQueryable().Where(x => !string.IsNullOrEmpty(x.Content) ? x.Content.Contains(request.Keyword ?? "") : true).ToList();
+
+            var numOfUnreadMessages = chat.Messages.Where(x => !x.ReadByUsers.Contains(currentUser)).Count();
 
             var totalMessage = chat.Messages.Count();
             var pageCount = (double)totalMessage / DEFAULT_LIMIT;
@@ -307,6 +325,7 @@ namespace TeeChat.Application.Services
                 result.Page = request.Page;
                 result.Limit = DEFAULT_LIMIT;
                 result.TotalRecords = totalMessage;
+                result.NumOfUnreadMessages = numOfUnreadMessages;
 
                 return new ApiResult<ChatViewModel>(result)
                 {
@@ -329,13 +348,31 @@ namespace TeeChat.Application.Services
                 };
             }
 
+            var currentUser = await _context.Users.FindAsync(_currentUser.UserId);
+            if (currentUser == null)
+            {
+                return new ApiResult<List<ChatViewModel>>(null)
+                {
+                    StatusCode = 404,
+                    Message = "Something went wrong with current user"
+                };
+            }
+
             var query = _context.Chats
                 .Include(x => x.Participants)
                 .Include(x => x.Messages)
+                .ThenInclude(x => x.ReadByUsers)
                 .OrderBy(x => x.DateCreated)
                 .AsSplitQuery();
 
             var chats = await query.Where(x => x.Participants.Contains(user)).ToListAsync();
+
+            var numOfUnreadMessagesByChatId = new Dictionary<int, int>();
+            chats.ForEach(x =>
+            {
+                var numOfUnreadMessages = x.Messages.Where(x => !x.ReadByUsers.Contains(currentUser)).Count();
+                numOfUnreadMessagesByChatId.Add(x.Id, numOfUnreadMessages);
+            });
 
             var chatViewModel = new List<ChatViewModel>();
 
@@ -352,6 +389,7 @@ namespace TeeChat.Application.Services
                 x.Limit = DEFAULT_LIMIT;
                 x.TotalRecords = x.Messages.Count();
                 x.Messages = x.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(1, DEFAULT_LIMIT).AsSplitQuery().ToList();
+                x.NumOfUnreadMessages = numOfUnreadMessagesByChatId[x.Id];
             });
 
             var result = new ApiResult<List<ChatViewModel>>(chatViewModel)
@@ -635,6 +673,57 @@ namespace TeeChat.Application.Services
             {
                 StatusCode = 400,
                 Message = "Cannot update image. Something went wrong!"
+            };
+        }
+
+        public async Task<ApiResult<string>> ReadChatAsync(int chatId)
+        {
+            var currentUser = await _context.Users.FindAsync(_currentUser.UserId);
+
+            if (currentUser == null)
+            {
+                return new ApiResult<string>(null)
+                {
+                    StatusCode = 404,
+                    Message = "Something went wrong with current user"
+                };
+            }
+
+            var chat = await _context.Chats
+                .Include(x => x.Participants)
+                .Include(x => x.Messages.Where(x => !x.ReadByUsers.Contains(currentUser)))
+                .ThenInclude(x => x.ReadByUsers)
+                .Where(x => x.Id == chatId)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
+
+            if (chat == null)
+            {
+                return new ApiResult<string>(null)
+                {
+                    StatusCode = 404,
+                    Message = "Not found chat with id: " + chatId
+                };
+            }
+
+            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
+            if (!isHaveAccess)
+            {
+                return new ApiResult<string>(null)
+                {
+                    StatusCode = 403,
+                    Message = "You do not have permission to access this chat"
+                };
+            }
+
+            chat.Messages.ForEach(x => x.ReadByUsers.Add(currentUser));
+
+            await _context.SaveChangesAsync();
+
+            return new ApiResult<string>(null)
+            {
+                StatusCode = 200,
+                Message = $"Read chat {chatId} successfully!"
             };
         }
     }

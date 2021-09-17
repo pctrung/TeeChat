@@ -37,10 +37,10 @@ namespace TeeChat.Api.Controllers
             }
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id, [FromQuery] GetChatRequest request)
+        [HttpGet("{chatId:int}")]
+        public async Task<IActionResult> Get(int chatId, [FromQuery] GetChatRequest request)
         {
-            var result = await _chatService.GetByIdAsync(id, request);
+            var result = await _chatService.GetByIdAsync(chatId, request);
             switch (result.StatusCode)
             {
                 case 200: return Ok(result.Data);
@@ -88,10 +88,10 @@ namespace TeeChat.Api.Controllers
             }
         }
 
-        [HttpPost("{id:int}/send")]
-        public async Task<IActionResult> SendMessage(int id, SendMessageRequest request)
+        [HttpPost("{chatId:int}/send")]
+        public async Task<IActionResult> SendMessage(int chatId, SendMessageRequest request)
         {
-            var result = await _chatService.AddMessageAsync(id, request);
+            var result = await _chatService.AddMessageAsync(chatId, request);
 
             switch (result.StatusCode)
             {
@@ -108,10 +108,10 @@ namespace TeeChat.Api.Controllers
             }
         }
 
-        [HttpPost("{id:int}/sendImage")]
-        public async Task<IActionResult> SendImage(int id, [FromForm] SendImageRequest request)
+        [HttpPost("{chatId:int}/sendImage")]
+        public async Task<IActionResult> SendImage(int chatId, [FromForm] SendImageRequest request)
         {
-            var result = await _chatService.AddImageAsync(id, request);
+            var result = await _chatService.AddImageAsync(chatId, request);
 
             switch (result.StatusCode)
             {
@@ -128,10 +128,10 @@ namespace TeeChat.Api.Controllers
             }
         }
 
-        [HttpPatch("{id:int}")]
-        public async Task<IActionResult> UpdateChat(int id, UpdateGroupChatRequest request)
+        [HttpPatch("{chatId:int}")]
+        public async Task<IActionResult> UpdateChat(int chatId, UpdateGroupChatRequest request)
         {
-            var result = await _chatService.UpdateGroupChatAsync(id, request);
+            var result = await _chatService.UpdateGroupChatAsync(chatId, request);
 
             switch (result.StatusCode)
             {
@@ -147,10 +147,10 @@ namespace TeeChat.Api.Controllers
             }
         }
 
-        [HttpPatch("{id:int}/avatar")]
-        public async Task<IActionResult> UpdateAvatar(int id, [FromForm] UpdateGroupAvatarRequest request)
+        [HttpPatch("{chatId:int}/avatar")]
+        public async Task<IActionResult> UpdateAvatar(int chatId, [FromForm] UpdateGroupAvatarRequest request)
         {
-            var result = await _chatService.UpdateGroupAvatarAsync(id, request);
+            var result = await _chatService.UpdateGroupAvatarAsync(chatId, request);
 
             switch (result.StatusCode)
             {
@@ -160,6 +160,19 @@ namespace TeeChat.Api.Controllers
 
                         return Ok(result);
                     };
+                case 403: return Forbid();
+                case 404: return NotFound(result.Message);
+                default: return BadRequest(result.Message);
+            }
+        }
+
+        [HttpPatch("{chatId:int}/read")]
+        public async Task<IActionResult> ReadChatAsync(int chatId)
+        {
+            var result = await _chatService.ReadChatAsync(chatId);
+            switch (result.StatusCode)
+            {
+                case 200: return Ok(result);
                 case 403: return Forbid();
                 case 404: return NotFound(result.Message);
                 default: return BadRequest(result.Message);

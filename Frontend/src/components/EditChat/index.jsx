@@ -227,7 +227,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
           </h3>
         </div>
         <div className="space-y-2 md:space-y-4">
-          {chat.type === constants.chatType.GROUP ? (
+          {chat?.type === constants.chatType.GROUP ? (
             <>
               <div className="space-y-2">
                 <label
@@ -380,7 +380,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
         <div className="flex justify-end py-6 space-x-4">
           <div className="space-x-2 flex items-center">
             <Button outline content="Close" onClick={() => setIsOpen(false)} />
-            {chat.type === constants.chatType.GROUP ? (
+            {chat?.type === constants.chatType.GROUP ? (
               <Button
                 disabled={!isValidButton}
                 content="Save"

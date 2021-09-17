@@ -23,6 +23,10 @@ export default function useChatApi() {
       const url = `${baseApiUrl}/${chatId}/send`;
       return Api.post(url, content);
     },
+    readMessage: (chatId) => {
+      const url = `${baseApiUrl}/${chatId}/read`;
+      return Api.patch(url);
+    },
     sendImage: (chatId, content) => {
       dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/${chatId}/sendImage`;

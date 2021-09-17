@@ -10,7 +10,8 @@ namespace TeeChat.Data.Entities
         public string LastName { get; set; }
         public string AvatarFileName { get; set; }
         public DateTime CreatedDate { get; set; }
-        public virtual List<Chat> Chats { get; set; }
-        public virtual List<Message> Messages { get; set; }
+        public List<Chat> Chats { get; set; }
+        public List<Message> Messages { get; set; }
+        public List<Message> ReadMessages { get; set; }
     }
 }

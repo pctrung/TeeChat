@@ -1,10 +1,11 @@
-import { appendMessageToChat, setSelectedId } from "app/chatSlice";
+import { appendMessageToChat, readMessage, setSelectedId } from "app/chatSlice";
 import InfoIcon from "assets/icons/info-icon.svg";
 import LeftArrowIcon from "assets/icons/left-arrow-icon.svg";
 import ChatInput from "components/ChatInput";
 import ClickableIcon from "components/ClickableIcon";
 import EditChat from "components/EditChat";
 import ImageCircle from "components/ImageCircle";
+import useChatApi from "hooks/useChatApi";
 import useMessagePagination from "hooks/useMessagePagination";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
@@ -14,6 +15,7 @@ import constants from "utils/constants";
 function ChatWindow({ chat }) {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.users.currentUser);
+  const chatApi = useChatApi();
 
   const [showTimeIndexes, setShowTimeIndexes] = useState([]);
   const [isOpenInfoPopup, setIsOpenInfoPopup] = useState(false);
@@ -50,6 +52,14 @@ function ChatWindow({ chat }) {
     page,
   );
   const endMessageRef = useRef();
+
+  useEffect(() => {
+    if (chat?.numOfUnreadMessages > 0) {
+      chatApi.readMessage(chat.id).then((res) => {
+        dispatch(readMessage(chat.id));
+      });
+    }
+  }, [chat]);
 
   useEffect(() => {
     dispatch(appendMessageToChat(appendChat));
@@ -97,7 +107,7 @@ function ChatWindow({ chat }) {
               }
             />
             <span className="text-lg font-semibold dark:text-dark-txt truncate w-60 md:w-96">
-              {chat.type === constants.chatType.PRIVATE
+              {chat?.type === constants.chatType.PRIVATE
                 ? friend?.fullName
                 : chat.name ?? constants.NO_NAME_GROUP}
             </span>
@@ -191,7 +201,7 @@ function ChatWindow({ chat }) {
                   />
                   <div className="flex flex-col w-full items-start">
                     {(showTimeIndexes.includes(index) ||
-                      chat.type === constants.chatType.GROUP) && (
+                      chat?.type === constants.chatType.GROUP) && (
                       <span className="transition-all animate-fade text-xs md:text-sm text-gray-400 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-left">
                         {message.senderFullName +
                           " - " +
