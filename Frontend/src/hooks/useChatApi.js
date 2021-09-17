@@ -68,11 +68,15 @@ export default function useChatApi() {
       return Api.patch(url, content);
     },
     createGroupChat: (content) => {
+      content.groupName = content?.groupName?.substring(0, 99);
+
       dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/group`;
       return Api.post(url, content);
     },
     updateGroupChat: (chatId, content) => {
+      content.newGroupName = content?.newGroupName?.substring(0, 99);
+
       dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/${chatId}`;
       return Api.patch(url, content);

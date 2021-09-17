@@ -21,9 +21,11 @@ namespace TeeChat.Models.RequestModels.Users
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Please enter your first name")]
+        [MaxLength(50, ErrorMessage = "Maximum character for first name is {1} character")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Please enter your last name")]
+        [MaxLength(50, ErrorMessage = "Maximum character for last name is {1} character")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Please enter email")]

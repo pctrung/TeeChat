@@ -91,8 +91,8 @@ function ChatWindow({ chat }) {
       />
       <div className="flex flex-col w-full h-full pb-4">
         {/* Header chat window */}
-        <div className="w-full border-b border-gray-300 dark:border-dark-third flex justify-between items-center md:p-4 p-3">
-          <div className="flex justify-between items-center space-x-3">
+        <div className="w-full border-b border-gray-300 dark:border-dark-third flex justify-between items-center md:p-4 md:py-7 p-3 py-5 overflow-hidden">
+          <div className="flex min-w-0 justify-start items-center space-x-3">
             <img
               src={LeftArrowIcon}
               alt="Arrow icon"
@@ -106,7 +106,7 @@ function ChatWindow({ chat }) {
                   : friend?.avatarUrl
               }
             />
-            <span className="text-lg font-semibold dark:text-dark-txt truncate w-60 md:w-96">
+            <span className="text-lg font-semibold dark:text-dark-txt truncate overflow-hidden">
               {chat?.type === constants.chatType.PRIVATE
                 ? friend?.fullName
                 : chat.name ?? constants.NO_NAME_GROUP}

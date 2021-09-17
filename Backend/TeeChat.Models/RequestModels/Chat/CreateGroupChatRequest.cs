@@ -9,6 +9,7 @@ namespace TeeChat.Models.RequestModels.Chat
         public List<string> ParticipantUserNames { get; set; }
 
         [Required(ErrorMessage = "Please enter group name!")]
+        [MaxLength(100, ErrorMessage = "Maximum character for group name is {1} character")]
         public string Name { get; set; }
     }
 }

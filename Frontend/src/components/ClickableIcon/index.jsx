@@ -13,7 +13,7 @@ function ClickableIcon({ className, icon, iconClass, alt, onClick, onBlur }) {
         onBlur={onBlur}
         onClick={onClick}
         className={
-          "p-1 rounded-full hover:bg-gray-200 active:bg-gray-300 dark:hover:bg-dark-hover dark:border-dark-third transition-all duration-200 cursor-pointer ease-in dark:active:bg-dark-third active:scale-90 active:transform select-none " +
+          "p-1 rounded-full hover:bg-gray-200 active:bg-gray-300 dark:hover:bg-dark-hover dark:border-dark-third transition-all duration-200 cursor-pointer ease-in dark:active:bg-dark-third active:scale-90 active:transform select-none flex-shrink-0 " +
           (className ?? "")
         }
       >

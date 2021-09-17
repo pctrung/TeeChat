@@ -56,6 +56,14 @@ const chats = createSlice({
       });
       if (index >= 0) {
         state[index].messages.push(newMessage?.message);
+      }
+    },
+    addNotification: (state, action) => {
+      const chatId = action.payload;
+      const index = state.findIndex((chat) => {
+        return chat.id === chatId;
+      });
+      if (index >= 0) {
         state[index].numOfUnreadMessages += 1;
       }
     },
@@ -95,6 +103,7 @@ export const {
   appendMessageToChat,
   editGroupAvatar,
   readMessage,
+  addNotification,
 } = chats.actions;
 export const { setSelectedId } = selectedId.actions;
 export default reducer;

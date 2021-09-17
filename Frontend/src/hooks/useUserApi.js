@@ -15,6 +15,9 @@ export default function useUserApi() {
       return Api.post(url, content);
     },
     register: (content) => {
+      content.firstName = content?.firstName?.substring(0, 49);
+      content.lastName = content?.lastName?.substring(0, 49);
+
       dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/register`;
       return Api.post(url, content);

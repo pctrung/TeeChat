@@ -39,8 +39,8 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
   async function submit() {
     const request = new FormData();
     request.append("Avatar", avatar);
-    request.append("FirstName", firstName);
-    request.append("LastName", lastName);
+    request.append("FirstName", firstName.substring(0, 49));
+    request.append("LastName", lastName.substring(0, 49));
 
     userApi.updateUser(request).then((response) => {
       dispatch(updateUser(response));

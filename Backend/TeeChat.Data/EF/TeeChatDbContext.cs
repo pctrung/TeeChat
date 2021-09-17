@@ -19,6 +19,7 @@ namespace TeeChat.Data.EF
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new MessageConfiguration());
             builder.ApplyConfiguration(new AppUserConfiguration());
+            builder.ApplyConfiguration(new ChatConfiguration());
         }
     }
 }

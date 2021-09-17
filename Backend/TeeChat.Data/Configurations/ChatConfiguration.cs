@@ -11,8 +11,8 @@ namespace TeeChat.Data.Configurations
             builder.ToTable("Chats");
             builder.HasKey(x => x.Id);
             builder.HasMany(x => x.Participants).WithMany(x => x.Chats);
-            builder.Property(x => x.CreatorUserName).HasMaxLength(50);
-            builder.Property(x => x.Name).HasMaxLength(50);
+            builder.Property(x => x.CreatorUserName);
+            builder.Property(x => x.Name).HasMaxLength(100);
         }
     }
 }
