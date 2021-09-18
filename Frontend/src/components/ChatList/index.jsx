@@ -66,7 +66,7 @@ function ChatList() {
                 onClick={() => handleClick(chat.id)}
               >
                 {chat.numOfUnreadMessages > 0 && (
-                  <span className="w-6 h-6 absolute right-4 top-1/2 transform translate-y-1/3 text-xs font-bold p-1 bg-green-500 dark:bg-green-600 text-white rounded-full  text-center align-middle">
+                  <span className="w-6 h-6 absolute right-7 top-1/2 text-xs font-bold p-1 bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle">
                     {chat.numOfUnreadMessages > 9
                       ? "9+"
                       : chat.numOfUnreadMessages}
@@ -109,7 +109,7 @@ function ChatList() {
                       className={
                         "mr-2 text-sm text-gray-500 truncate overflow-hidden flex-grow" +
                         " " +
-                        (chat.numOfUnreadMessages > 0 ? "font-bold" : "")
+                        (chat.numOfUnreadMessages > 0 ? "font-bold mr-10" : "")
                       }
                     >
                       {lastMessage.content ?? ""}
