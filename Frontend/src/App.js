@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
-import jwt from "jwt-decode";
 import { setPopup } from "app/appSlice";
 import Loader from "components/Loader";
 import Popup from "components/Popup";
@@ -65,11 +64,4 @@ function PrivateRoute({ component: Component, ...rest }) {
       }
     />
   );
-}
-
-function isTokenExpired(token) {
-  if (jwt(token).exp < Date.now() / 1000) {
-    localStorage.clear();
-    return true;
-  }
 }

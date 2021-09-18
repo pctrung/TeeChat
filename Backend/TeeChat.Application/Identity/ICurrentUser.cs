@@ -13,9 +13,9 @@ namespace TeeChat.Application.Identity
         string FirstName { get; }
 
         string LastName { get; }
-        
+
         string FullName { get; }
-        
+
         ClaimsPrincipal User { get; }
     }
 }

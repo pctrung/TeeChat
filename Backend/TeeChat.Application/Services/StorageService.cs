@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using TeeChat.Application.Interfaces;
-using System.IO;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting;
 using System;
+using System.IO;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using TeeChat.Application.Interfaces;
 using TeeChat.Utilities.Constants;
 
 namespace TeeChat.Application.Services

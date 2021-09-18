@@ -13,7 +13,6 @@ ChatInput.propTypes = {
 
 function ChatInput({ chatId }) {
   const [content, setContent] = useState("");
-  const [chosenEmoji, setChosenEmoji] = useState(null);
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
   const ref = useRef();
 
@@ -31,7 +30,6 @@ function ChatInput({ chatId }) {
   }
 
   const onEmojiClick = (event, emojiObject) => {
-    setChosenEmoji(emojiObject);
     if (emojiObject?.emoji) {
       setContent(content + emojiObject?.emoji);
     }
