@@ -16,6 +16,7 @@ namespace TeeChat.Models.ViewModels
         public virtual List<UserViewModel> Participants { get; set; }
         public virtual List<MessageViewModel> Messages { get; set; }
         public DateTime DateCreated { get; set; }
-        public int NumOfUnreadMessages { get; set; }
+        public int NumOfUnreadMessages { get; set; } 
+        public List<string> ReadByUserNames { get; set; }
     }
 }

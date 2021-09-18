@@ -27,6 +27,6 @@ namespace TeeChat.Application.Interfaces
 
         Task<ApiResult<ChatViewModel>> GetByIdAsync(int chatId, GetChatRequest request);
 
-        Task<ApiResult<string>> ReadChatAsync(int chatId);
+        Task<ApiResult<ReadChatResponse>> ReadChatAsync(int chatId);
     }
 }

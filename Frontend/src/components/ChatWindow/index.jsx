@@ -1,4 +1,4 @@
-import { appendMessageToChat, readMessage, setSelectedId } from "app/chatSlice";
+import { appendMessageToChat, readChat, setSelectedId } from "app/chatSlice";
 import InfoIcon from "assets/icons/info-icon.svg";
 import LeftArrowIcon from "assets/icons/left-arrow-icon.svg";
 import ChatInput from "components/ChatInput";
@@ -19,15 +19,8 @@ function ChatWindow({ chat }) {
 
   const [showTimeIndexes, setShowTimeIndexes] = useState([]);
   const [isOpenInfoPopup, setIsOpenInfoPopup] = useState(false);
-
-  let currentUserName = currentUser.userName;
-
-  const friend =
-    chat?.participants.length > 1
-      ? chat?.participants
-          ?.filter((x) => x.userName !== currentUserName)
-          .shift()
-      : currentUser;
+  const [friend, setFriend] = useState({});
+  const [seenBy, setSeenBy] = useState("");
 
   function backToChats() {
     const action = setSelectedId(0);
@@ -55,9 +48,34 @@ function ChatWindow({ chat }) {
 
   useEffect(() => {
     if (chat?.numOfUnreadMessages > 0) {
-      chatApi.readMessage(chat?.id).then((res) => {
-        dispatch(readMessage(chat?.id));
+      chatApi.readChat(chat?.id).then((res) => {
+        dispatch(readChat(chat?.id));
       });
+    }
+    if (chat?.participants.length > 1) {
+      var newFriend = chat?.participants
+        ?.filter((x) => x.userName !== currentUser?.userName)
+        .shift();
+      setFriend(newFriend);
+
+      if (chat?.readByUserNames?.length > 1) {
+        var newSeenBy = "";
+        var fullNameList = chat?.readByUserNames
+          ?.filter((userName) => userName !== currentUser?.userName)
+          ?.map((userName) => {
+            var fullName = chat.participants
+              .filter((x) => x.userName === userName)
+              ?.shift()?.fullName;
+            return fullName;
+          });
+
+        if (fullNameList?.length > 1) {
+          newSeenBy = "Seen by " + fullNameList.filter((x) => x).join(", ");
+          setSeenBy(newSeenBy);
+        } else {
+          setSeenBy("");
+        }
+      }
     }
   }, [chat]);
 
@@ -152,7 +170,7 @@ function ChatWindow({ chat }) {
               message.senderUserName === currentUser.userName ? (
                 <>
                   <div
-                    key={index + Math.random()}
+                    key={message.id ?? index}
                     className="flex flex-col items-end w-full"
                   >
                     {showTimeIndexes.includes(index) && (
@@ -185,10 +203,20 @@ function ChatWindow({ chat }) {
                       </span>
                     )}
                   </div>
+                  {chat?.type === constants.chatType.PRIVATE &&
+                    chat?.messages?.length === index + 1 && (
+                      <>
+                        <div className="text-xs font-semibold text-right text-gray-600 dark:text-dark-txt mr-2 select-none">
+                          {chat?.readByUserNames?.includes(friend?.userName)
+                            ? "Seen"
+                            : ""}
+                        </div>
+                      </>
+                    )}
                 </>
               ) : (
                 <div
-                  key={index + Math.random()}
+                  key={message.id ?? index}
                   className="flex items-end space-x-2"
                 >
                   <ImageCircle
@@ -236,6 +264,13 @@ function ChatWindow({ chat }) {
                 </div>
               ),
             )}
+          {chat?.type === constants.chatType.GROUP && (
+            <>
+              <div className="text-xs font-semibold text-right text-gray-600 dark:text-dark-txt mr-2 select-none">
+                {seenBy}
+              </div>
+            </>
+          )}
           <div ref={endMessageRef}></div>
         </div>
         {/* End chat content */}

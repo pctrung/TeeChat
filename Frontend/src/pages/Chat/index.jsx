@@ -3,6 +3,7 @@ import {
   addChat,
   addMessage,
   addNotification,
+  addReadByUserName,
   editChat,
   editGroupAvatar,
   refreshChats,
@@ -91,6 +92,10 @@ function Chat() {
         });
         connection.on("ReceiveUpdatedGroupAvatar", (response) => {
           const action = editGroupAvatar(response);
+          dispatch(action);
+        });
+        connection.on("ReceiveAddReadByUserName", (response) => {
+          const action = addReadByUserName(response);
           dispatch(action);
         });
       });

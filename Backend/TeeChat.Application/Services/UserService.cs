@@ -211,7 +211,7 @@ namespace TeeChat.Application.Services
             await _userManager.AddClaimAsync(user, new Claim("fullName", user.LastName + " " + user.FirstName));
             await _userManager.AddClaimAsync(user, new Claim("email", user.Email));
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.UserName));
-            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, user.UserName));
+            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, user.LastName + " " + user.FirstName));
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Email, user.Email));
             return result;
         }

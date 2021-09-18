@@ -37,7 +37,13 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<SendMessageResponse>> AddMessageAsync(int chatId, SendMessageRequest request)
         {
-            var chat = await _context.Chats.Include(x => x.Participants).Include(x => x.Messages).Where(x => x.Id == chatId).AsSplitQuery().FirstOrDefaultAsync();
+            var chat = await _context.Chats
+                .Include(x => x.Participants)
+                .Include(x => x.Messages)
+                .Where(x => x.Id == chatId)
+                .OrderBy(x => x.Id)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
             if (chat == null)
             {
                 return new ApiResult<SendMessageResponse>(null)
@@ -122,7 +128,10 @@ namespace TeeChat.Application.Services
             }
 
             // add participants
-            var participants = await _context.Users.Where(x => !x.UserName.Equals(_currentUser.UserName) && request.ParticipantUserNames.Contains(x.UserName)).ToListAsync();
+            var participants = await _context.Users
+                .Where(x => !x.UserName
+                .Equals(_currentUser.UserName) && request.ParticipantUserNames.Contains(x.UserName))
+                .ToListAsync();
 
             if (participants == null)
             {
@@ -193,7 +202,12 @@ namespace TeeChat.Application.Services
         public async Task<ApiResult<CreateChatResponse>> CreatePrivateChatAsync(CreatePrivateChatRequest request)
         {
             // add participants
-            var participant = await _context.Users.Where(x => request.ParticipantUserName.Equals(x.UserName)).AsSplitQuery().FirstOrDefaultAsync();
+            var participant = await _context.Users
+                .Where(x => request.ParticipantUserName
+                .Equals(x.UserName))
+                .OrderBy(x => x.Id)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
 
             if (participant == null)
             {
@@ -216,6 +230,7 @@ namespace TeeChat.Application.Services
 
             var chat = await _context.Chats
                 .Where(x => x.Type == ChatType.PRIVATE && x.Participants.Contains(currentUser) && x.Participants.Contains(participant))
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync();
 
             bool isExistChat = chat != null;
@@ -306,6 +321,9 @@ namespace TeeChat.Application.Services
             request.Page = request.Page <= totalPage ? request.Page : totalPage;
             chat.Messages = chat.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(request.Page, DEFAULT_LIMIT).ToList();
 
+            var lastMessage = chat.Messages.LastOrDefault();
+            var readByUserNames = lastMessage != null ? lastMessage.ReadByUsers.Select(x => x.UserName).ToList() : null;
+
             if (chat == null)
             {
                 return new ApiResult<ChatViewModel>(null)
@@ -322,6 +340,7 @@ namespace TeeChat.Application.Services
                 result.Limit = DEFAULT_LIMIT;
                 result.TotalRecords = totalMessage;
                 result.NumOfUnreadMessages = numOfUnreadMessages;
+                result.ReadByUserNames = readByUserNames;
 
                 return new ApiResult<ChatViewModel>(result)
                 {
@@ -364,10 +383,15 @@ namespace TeeChat.Application.Services
             var chats = await query.Where(x => x.Participants.Contains(user)).ToListAsync();
 
             var numOfUnreadMessagesByChatId = new Dictionary<int, int>();
+            var readByUserNamesByChatId = new Dictionary<int, List<string>>();
+
             chats.ForEach(x =>
             {
                 var numOfUnreadMessages = x.Messages.Where(x => !x.ReadByUsers.Contains(currentUser)).Count();
                 numOfUnreadMessagesByChatId.Add(x.Id, numOfUnreadMessages);
+
+                var lastMessage = x.Messages.LastOrDefault();
+                readByUserNamesByChatId.Add(x.Id, lastMessage != null ? lastMessage.ReadByUsers.Select(x => x.UserName).ToList() : null);
             });
 
             var chatViewModel = new List<ChatViewModel>();
@@ -386,6 +410,7 @@ namespace TeeChat.Application.Services
                 x.TotalRecords = x.Messages.Count();
                 x.Messages = x.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(1, DEFAULT_LIMIT).AsSplitQuery().ToList();
                 x.NumOfUnreadMessages = numOfUnreadMessagesByChatId[x.Id];
+                x.ReadByUserNames = readByUserNamesByChatId[x.Id];
             });
 
             var result = new ApiResult<List<ChatViewModel>>(chatViewModel)
@@ -399,7 +424,14 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<CreateChatResponse>> UpdateGroupChatAsync(int chatId, UpdateGroupChatRequest request)
         {
-            var chat = await _context.Chats.Include(x => x.Participants).Where(x => x.Id == chatId).AsSplitQuery().FirstOrDefaultAsync();
+            var chat = await _context.Chats
+                .Include(x => x.Participants)
+                .Include(x => x.Messages)
+                .ThenInclude(x => x.ReadByUsers)
+                .Where(x => x.Id == chatId)
+                .OrderBy(x => x.Id)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
             if (chat == null)
             {
                 return new ApiResult<CreateChatResponse>(null)
@@ -460,7 +492,7 @@ namespace TeeChat.Application.Services
             {
                 foreach (var userName in request.ParticipantUserNamesToRemove)
                 {
-                    var user = await _context.Users.Where(x => x.UserName.Equals(userName)).AsSplitQuery().FirstOrDefaultAsync();
+                    var user = await _context.Users.Where(x => x.UserName.Equals(userName)).AsSplitQuery().OrderBy(x => x.Id).FirstOrDefaultAsync();
                     if (user == null)
                     {
                         return new ApiResult<CreateChatResponse>(null)
@@ -504,7 +536,12 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<UpdateGroupAvatarResponse>> UpdateGroupAvatarAsync(int chatId, UpdateGroupAvatarRequest request)
         {
-            var chat = await _context.Chats.Include(x => x.Participants).Where(x => x.Id == chatId).AsSplitQuery().FirstOrDefaultAsync();
+            var chat = await _context.Chats
+                .Include(x => x.Participants)
+                .Where(x => x.Id == chatId)
+                .OrderBy(x => x.Id)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
             if (chat == null)
             {
                 return new ApiResult<UpdateGroupAvatarResponse>(null)
@@ -581,7 +618,13 @@ namespace TeeChat.Application.Services
 
         public async Task<ApiResult<SendMessageResponse>> AddImageAsync(int chatId, SendImageRequest request)
         {
-            var chat = await _context.Chats.Include(x => x.Participants).Include(x => x.Messages).Where(x => x.Id == chatId).AsSplitQuery().FirstOrDefaultAsync();
+            var chat = await _context.Chats
+                .Include(x => x.Participants)
+                .Include(x => x.Messages)
+                .Where(x => x.Id == chatId)
+                .OrderBy(x => x.Id)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
             if (chat == null)
             {
                 return new ApiResult<SendMessageResponse>(null)
@@ -672,13 +715,13 @@ namespace TeeChat.Application.Services
             };
         }
 
-        public async Task<ApiResult<string>> ReadChatAsync(int chatId)
+        public async Task<ApiResult<ReadChatResponse>> ReadChatAsync(int chatId)
         {
             var currentUser = await _context.Users.FindAsync(_currentUser.UserId);
 
             if (currentUser == null)
             {
-                return new ApiResult<string>(null)
+                return new ApiResult<ReadChatResponse>(null)
                 {
                     StatusCode = 404,
                     Message = "Something went wrong with current user"
@@ -690,12 +733,13 @@ namespace TeeChat.Application.Services
                 .Include(x => x.Messages.Where(x => !x.ReadByUsers.Contains(currentUser)))
                 .ThenInclude(x => x.ReadByUsers)
                 .Where(x => x.Id == chatId)
+                .OrderBy(x => x.Id)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             if (chat == null)
             {
-                return new ApiResult<string>(null)
+                return new ApiResult<ReadChatResponse>(null)
                 {
                     StatusCode = 404,
                     Message = "Not found chat with id: " + chatId
@@ -705,7 +749,7 @@ namespace TeeChat.Application.Services
             var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return new ApiResult<string>(null)
+                return new ApiResult<ReadChatResponse>(null)
                 {
                     StatusCode = 403,
                     Message = "You do not have permission to access this chat"
@@ -716,7 +760,14 @@ namespace TeeChat.Application.Services
 
             await _context.SaveChangesAsync();
 
-            return new ApiResult<string>(null)
+            var result = new ReadChatResponse()
+            {
+                ChatId = chat.Id,
+                ReadByUserName = currentUser.UserName,
+                ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+            };
+
+            return new ApiResult<ReadChatResponse>(result)
             {
                 StatusCode = 200,
                 Message = $"Read chat {chatId} successfully!"

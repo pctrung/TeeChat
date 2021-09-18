@@ -18,6 +18,8 @@ const chats = createSlice({
       if (index >= 0) {
         state[index].name = updatedChat.name;
         state[index].participants = updatedChat.participants;
+      } else {
+        state.push(updatedChat);
       }
     },
     editGroupAvatar: (state, action) => {
@@ -27,6 +29,17 @@ const chats = createSlice({
       });
       if (index >= 0) {
         state[index].groupAvatarUrl = action.payload?.groupAvatarUrl;
+      }
+    },
+    addReadByUserName: (state, action) => {
+      const { chatId, readByUserName } = action.payload;
+      const index = state.findIndex((chat) => {
+        return chat.id === chatId;
+      });
+      if (index >= 0) {
+        if (!state[index].readByUserNames.includes(readByUserName)) {
+          state[index].readByUserNames.push(readByUserName);
+        }
       }
     },
     appendMessageToChat: (state, action) => {
@@ -59,6 +72,7 @@ const chats = createSlice({
       });
       if (index >= 0) {
         state[index].messages.push(newMessage?.message);
+        state[index].readByUserNames = [newMessage?.SenderUserName];
       }
     },
     addNotification: (state, action) => {
@@ -70,7 +84,7 @@ const chats = createSlice({
         state[index].numOfUnreadMessages += 1;
       }
     },
-    readMessage: (state, action) => {
+    readChat: (state, action) => {
       const chatId = action.payload;
       const index = state.findIndex((chat) => {
         return chat.id === chatId;
@@ -105,8 +119,9 @@ export const {
   addMessage,
   appendMessageToChat,
   editGroupAvatar,
-  readMessage,
+  readChat,
   addNotification,
+  addReadByUserName,
 } = chats.actions;
 export const { setSelectedId } = selectedId.actions;
 export default reducer;

@@ -172,7 +172,12 @@ namespace TeeChat.Api.Controllers
             var result = await _chatService.ReadChatAsync(chatId);
             switch (result.StatusCode)
             {
-                case 200: return Ok(result);
+                case 200:
+                    {
+                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveAddReadByUserName(result.Data);
+
+                        return Ok(result);
+                    }
                 case 403: return Forbid();
                 case 404: return NotFound(result.Message);
                 default: return BadRequest(result.Message);
