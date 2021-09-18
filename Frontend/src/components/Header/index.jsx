@@ -85,7 +85,11 @@ function Header({ logout }) {
             className="transition-all duration-200 ring ring-green-500 p-1 transform active:scale-95 rounded-full cursor-pointer"
             onClick={() => setIsOpenUserInfo((x) => !x)}
           >
-            <ImageCircle src={userAvatar} size="md" />
+            <ImageCircle
+              src={userAvatar}
+              size="md"
+              userName={currentUser.userName}
+            />
           </div>
           <h1 className="font-bold text-3xl">Chats</h1>
         </div>

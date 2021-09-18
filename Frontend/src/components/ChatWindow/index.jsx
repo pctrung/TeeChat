@@ -123,6 +123,7 @@ function ChatWindow({ chat }) {
                   ? chat?.groupAvatarUrl
                   : friend?.avatarUrl
               }
+              participants={chat?.participants}
             />
             <span className="text-lg font-semibold dark:text-dark-txt truncate overflow-hidden">
               {chat?.type === constants.chatType.PRIVATE
@@ -226,6 +227,7 @@ function ChatWindow({ chat }) {
                         .shift()?.avatarUrl
                     }
                     size="sm"
+                    userName={message.senderUserName}
                   />
                   <div className="flex flex-col w-full items-start">
                     {(showTimeIndexes.includes(index) ||

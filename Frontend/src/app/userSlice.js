@@ -21,11 +21,24 @@ const currentUser = createSlice({
   },
 });
 
+const onlineUserNameList = createSlice({
+  name: "onlineUserNameList",
+  initialState: [],
+  reducers: {
+    updateOnlineUserNameList: (state, action) => {
+      state = action.payload;
+      return state;
+    },
+  },
+});
+
 const reducer = combineReducers({
   currentUser: currentUser.reducer,
+  onlineUserNameList: onlineUserNameList.reducer,
 });
 
 export const { getCurrentUser, updateUser } = currentUser.actions;
+export const { updateOnlineUserNameList } = onlineUserNameList.actions;
 export default reducer;
 
 function decodeCurrentUser() {

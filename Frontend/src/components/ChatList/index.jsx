@@ -79,6 +79,7 @@ function ChatList() {
                       : chat?.groupAvatarUrl
                   }
                   size="lg"
+                  participants={chat?.participants}
                 />
 
                 <div className="font-primary flex flex-col px-3 py-2 justify-between truncate w-full">

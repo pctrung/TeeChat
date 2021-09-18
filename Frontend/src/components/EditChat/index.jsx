@@ -306,7 +306,11 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                               key={Math.random() + index}
                               className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-hover bg-gray-100 hover:bg-green-200 dark:hover:bg-green-600 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                             >
-                              <ImageCircle size="xs" src={friend.avatarUrl} />
+                              <ImageCircle
+                                size="xs"
+                                src={friend.avatarUrl}
+                                userName={friend?.userName}
+                              />
                               <span className="break-full w-full overflow-ellipsis truncate md:text-base text-sm">
                                 {friend.fullName ?? "Unknown"}
                               </span>
@@ -345,7 +349,11 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                         key={Math.random() + index}
                         className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2 dark:hover:bg-red-500 dark:bg-dark-hover bg-gray-100 hover:bg-red-200 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                       >
-                        <ImageCircle size="xs" src={friend.avatarUrl} />
+                        <ImageCircle
+                          size="xs"
+                          src={friend.avatarUrl}
+                          userName={friend?.userName}
+                        />
                         <span className="break-full w-full overflow-ellipsis truncate md:text-base text-sm">
                           {friend.fullName ?? "Unknown"}
                         </span>

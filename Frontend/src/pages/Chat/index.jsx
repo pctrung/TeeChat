@@ -9,7 +9,7 @@ import {
   refreshChats,
   setSelectedId,
 } from "app/chatSlice";
-import { updateUser } from "app/userSlice";
+import { updateOnlineUserNameList, updateUser } from "app/userSlice";
 import ChatList from "components/ChatList";
 import ChatWindow from "components/ChatWindow";
 import Header from "components/Header";
@@ -96,6 +96,10 @@ function Chat() {
         });
         connection.on("ReceiveAddReadByUserName", (response) => {
           const action = addReadByUserName(response);
+          dispatch(action);
+        });
+        connection.on("ReceiveUpdatedOnlineUserNameList", (response) => {
+          const action = updateOnlineUserNameList(response);
           dispatch(action);
         });
       });
