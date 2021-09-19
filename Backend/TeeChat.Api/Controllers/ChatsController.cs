@@ -28,26 +28,26 @@ namespace TeeChat.Api.Controllers
         public async Task<IActionResult> Get()
         {
             var result = await _chatService.GetAllAsync();
-            switch (result.StatusCode)
+            return result.StatusCode switch
             {
-                case 200: return Ok(result);
-                case 403: return Forbid();
-                case 404: return NotFound(result.Message);
-                default: return BadRequest(result.Message);
-            }
+                200 => Ok(result),
+                403 => Forbid(),
+                404 => NotFound(result.Message),
+                _ => BadRequest(result.Message),
+            };
         }
 
         [HttpGet("{chatId:int}")]
         public async Task<IActionResult> Get(int chatId, [FromQuery] GetChatRequest request)
         {
             var result = await _chatService.GetByIdAsync(chatId, request);
-            switch (result.StatusCode)
+            return result.StatusCode switch
             {
-                case 200: return Ok(result.Data);
-                case 403: return Forbid();
-                case 404: return NotFound(result.Message);
-                default: return BadRequest(result.Message);
-            }
+                200 => Ok(result.Data),
+                403 => Forbid(),
+                404 => NotFound(result.Message),
+                _ => BadRequest(result.Message),
+            };
         }
 
         [HttpPost("group")]

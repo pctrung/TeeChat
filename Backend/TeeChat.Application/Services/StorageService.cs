@@ -14,7 +14,7 @@ namespace TeeChat.Application.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string _imagePath;
         private readonly string _imageUrl;
-        private string[] IMAGE_TYPES = new string[] { ".tiff", ".tiff", ".jpg", ".jpeg", ".gif", ".png" };
+        private readonly string[] IMAGE_TYPES = new string[] { ".tiff", ".tiff", ".jpg", ".jpeg", ".gif", ".png" };
 
         public StorageService(IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
@@ -52,7 +52,7 @@ namespace TeeChat.Application.Services
 
             var fileName = $"{Guid.NewGuid()}{extension}";
 
-            fileName = fileName != null ? fileName : string.Empty;
+            fileName ??= string.Empty;
 
             if (!Directory.Exists(_imagePath))
             {

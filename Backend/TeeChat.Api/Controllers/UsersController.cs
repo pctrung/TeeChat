@@ -74,11 +74,11 @@ namespace TeeChat.Api.Controllers
         {
             var result = await _userService.GetCurrentUserAsync();
 
-            switch (result.StatusCode)
+            return result.StatusCode switch
             {
-                case 200: return Ok(result.Data);
-                default: return BadRequest(result.Message);
-            }
+                200 => Ok(result.Data),
+                _ => BadRequest(result.Message),
+            };
         }
 
         [HttpPut]
@@ -87,11 +87,11 @@ namespace TeeChat.Api.Controllers
         {
             var result = await _userService.UpdateUserAsync(request);
 
-            switch (result.StatusCode)
+            return result.StatusCode switch
             {
-                case 200: return Ok(result.Data);
-                default: return BadRequest(result.Message);
-            }
+                200 => Ok(result.Data),
+                _ => BadRequest(result.Message),
+            };
         }
     }
 }

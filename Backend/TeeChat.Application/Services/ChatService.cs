@@ -226,9 +226,11 @@ namespace TeeChat.Application.Services
 
             if (!isExistChat)
             {
-                chat = new Chat();
-                chat.Type = ChatType.Private;
-                chat.Participants = new List<AppUser>() { participant };
+                chat = new Chat
+                {
+                    Type = ChatType.Private,
+                    Participants = new List<AppUser>() { participant }
+                };
                 chat.Participants.Add(currentUser);
                 chat.Creator = currentUser;
                 chat.DateCreated = DateTime.Now;
@@ -297,11 +299,11 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            chat.Messages = chat.Messages.AsQueryable().Where(x => !string.IsNullOrEmpty(x.Content) ? x.Content.Contains(request.Keyword ?? "") : true).ToList();
+            chat.Messages = chat.Messages.AsQueryable().Where(x => string.IsNullOrEmpty(x.Content) || x.Content.Contains(request.Keyword ?? "")).ToList();
 
             var numOfUnreadMessages = chat.Messages.Where(x => !x.ReadByUsers.Contains(currentUser)).Count();
 
-            var totalMessage = chat.Messages.Count();
+            var totalMessage = chat.Messages.Count;
             var pageCount = (double)totalMessage / DEFAULT_LIMIT;
             var totalPage = (int)Math.Ceiling(pageCount);
 
@@ -310,7 +312,7 @@ namespace TeeChat.Application.Services
             chat.Messages = chat.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(request.Page, DEFAULT_LIMIT).ToList();
 
             var lastMessage = chat.Messages.LastOrDefault();
-            var readByUserNames = lastMessage != null ? lastMessage.ReadByUsers.Select(x => x.UserName).ToList() : null;
+            var readByUserNames = lastMessage?.ReadByUsers.Select(x => x.UserName).ToList();
 
             if (chat == null)
             {
@@ -379,7 +381,7 @@ namespace TeeChat.Application.Services
                 numOfUnreadMessagesByChatId.Add(x.Id, numOfUnreadMessages);
 
                 var lastMessage = x.Messages.LastOrDefault();
-                readByUserNamesByChatId.Add(x.Id, lastMessage != null ? lastMessage.ReadByUsers.Select(x => x.UserName).ToList() : null);
+                readByUserNamesByChatId.Add(x.Id, lastMessage?.ReadByUsers.Select(x => x.UserName).ToList());
             });
 
             var chatViewModel = new List<ChatViewModel>();
@@ -395,7 +397,7 @@ namespace TeeChat.Application.Services
                 x.Keyword = "";
                 x.Page = 1;
                 x.Limit = DEFAULT_LIMIT;
-                x.TotalRecords = x.Messages.Count();
+                x.TotalRecords = x.Messages.Count;
                 x.Messages = x.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(1, DEFAULT_LIMIT).ToList();
                 x.NumOfUnreadMessages = numOfUnreadMessagesByChatId[x.Id];
                 x.ReadByUserNames = readByUserNamesByChatId[x.Id];

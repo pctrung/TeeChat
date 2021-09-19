@@ -10,7 +10,7 @@ namespace TeeChat.Hubs.Hubs
     [Authorize]
     public class ChatHub : Hub<IChatClient>
     {
-        private static List<string> _onlineUserNameList = new List<string>();
+        private static readonly List<string> _onlineUserNameList = new();
 
         public override async Task OnConnectedAsync()
         {
