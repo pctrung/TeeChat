@@ -10,7 +10,7 @@ import useMessagePagination from "hooks/useMessagePagination";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import constants from "utils/constants";
+import { ChatType, DefaultName } from "utils/Constant";
 
 function ChatWindow({ chat }) {
   const dispatch = useDispatch();
@@ -126,9 +126,9 @@ function ChatWindow({ chat }) {
               participants={chat?.participants}
             />
             <span className="text-lg font-semibold dark:text-dark-txt truncate overflow-hidden">
-              {chat?.type === constants.chatType.PRIVATE
+              {chat?.type === ChatType.PRIVATE
                 ? friend?.fullName
-                : chat?.name ?? constants.NO_NAME_GROUP}
+                : chat?.name ?? DefaultName.NO_NAME_GROUP}
             </span>
           </div>
           <ClickableIcon
@@ -204,7 +204,7 @@ function ChatWindow({ chat }) {
                       </span>
                     )}
                   </div>
-                  {chat?.type === constants.chatType.PRIVATE &&
+                  {chat?.type === ChatType.PRIVATE &&
                     chat?.messages?.length === index + 1 && (
                       <>
                         <div className="text-xs font-semibold text-right text-gray-600 dark:text-dark-txt mr-2 select-none">
@@ -231,7 +231,7 @@ function ChatWindow({ chat }) {
                   />
                   <div className="flex flex-col w-full items-start">
                     {(showTimeIndexes.includes(index) ||
-                      chat?.type === constants.chatType.GROUP) && (
+                      chat?.type === ChatType.GROUP) && (
                       <span className="transition-all animate-fade text-xs md:text-sm text-gray-400 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-left">
                         {message.senderFullName +
                           " - " +
@@ -266,7 +266,7 @@ function ChatWindow({ chat }) {
                 </div>
               ),
             )}
-          {chat?.type === constants.chatType.GROUP && (
+          {chat?.type === ChatType.GROUP && (
             <>
               <div className="text-xs font-semibold text-right text-gray-600 dark:text-dark-txt mr-2 select-none">
                 {seenBy}

@@ -3,7 +3,7 @@ import ImageCircle from "components/ImageCircle";
 import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import constants from "utils/constants";
+import { ChatType, DefaultName } from "utils/Constant";
 
 function ChatList() {
   const chats = useSelector((state) => state.chats.chats);
@@ -74,7 +74,7 @@ function ChatList() {
                 )}
                 <ImageCircle
                   src={
-                    chat?.type === constants.chatType.PRIVATE
+                    chat?.type === ChatType.PRIVATE
                       ? friend?.avatarUrl
                       : chat?.groupAvatarUrl
                   }
@@ -93,9 +93,9 @@ function ChatList() {
                           : "")
                       }
                     >
-                      {chat?.type === constants.chatType.PRIVATE
+                      {chat?.type === ChatType.PRIVATE
                         ? friend?.fullName
-                        : chat?.name ?? constants.NO_NAME_GROUP}
+                        : chat?.name ?? DefaultName.NO_NAME_GROUP}
                     </span>
                     <span className="text-sm text-gray-500 truncate flex-shrink-0">
                       {moment(

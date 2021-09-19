@@ -160,7 +160,7 @@ namespace TeeChat.Application.Services
 
             var chat = new Chat
             {
-                Type = ChatType.GROUP,
+                Type = ChatType.Group,
                 Participants = participants
             };
             chat.Participants.Add(currentUser);
@@ -220,14 +220,14 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var chat = await _context.Chats.FirstOrDefaultAsync(x => x.Type == ChatType.PRIVATE && x.Participants.Contains(currentUser) && x.Participants.Contains(participant));
+            var chat = await _context.Chats.FirstOrDefaultAsync(x => x.Type == ChatType.Private && x.Participants.Contains(currentUser) && x.Participants.Contains(participant));
 
             bool isExistChat = chat != null;
 
             if (!isExistChat)
             {
                 chat = new Chat();
-                chat.Type = ChatType.PRIVATE;
+                chat.Type = ChatType.Private;
                 chat.Participants = new List<AppUser>() { participant };
                 chat.Participants.Add(currentUser);
                 chat.Creator = currentUser;
@@ -426,7 +426,7 @@ namespace TeeChat.Application.Services
                     Message = "Not found chat with id: " + chatId
                 };
             }
-            if (chat.Type == ChatType.PRIVATE)
+            if (chat.Type == ChatType.Private)
             {
                 return new ApiResult<CreateChatResponse>(null)
                 {
@@ -534,7 +534,7 @@ namespace TeeChat.Application.Services
                     Message = "Not found chat with id: " + chatId
                 };
             }
-            if (chat.Type == ChatType.PRIVATE)
+            if (chat.Type == ChatType.Private)
             {
                 return new ApiResult<UpdateGroupAvatarResponse>(null)
                 {

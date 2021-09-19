@@ -5,10 +5,10 @@ import useChatApi from "hooks/useChatApi";
 import useUserApi from "hooks/useUserApi";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import constants from "utils/constants";
+import { ChatType, DefaultName } from "utils/Constant";
 
 function CreateChat({ isOpen, setIsOpen }) {
-  const [selectedMode, setSelectedMode] = useState(constants.chatType.PRIVATE);
+  const [selectedMode, setSelectedMode] = useState(ChatType.PRIVATE);
   const [isOpenFriendList, setIsOpenFriendList] = useState(false);
   const [isValidButton, setIsValidButton] = useState(false);
   const [groupName, setGroupName] = useState("");
@@ -69,17 +69,17 @@ function CreateChat({ isOpen, setIsOpen }) {
   }, []);
 
   useEffect(() => {
-    if (selectedMode === constants.chatType.GROUP) {
+    if (selectedMode === ChatType.GROUP) {
       var result = selectedFriendList?.length >= 2 && groupName?.trim();
       setIsValidButton(result);
-    } else if (selectedMode === constants.chatType.PRIVATE) {
+    } else if (selectedMode === ChatType.PRIVATE) {
       setIsValidButton(selectedFriendList?.length !== 0 ? true : false);
     }
   }, [selectedFriendList, groupName, selectedMode]);
 
   async function handleCreateGroup() {
     if (isValidButton) {
-      if (selectedMode === constants.chatType.GROUP) {
+      if (selectedMode === ChatType.GROUP) {
         const request = {
           participantUserNames: selectedFriendList.map((x) => x.userName),
           name: groupName,
@@ -92,7 +92,7 @@ function CreateChat({ isOpen, setIsOpen }) {
           setGroupName("");
           setIsOpen(false);
         });
-      } else if (selectedMode === constants.chatType.PRIVATE) {
+      } else if (selectedMode === ChatType.PRIVATE) {
         const request = {
           participantUserName: selectedFriendList
             .map((x) => x.userName)
@@ -130,7 +130,7 @@ function CreateChat({ isOpen, setIsOpen }) {
               className={
                 "absolute bg-gradient-to-br from-green-400 to-green-600 w-1/2 h-full rounded transition-all duration-200 z-0" +
                 " " +
-                (selectedMode === constants.chatType.GROUP
+                (selectedMode === ChatType.GROUP
                   ? "transform translate-x-full left-0"
                   : "left-0 ")
               }
@@ -139,11 +139,11 @@ function CreateChat({ isOpen, setIsOpen }) {
               className={
                 " px-3 py-2 z-10 text-xs md:text-sm select-none " +
                 " " +
-                (selectedMode === constants.chatType.PRIVATE
+                (selectedMode === ChatType.PRIVATE
                   ? "text-white"
                   : " text-green-600 dark:text-green-400")
               }
-              onClick={() => setSelectedMode(constants.chatType.PRIVATE)}
+              onClick={() => setSelectedMode(ChatType.PRIVATE)}
             >
               Private
             </span>
@@ -151,18 +151,18 @@ function CreateChat({ isOpen, setIsOpen }) {
               className={
                 " px-3 py-2 z-10 text-xs md:text-sm select-none " +
                 " " +
-                (selectedMode === constants.chatType.GROUP
+                (selectedMode === ChatType.GROUP
                   ? "text-white"
                   : " text-green-600 dark:text-green-400")
               }
-              onClick={() => setSelectedMode(constants.chatType.GROUP)}
+              onClick={() => setSelectedMode(ChatType.GROUP)}
             >
               Group
             </span>
           </div>
         </div>
         <div className="space-y-2 md:space-y-4">
-          {selectedMode === constants.chatType.GROUP ? (
+          {selectedMode === ChatType.GROUP ? (
             <>
               <div className="space-y-2">
                 <label
@@ -238,7 +238,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                                 userName={friend?.userName}
                               />
                               <span className="break-full w-full overflow-ellipsis truncate md:text-base text-sm">
-                                {friend.fullName ?? "Unknown"}
+                                {friend.fullName ?? DefaultName.NO_NAME_USER}
                               </span>
                             </div>
                           ))}
@@ -281,7 +281,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                           userName={friend?.userName}
                         />
                         <span className="break-full w-full overflow-ellipsis truncate md:text-base text-sm">
-                          {friend.fullName ?? "Unknown"}
+                          {friend.fullName ?? DefaultName.NO_NAME_USER}
                         </span>
                       </div>
                     ))}
@@ -343,7 +343,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                               userName={friend?.userName}
                             />
                             <span className="break-full w-full overflow-ellipsis truncate text-sm md:text-base">
-                              {friend.fullName ?? "Unknown"}
+                              {friend.fullName ?? DefaultName.NO_NAME_USER}
                             </span>
                           </div>
                         ))}
@@ -385,7 +385,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                             userName={friend?.userName}
                           />
                           <span className="break-full w-full overflow-ellipsis truncate md:text-base text-sm">
-                            {friend.fullName ?? "Unknown"}
+                            {friend.fullName ?? DefaultName.NO_NAME_USER}
                           </span>
                         </div>
                       );

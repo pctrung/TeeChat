@@ -8,7 +8,7 @@ import useUserApi from "hooks/useUserApi";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import constants from "utils/constants";
+import { ChatType, DefaultName } from "utils/Constant";
 
 function EditChat({ isOpen, setIsOpen, chat }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -236,7 +236,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
           </h3>
         </div>
         <div className="space-y-2 md:space-y-4">
-          {chat?.type === constants.chatType.GROUP ? (
+          {chat?.type === ChatType.GROUP ? (
             <>
               <div className="space-y-2">
                 <label
@@ -312,7 +312,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                                 userName={friend?.userName}
                               />
                               <span className="break-full w-full overflow-ellipsis truncate md:text-base text-sm">
-                                {friend.fullName ?? "Unknown"}
+                                {friend.fullName ?? DefaultName.NO_NAME_USER}
                               </span>
                             </div>
                           ))}
@@ -355,7 +355,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                           userName={friend?.userName}
                         />
                         <span className="break-full w-full overflow-ellipsis truncate md:text-base text-sm">
-                          {friend.fullName ?? "Unknown"}
+                          {friend.fullName ?? DefaultName.NO_NAME_USER}
                         </span>
                       </div>
                     ))}
@@ -401,7 +401,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
         <div className="flex justify-end py-6 space-x-4">
           <div className="space-x-2 flex items-center">
             <Button outline content="Close" onClick={() => setIsOpen(false)} />
-            {chat?.type === constants.chatType.GROUP ? (
+            {chat?.type === ChatType.GROUP ? (
               <Button
                 disabled={!isValidButton}
                 content="Save"
