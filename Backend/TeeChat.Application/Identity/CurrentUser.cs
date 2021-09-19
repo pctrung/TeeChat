@@ -10,7 +10,7 @@ namespace TeeChat.Application.Identity
         public string Email { get => _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email); }
         public string FirstName { get => _httpContextAccessor.HttpContext.User.FindFirstValue("FirstName"); }
         public string LastName { get => _httpContextAccessor.HttpContext.User.FindFirstValue("LastName"); }
-        public string FullName { get => LastName + " " + FirstName; }
+        public string FullName { get => _httpContextAccessor.HttpContext.User.FindFirstValue("FullName"); }
         public ClaimsPrincipal User { get => _httpContextAccessor.HttpContext.User; }
 
         private readonly IHttpContextAccessor _httpContextAccessor;

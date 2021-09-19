@@ -380,8 +380,8 @@ function EditChat({ isOpen, setIsOpen, chat }) {
           ) : (
             <div ref={friendListRef} className="space-y-2">
               <div className="font-bold dark:text-dark-txt">
-                Created user:{" "}
-                <span className="font-normal">{chat?.creatorUserName}</span>
+                Creator:{" "}
+                <span className="font-normal">{chat?.creatorFullName}</span>
               </div>
               <div className="font-bold dark:text-dark-txt">
                 Created date:{" "}
@@ -390,6 +390,10 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                     "MMMM Do YYYY, h:mm:ss a",
                   )}
                 </span>
+              </div>
+              <div className="font-bold dark:text-dark-txt">
+                Total messages:{" "}
+                <span className="font-normal">{chat?.totalRecords}</span>
               </div>
             </div>
           )}

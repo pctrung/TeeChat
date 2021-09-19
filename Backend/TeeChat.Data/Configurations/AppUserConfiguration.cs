@@ -11,6 +11,7 @@ namespace TeeChat.Data.Configurations
             builder.ToTable("Users");
             builder.Property(x => x.LastName).HasMaxLength(50).IsRequired();
             builder.Property(x => x.FirstName).HasMaxLength(50).IsRequired();
+            builder.Ignore(x => x.FullName);
         }
     }
 }

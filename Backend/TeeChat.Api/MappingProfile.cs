@@ -18,12 +18,16 @@ namespace TeeChat.Api
                     .ForMember(des => des.AvatarUrl,
                     act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.AvatarFileName) ? "" : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.AvatarFileName}")));
 
-                CreateMap<Chat, ChatViewModel>().ForMember(des => des.GroupAvatarUrl,
-                    act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.AvatarFileName) ? "" : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.AvatarFileName}")));
+                CreateMap<Chat, ChatViewModel>()
+                    .ForMember(
+                        des => des.GroupAvatarUrl,
+                        act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.AvatarFileName) ? "" : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.AvatarFileName}")))
+                    .ForMember(des => des.CreatorUserName, act => act.MapFrom(src => src.Creator.UserName))
+                    .ForMember(des => des.CreatorFullName, act => act.MapFrom(src => src.Creator.FullName));
 
                 CreateMap<Message, MessageViewModel>()
                 .ForMember(des => des.SenderUserName, act => act.MapFrom(src => src.Sender.UserName))
-                .ForMember(des => des.SenderFullName, act => act.MapFrom(src => $"{src.Sender.LastName} {src.Sender.FirstName}"))
+                .ForMember(des => des.SenderFullName, act => act.MapFrom(src => src.Sender.FullName))
                 .ForMember(des => des.ImageUrl,
                     act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.ImageFileName) ? "" : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.ImageFileName}")));
             }
@@ -33,7 +37,7 @@ namespace TeeChat.Api
                 CreateMap<Chat, ChatViewModel>();
                 CreateMap<Message, MessageViewModel>()
                     .ForMember(des => des.SenderUserName, act => act.MapFrom(src => src.Sender.UserName))
-                    .ForMember(des => des.SenderFullName, act => act.MapFrom(src => $"{src.Sender.LastName} {src.Sender.FirstName}"));
+                    .ForMember(des => des.SenderFullName, act => act.MapFrom(src => src.Sender.FullName));
             }
         }
     }

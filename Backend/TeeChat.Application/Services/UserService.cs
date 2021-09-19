@@ -199,7 +199,7 @@ namespace TeeChat.Application.Services
                 FirstName = request.FirstName.Trim(),
                 LastName = request.LastName.Trim(),
                 UserName = request.Username.Trim(),
-                CreatedDate = DateTime.Now,
+                DateCreated = DateTime.Now,
                 Email = request.Email
             };
 
@@ -208,10 +208,10 @@ namespace TeeChat.Application.Services
             await _userManager.AddClaimAsync(user, new Claim("userName", user.UserName));
             await _userManager.AddClaimAsync(user, new Claim("firstName", user.FirstName));
             await _userManager.AddClaimAsync(user, new Claim("lastName", user.LastName));
-            await _userManager.AddClaimAsync(user, new Claim("fullName", user.LastName + " " + user.FirstName));
+            await _userManager.AddClaimAsync(user, new Claim("fullName", user.FullName));
             await _userManager.AddClaimAsync(user, new Claim("email", user.Email));
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.UserName));
-            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, user.LastName + " " + user.FirstName));
+            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, user.FullName));
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Email, user.Email));
             return result;
         }

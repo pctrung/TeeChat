@@ -166,8 +166,7 @@ namespace TeeChat.Application.Services
                 Participants = participants
             };
             chat.Participants.Add(currentUser);
-            chat.CreatorUserName = _currentUser.UserName;
-            chat.CreatorUserName = _currentUser.FullName;
+            chat.Creator = currentUser;
             chat.DateCreated = DateTime.Now;
             chat.Name = request.Name.Trim();
 
@@ -241,7 +240,7 @@ namespace TeeChat.Application.Services
                 chat.Type = ChatType.PRIVATE;
                 chat.Participants = new List<AppUser>() { participant };
                 chat.Participants.Add(currentUser);
-                chat.CreatorUserName = _currentUser.UserName;
+                chat.Creator = currentUser;
                 chat.DateCreated = DateTime.Now;
                 await _context.Chats.AddAsync(chat);
                 await _context.SaveChangesAsync();
