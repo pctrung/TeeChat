@@ -65,7 +65,7 @@ function ChatList() {
                 }
                 onClick={() => handleClick(chat.id)}
               >
-                {chat.numOfUnreadMessages > 0 && (
+                {chat.numOfUnreadMessages > 0 && selectedId !== chat.id && (
                   <span className="w-6 h-6 absolute right-7 top-1/2 text-xs font-bold p-1 bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle">
                     {chat.numOfUnreadMessages > 9
                       ? "9+"
@@ -88,7 +88,9 @@ function ChatList() {
                       className={
                         "text-gray-800 truncate dark:text-dark-txt" +
                         " " +
-                        (chat.numOfUnreadMessages > 0 ? "font-bold" : "")
+                        (chat.numOfUnreadMessages > 0 && selectedId !== chat.id
+                          ? "font-bold"
+                          : "")
                       }
                     >
                       {chat?.type === constants.chatType.PRIVATE
@@ -110,7 +112,9 @@ function ChatList() {
                       className={
                         "mr-2 text-sm text-gray-500 truncate overflow-hidden flex-grow" +
                         " " +
-                        (chat.numOfUnreadMessages > 0 ? "font-bold mr-10" : "")
+                        (chat.numOfUnreadMessages > 0 && selectedId !== chat.id
+                          ? "font-bold mr-10"
+                          : "")
                       }
                     >
                       {lastMessage.content ?? ""}
