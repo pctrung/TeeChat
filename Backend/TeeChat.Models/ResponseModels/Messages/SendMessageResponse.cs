@@ -1,4 +1,4 @@
-﻿using TeeChat.Models.ResponseModels.Interfaces;
+﻿using TeeChat.Models.ResponseModels.Common;
 using TeeChat.Models.ViewModels;
 
 namespace TeeChat.Models.ResponseModels.Messages

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TeeChat.Models.ResponseModels.Interfaces
+namespace TeeChat.Models.ResponseModels.Common
 {
     public abstract class HubResponseBase
     {

@@ -1,4 +1,4 @@
-﻿using TeeChat.Models.ResponseModels.Interfaces;
+﻿using TeeChat.Models.ResponseModels.Common;
 
 namespace TeeChat.Models.ResponseModels.Chats
 {
