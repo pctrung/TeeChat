@@ -23,7 +23,7 @@ namespace TeeChat.Application.Services
     {
         private readonly TeeChatDbContext _context;
         private readonly IMapper _mapper;
-        private readonly ICurrentUser _currentUser;
+        private readonly AppUser _currentUser;
         private readonly IStorageService _storageService;
         private const int DEFAULT_LIMIT = 30;
 
@@ -32,7 +32,13 @@ namespace TeeChat.Application.Services
             _context = context;
             _storageService = storageService;
             _mapper = mapper;
-            _currentUser = currentUser;
+
+            _currentUser = _context.Users.Find(currentUser.UserId);
+
+            if (_currentUser == null)
+            {
+                throw new Exception("Cannot get current user. Something went wrong!");
+            }
         }
 
         public async Task<ApiResult<SendMessageResponse>> AddMessageAsync(int chatId, SendMessageRequest request)
@@ -41,44 +47,25 @@ namespace TeeChat.Application.Services
                 .Include(x => x.Participants)
                 .Include(x => x.Messages)
                 .AsSplitQuery()
+                .OrderByDescending(x => x.DateCreated)
                 .FirstOrDefaultAsync(x => x.Id == chatId);
             if (chat == null)
             {
-                return new ApiResult<SendMessageResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found chat with Id: " + chatId
-                };
+                return ApiResult<SendMessageResponse>.NotFound(null, "Not found chat with Id: " + chatId);
             }
 
-            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
+            var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return new ApiResult<SendMessageResponse>(null)
-                {
-                    StatusCode = 403,
-                    Message = "You do not have permission to access this chat"
-                };
+                return ApiResult<SendMessageResponse>.ForBid(null, "You do not have permission to access this chat");
             }
 
             if (string.IsNullOrWhiteSpace(request.Content))
             {
-                return new ApiResult<SendMessageResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Content cannot be null or empty"
-                };
+                return ApiResult<SendMessageResponse>.BadRequest(null, "Content cannot be null or empty");
             }
 
-            var sender = await _context.Users.FindAsync(_currentUser.UserId);
-            if (sender == null)
-            {
-                return new ApiResult<SendMessageResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Something went wrong with current user"
-                };
-            }
+            var sender = _currentUser;
 
             var newMessage = new Message()
             {
@@ -99,63 +86,32 @@ namespace TeeChat.Application.Services
                 RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
             };
 
-            return new ApiResult<SendMessageResponse>(result)
-            {
-                StatusCode = 201,
-                Message = "Send message successfully"
-            };
+            return ApiResult<SendMessageResponse>.Created(result, "Send message successfully");
         }
 
         public async Task<ApiResult<CreateChatResponse>> CreateGroupChatAsync(CreateGroupChatRequest request)
         {
             if (request.ParticipantUserNames.Count < 2)
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Group chat participant require at least 3 people"
-                };
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Group chat participant require at least 3 people");
             }
             if (string.IsNullOrWhiteSpace(request.Name))
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Please enter group name"
-                };
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Please enter group name");
             }
 
             // add participants
             var participants = await _context.Users
-                .Where(x => !x.UserName
-                .Equals(_currentUser.UserName) && request.ParticipantUserNames.Contains(x.UserName))
+                .Where(x => !x.UserName.Equals(_currentUser.UserName) && request.ParticipantUserNames.Contains(x.UserName))
                 .ToListAsync();
 
             if (participants == null)
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found any participants"
-                };
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Not found any participants");
             }
             else if (participants.Count < 2)
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Group chat participant require at least 3 people"
-                };
-            }
-
-            var currentUser = await _context.Users.FindAsync(_currentUser.UserId);
-            if (currentUser == null)
-            {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Something went wrong with current user"
-                };
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Group chat participant require at least 3 people");
             }
 
             var chat = new Chat
@@ -163,8 +119,8 @@ namespace TeeChat.Application.Services
                 Type = ChatType.Group,
                 Participants = participants
             };
-            chat.Participants.Add(currentUser);
-            chat.Creator = currentUser;
+            chat.Participants.Add(_currentUser);
+            chat.Creator = _currentUser;
             chat.DateCreated = DateTime.Now;
             chat.Name = request.Name.Trim();
 
@@ -180,19 +136,11 @@ namespace TeeChat.Application.Services
                     RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
                 };
 
-                return new ApiResult<CreateChatResponse>(result)
-                {
-                    StatusCode = 201,
-                    Message = "Create message successfully"
-                };
+                return ApiResult<CreateChatResponse>.Created(result, "Create chat successfully");
             }
             else
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Cannot save chat"
-                };
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Cannot create chat. Something when wrong!");
             }
         }
 
@@ -203,24 +151,10 @@ namespace TeeChat.Application.Services
 
             if (participant == null)
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found user with username: " + request.ParticipantUserName
-                };
+                return ApiResult<CreateChatResponse>.NotFound(null, "Not found user: " + request.ParticipantUserName);
             }
 
-            var currentUser = await _context.Users.FindAsync(_currentUser.UserId);
-            if (currentUser == null)
-            {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Something went wrong with current user"
-                };
-            }
-
-            var chat = await _context.Chats.FirstOrDefaultAsync(x => x.Type == ChatType.Private && x.Participants.Contains(currentUser) && x.Participants.Contains(participant));
+            var chat = await _context.Chats.FirstOrDefaultAsync(x => x.Type == ChatType.Private && x.Participants.Contains(_currentUser) && x.Participants.Contains(participant));
 
             bool isExistChat = chat != null;
 
@@ -231,8 +165,8 @@ namespace TeeChat.Application.Services
                     Type = ChatType.Private,
                     Participants = new List<AppUser>() { participant }
                 };
-                chat.Participants.Add(currentUser);
-                chat.Creator = currentUser;
+                chat.Participants.Add(_currentUser);
+                chat.Creator = _currentUser;
                 chat.DateCreated = DateTime.Now;
                 await _context.Chats.AddAsync(chat);
                 await _context.SaveChangesAsync();
@@ -243,22 +177,14 @@ namespace TeeChat.Application.Services
                 var result = new CreateChatResponse()
                 {
                     Chat = _mapper.Map<ChatViewModel>(chat),
-                    RecipientUserNames = isExistChat ? new List<string> { currentUser.UserName } : chat.Participants.Select(x => x.UserName).ToList()
+                    RecipientUserNames = isExistChat ? new List<string> { _currentUser.UserName } : chat.Participants.Select(x => x.UserName).ToList()
                 };
 
-                return new ApiResult<CreateChatResponse>(result)
-                {
-                    StatusCode = 201,
-                    Message = "Create message successfully"
-                };
+                return ApiResult<CreateChatResponse>.Created(result, "Create chat successfully");
             }
             else
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Cannot create chat. Something went wrong!"
-                };
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Cannot create chat. Something went wrong!");
             }
         }
 
@@ -272,36 +198,18 @@ namespace TeeChat.Application.Services
                 .FirstOrDefaultAsync(x => x.Id == chatId);
             if (chat == null)
             {
-                return new ApiResult<ChatViewModel>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found chat with id: " + chatId
-                };
+                return ApiResult<ChatViewModel>.NotFound(null, "Not found chat with id: " + chatId);
             }
 
-            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
+            var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return new ApiResult<ChatViewModel>(null)
-                {
-                    StatusCode = 403,
-                    Message = "You do not have permission to access this chat"
-                };
-            }
-
-            var currentUser = await _context.Users.FindAsync(_currentUser.UserId);
-            if (currentUser == null)
-            {
-                return new ApiResult<ChatViewModel>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Something went wrong with current user"
-                };
+                return ApiResult<ChatViewModel>.ForBid(null, "You do not have permission to access this chat");
             }
 
             chat.Messages = chat.Messages.AsQueryable().Where(x => string.IsNullOrEmpty(x.Content) || x.Content.Contains(request.Keyword ?? "")).ToList();
 
-            var numOfUnreadMessages = chat.Messages.Where(x => !x.ReadByUsers.Contains(currentUser)).Count();
+            var numOfUnreadMessages = chat.Messages.Where(x => !x.ReadByUsers.Contains(_currentUser)).Count();
 
             var totalMessage = chat.Messages.Count;
             var pageCount = (double)totalMessage / DEFAULT_LIMIT;
@@ -314,55 +222,19 @@ namespace TeeChat.Application.Services
             var lastMessage = chat.Messages.LastOrDefault();
             var readByUserNames = lastMessage?.ReadByUsers.Select(x => x.UserName).ToList();
 
-            if (chat == null)
-            {
-                return new ApiResult<ChatViewModel>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found chat with id: " + chatId
-                };
-            }
-            else
-            {
-                var result = _mapper.Map<ChatViewModel>(chat);
-                result.Keyword = request.Keyword;
-                result.Page = request.Page;
-                result.Limit = DEFAULT_LIMIT;
-                result.TotalRecords = totalMessage;
-                result.NumOfUnreadMessages = numOfUnreadMessages;
-                result.ReadByUserNames = readByUserNames;
+            var result = _mapper.Map<ChatViewModel>(chat);
+            result.Keyword = request.Keyword;
+            result.Page = request.Page;
+            result.Limit = DEFAULT_LIMIT;
+            result.TotalRecords = totalMessage;
+            result.NumOfUnreadMessages = numOfUnreadMessages;
+            result.ReadByUserNames = readByUserNames;
 
-                return new ApiResult<ChatViewModel>(result)
-                {
-                    StatusCode = 200,
-                    Message = "Get chat successfully, id: " + chatId
-                };
-            }
+            return ApiResult<ChatViewModel>.Ok(result, "Get chat successfully, id: " + chatId);
         }
 
         public async Task<ApiResult<List<ChatViewModel>>> GetAllAsync()
         {
-            var user = await _context.Users.FindAsync(_currentUser.UserId);
-
-            if (user == null)
-            {
-                return new ApiResult<List<ChatViewModel>>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found user with username: " + _currentUser.UserName
-                };
-            }
-
-            var currentUser = await _context.Users.FindAsync(_currentUser.UserId);
-            if (currentUser == null)
-            {
-                return new ApiResult<List<ChatViewModel>>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Something went wrong with current user"
-                };
-            }
-
             var query = _context.Chats
                 .Include(x => x.Participants)
                 .Include(x => x.Messages)
@@ -370,14 +242,14 @@ namespace TeeChat.Application.Services
                 .OrderBy(x => x.DateCreated)
                 .AsSplitQuery();
 
-            var chats = await query.Where(x => x.Participants.Contains(user)).ToListAsync();
+            var chats = await query.Where(x => x.Participants.Contains(_currentUser)).ToListAsync();
 
             var numOfUnreadMessagesByChatId = new Dictionary<int, int>();
             var readByUserNamesByChatId = new Dictionary<int, List<string>>();
 
             chats.ForEach(x =>
             {
-                var numOfUnreadMessages = x.Messages.Where(x => !x.ReadByUsers.Contains(currentUser)).Count();
+                var numOfUnreadMessages = x.Messages.Where(x => !x.ReadByUsers.Contains(_currentUser)).Count();
                 numOfUnreadMessagesByChatId.Add(x.Id, numOfUnreadMessages);
 
                 var lastMessage = x.Messages.LastOrDefault();
@@ -403,11 +275,7 @@ namespace TeeChat.Application.Services
                 x.ReadByUserNames = readByUserNamesByChatId[x.Id];
             });
 
-            var result = new ApiResult<List<ChatViewModel>>(chatViewModel)
-            {
-                StatusCode = 200,
-                Message = "Get chat successfully"
-            };
+            var result = ApiResult<List<ChatViewModel>>.Ok(chatViewModel, "Get chat successfully");
 
             return result;
         }
@@ -422,29 +290,17 @@ namespace TeeChat.Application.Services
                 .FirstOrDefaultAsync(x => x.Id == chatId);
             if (chat == null)
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found chat with id: " + chatId
-                };
+                return ApiResult<CreateChatResponse>.NotFound(null, "Not found chat with id: " + chatId);
             }
             if (chat.Type == ChatType.Private)
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "You can only update group chat"
-                };
+                return ApiResult<CreateChatResponse>.BadRequest(null, "You can only update group chat");
             }
 
-            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
+            var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return new ApiResult<CreateChatResponse>(null)
-                {
-                    StatusCode = 403,
-                    Message = "You do not have permission to access this chat"
-                };
+                return ApiResult<CreateChatResponse>.ForBid(null, "You do not have permission to access this chat");
             }
 
             if (!string.IsNullOrWhiteSpace(request.NewGroupName))
@@ -467,11 +323,7 @@ namespace TeeChat.Application.Services
                     }
                     if (user == null)
                     {
-                        return new ApiResult<CreateChatResponse>(null)
-                        {
-                            StatusCode = 404,
-                            Message = "Not found user: " + userName
-                        };
+                        return ApiResult<CreateChatResponse>.NotFound(null, "Not found user: " + userName);
                     }
                     chat.Participants.Add(user);
                 }
@@ -483,11 +335,7 @@ namespace TeeChat.Application.Services
                     var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
                     if (user == null)
                     {
-                        return new ApiResult<CreateChatResponse>(null)
-                        {
-                            StatusCode = 404,
-                            Message = "Not found user: " + userName
-                        };
+                        return ApiResult<CreateChatResponse>.NotFound(null, "Not found user: " + userName);
                     }
                     chat.Participants.Remove(user);
                 }
@@ -501,24 +349,12 @@ namespace TeeChat.Application.Services
                 RecipientUserNames = participantUserNamesToNotify
             };
 
-            return new ApiResult<CreateChatResponse>(result)
-            {
-                StatusCode = 200,
-                Message = "Update chat successfully"
-            };
+            return ApiResult<CreateChatResponse>.Ok(result, "Update chat successfully");
         }
 
-        private async Task<bool> IsHavePermissionToAccessChatAsync(Chat chat)
+        private bool IsHavePermissionToAccessChatAsync(Chat chat)
         {
-            var user = await _context.Users.FindAsync(_currentUser.UserId);
-
-            if (user == null)
-            {
-                return false;
-            }
-
-            var result = chat.Participants.Contains(user);
-
+            var result = chat.Participants.Contains(_currentUser);
             return result;
         }
 
@@ -530,29 +366,17 @@ namespace TeeChat.Application.Services
                 .FirstOrDefaultAsync(x => x.Id == chatId);
             if (chat == null)
             {
-                return new ApiResult<UpdateGroupAvatarResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found chat with id: " + chatId
-                };
+                return ApiResult<UpdateGroupAvatarResponse>.NotFound(null, "Not found chat with id: " + chatId);
             }
             if (chat.Type == ChatType.Private)
             {
-                return new ApiResult<UpdateGroupAvatarResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "You can only update group chat"
-                };
+                return ApiResult<UpdateGroupAvatarResponse>.BadRequest(null, "You can only update group chat");
             }
 
-            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
+            var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return new ApiResult<UpdateGroupAvatarResponse>(null)
-                {
-                    StatusCode = 403,
-                    Message = "You do not have permission to access this chat"
-                };
+                return ApiResult<UpdateGroupAvatarResponse>.ForBid(null, "You do not have permission to access this chat");
             }
             if (request.Avatar != null)
             {
@@ -578,28 +402,16 @@ namespace TeeChat.Application.Services
                             RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
                         };
 
-                        return new ApiResult<UpdateGroupAvatarResponse>(result)
-                        {
-                            StatusCode = 200,
-                            Message = "Update group image successfully!"
-                        };
+                        return ApiResult<UpdateGroupAvatarResponse>.Ok(result, "Update group image successfully!");
                     }
                 }
                 catch (Exception e)
                 {
-                    return new ApiResult<UpdateGroupAvatarResponse>(null)
-                    {
-                        StatusCode = 400,
-                        Message = e.Message
-                    };
+                    return ApiResult<UpdateGroupAvatarResponse>.BadRequest(null, e.Message);
                 }
             }
 
-            return new ApiResult<UpdateGroupAvatarResponse>(null)
-            {
-                StatusCode = 400,
-                Message = "Cannot update image. Something went wrong!"
-            };
+            return ApiResult<UpdateGroupAvatarResponse>.BadRequest(null, "Cannot update image. Something went wrong!");
         }
 
         public async Task<ApiResult<SendMessageResponse>> AddImageAsync(int chatId, SendImageRequest request)
@@ -611,42 +423,21 @@ namespace TeeChat.Application.Services
                 .FirstOrDefaultAsync(x => x.Id == chatId);
             if (chat == null)
             {
-                return new ApiResult<SendMessageResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found chat with Id: " + chatId
-                };
+                return ApiResult<SendMessageResponse>.NotFound(null, "Not found chat with Id: " + chatId);
             }
 
-            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
+            var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return new ApiResult<SendMessageResponse>(null)
-                {
-                    StatusCode = 403,
-                    Message = "You do not have permission to access this chat"
-                };
+                return ApiResult<SendMessageResponse>.ForBid(null, "You do not have permission to access this chat");
             }
 
             if (request.Image == null)
             {
-                return new ApiResult<SendMessageResponse>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Image cannot be null"
-                };
+                return ApiResult<SendMessageResponse>.BadRequest(null, "Image cannot be null");
             }
 
-            var sender = await _context.Users.FindAsync(_currentUser.UserId);
-
-            if (sender == null)
-            {
-                return new ApiResult<SendMessageResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Something went wrong with current user"
-                };
-            }
+            var sender = _currentUser;
 
             if (request.Image != null)
             {
@@ -675,85 +466,50 @@ namespace TeeChat.Application.Services
                             RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
                         };
 
-                        return new ApiResult<SendMessageResponse>(result)
-                        {
-                            StatusCode = 201,
-                            Message = "Send image successfully"
-                        };
+                        return ApiResult<SendMessageResponse>.Created(result, "Send image successfully");
                     }
                 }
                 catch (Exception e)
                 {
-                    return new ApiResult<SendMessageResponse>(null)
-                    {
-                        StatusCode = 400,
-                        Message = e.Message
-                    };
+                    return ApiResult<SendMessageResponse>.BadRequest(null, e.Message);
                 }
             }
 
-            return new ApiResult<SendMessageResponse>(null)
-            {
-                StatusCode = 400,
-                Message = "Cannot update image. Something went wrong!"
-            };
+            return ApiResult<SendMessageResponse>.BadRequest(null, "Cannot update image. Something went wrong!");
         }
 
         public async Task<ApiResult<ReadChatResponse>> ReadChatAsync(int chatId)
         {
-            var currentUser = await _context.Users.FindAsync(_currentUser.UserId);
-
-            if (currentUser == null)
-            {
-                return new ApiResult<ReadChatResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Something went wrong with current user"
-                };
-            }
-
             var chat = await _context.Chats
                 .Include(x => x.Participants)
-                .Include(x => x.Messages.Where(x => !x.ReadByUsers.Contains(currentUser)))
+                .Include(x => x.Messages.Where(x => !x.ReadByUsers.Contains(_currentUser)))
                 .ThenInclude(x => x.ReadByUsers)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == chatId);
 
             if (chat == null)
             {
-                return new ApiResult<ReadChatResponse>(null)
-                {
-                    StatusCode = 404,
-                    Message = "Not found chat with id: " + chatId
-                };
+                return ApiResult<ReadChatResponse>.NotFound(null, "Not found chat with id: " + chatId);
             }
 
-            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
+            var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return new ApiResult<ReadChatResponse>(null)
-                {
-                    StatusCode = 403,
-                    Message = "You do not have permission to access this chat"
-                };
+                return ApiResult<ReadChatResponse>.ForBid(null, "You do not have permission to access this chat");
             }
 
-            chat.Messages.ForEach(x => x.ReadByUsers.Add(currentUser));
+            chat.Messages.ForEach(x => x.ReadByUsers.Add(_currentUser));
 
             await _context.SaveChangesAsync();
 
             var result = new ReadChatResponse()
             {
                 ChatId = chat.Id,
-                ReadByUserName = currentUser.UserName,
+                ReadByUserName = _currentUser.UserName,
                 RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
             };
 
-            return new ApiResult<ReadChatResponse>(result)
-            {
-                StatusCode = 200,
-                Message = $"Read chat {chatId} successfully!"
-            };
+            return ApiResult<ReadChatResponse>.Ok(result, $"Read chat {chatId} successfully!");
         }
     }
 }

@@ -104,7 +104,7 @@ namespace TeeChat.Application.Services
 
         public async Task<List<UserViewModel>> GetFriendListAsync()
         {
-            // filter friend in social app
+            // filter friend in social application
             var data = await _context.Users.ToListAsync();
 
             var result = _mapper.Map<List<UserViewModel>>(data);
@@ -118,11 +118,7 @@ namespace TeeChat.Application.Services
             var user = await _context.Users.FindAsync(_currentUser.UserId);
             if (user == null)
             {
-                return new ApiResult<UserViewModel>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Something went wrong. Cannot find user: " + _currentUser.UserName
-                };
+                return ApiResult<UserViewModel>.BadRequest(null, "Something went wrong. Cannot find user: " + _currentUser.UserName);
             }
 
             if (!string.IsNullOrWhiteSpace(request.FirstName))
@@ -154,11 +150,7 @@ namespace TeeChat.Application.Services
                 }
                 catch (Exception e)
                 {
-                    return new ApiResult<UserViewModel>(null)
-                    {
-                        StatusCode = 400,
-                        Message = e.Message
-                    };
+                    return ApiResult<UserViewModel>.BadRequest(null, e.Message);
                 }
             }
 
@@ -166,20 +158,12 @@ namespace TeeChat.Application.Services
 
             if (!isChanged)
             {
-                return new ApiResult<UserViewModel>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Nothing is changed!"
-                };
+                return ApiResult<UserViewModel>.BadRequest(null, "Nothing is changed!");
             }
 
             var responseUser = _mapper.Map<UserViewModel>(user);
 
-            return new ApiResult<UserViewModel>(responseUser)
-            {
-                StatusCode = 200,
-                Message = "Update user successfully"
-            };
+            return ApiResult<UserViewModel>.Ok(responseUser, "Update user successfully");
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterRequest request)
@@ -221,20 +205,12 @@ namespace TeeChat.Application.Services
             var user = await _context.Users.FindAsync(_currentUser.UserId);
             if (user == null)
             {
-                return new ApiResult<UserViewModel>(null)
-                {
-                    StatusCode = 400,
-                    Message = "Something went wrong. Cannot find user: " + _currentUser.UserName
-                };
+                return ApiResult<UserViewModel>.BadRequest(null, "Something went wrong. Cannot find user: " + _currentUser.UserName);
             }
 
             var responseUser = _mapper.Map<UserViewModel>(user);
 
-            return new ApiResult<UserViewModel>(responseUser)
-            {
-                StatusCode = 200,
-                Message = "Get current user successfully"
-            };
+            return ApiResult<UserViewModel>.Ok(responseUser, "Get current user successfully!");
         }
     }
 }
