@@ -34,7 +34,7 @@ function Chat() {
 
   function logout() {
     window.localStorage.removeItem("token");
-    connection.stop();
+    connection?.stop();
     history.push("/login");
   }
 
@@ -49,9 +49,14 @@ function Chat() {
           console.error("Connection failed: ", error);
         });
 
-      userApi.getCurrentUser().then((response) => {
-        dispatch(updateUser(response));
-      });
+      userApi
+        .getCurrentUser()
+        .then((response) => {
+          dispatch(updateUser(response));
+        })
+        .catch((error) => {
+          logout();
+        });
     }
 
     fetchData();
