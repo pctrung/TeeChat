@@ -59,7 +59,7 @@ namespace TeeChat.Api.Controllers
             {
                 case 201:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveChat(result.Data.Chat);
+                        await _chatHub.Clients.Users(result.Data.RecipientUserNames).ReceiveChat(result.Data.Chat);
                         return Created("", result.Data.Chat);
                     }
                 case 200: return Ok(result);
@@ -78,7 +78,7 @@ namespace TeeChat.Api.Controllers
             {
                 case 201:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveChat(result.Data.Chat);
+                        await _chatHub.Clients.Users(result.Data.RecipientUserNames).ReceiveChat(result.Data.Chat);
                         return Created("", result.Data.Chat);
                     }
                 case 200: return Ok(result);
@@ -97,7 +97,7 @@ namespace TeeChat.Api.Controllers
             {
                 case 201:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveMessage(result.Data);
+                        await _chatHub.Clients.Users(result.Data.RecipientUserNames).ReceiveMessage(result.Data);
 
                         return Created("", result);
                     };
@@ -117,7 +117,7 @@ namespace TeeChat.Api.Controllers
             {
                 case 201:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveMessage(result.Data);
+                        await _chatHub.Clients.Users(result.Data.RecipientUserNames).ReceiveMessage(result.Data);
 
                         return Created("", result);
                     };
@@ -137,7 +137,7 @@ namespace TeeChat.Api.Controllers
             {
                 case 200:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveUpdatedChat(result.Data.Chat);
+                        await _chatHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedChat(result.Data.Chat);
 
                         return Created("", result);
                     };
@@ -156,7 +156,7 @@ namespace TeeChat.Api.Controllers
             {
                 case 200:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveUpdatedGroupAvatar(result.Data);
+                        await _chatHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedGroupAvatar(result.Data);
 
                         return Ok(result);
                     };
@@ -174,7 +174,7 @@ namespace TeeChat.Api.Controllers
             {
                 case 200:
                     {
-                        await _chatHub.Clients.Users(result.Data.ParticipantUserNamesToNotify).ReceiveAddReadByUserName(result.Data);
+                        await _chatHub.Clients.Users(result.Data.RecipientUserNames).ReceiveAddReadByUserName(result.Data);
 
                         return Ok(result);
                     }

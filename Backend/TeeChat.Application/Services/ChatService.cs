@@ -96,7 +96,7 @@ namespace TeeChat.Application.Services
             {
                 ChatId = chat.Id,
                 Message = _mapper.Map<MessageViewModel>(newMessage),
-                ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+                RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
             };
 
             return new ApiResult<SendMessageResponse>(result)
@@ -177,7 +177,7 @@ namespace TeeChat.Application.Services
                 var result = new CreateChatResponse()
                 {
                     Chat = _mapper.Map<ChatViewModel>(chat),
-                    ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+                    RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
                 };
 
                 return new ApiResult<CreateChatResponse>(result)
@@ -243,7 +243,7 @@ namespace TeeChat.Application.Services
                 var result = new CreateChatResponse()
                 {
                     Chat = _mapper.Map<ChatViewModel>(chat),
-                    ParticipantUserNamesToNotify = isExistChat ? new List<string> { currentUser.UserName } : chat.Participants.Select(x => x.UserName).ToList()
+                    RecipientUserNames = isExistChat ? new List<string> { currentUser.UserName } : chat.Participants.Select(x => x.UserName).ToList()
                 };
 
                 return new ApiResult<CreateChatResponse>(result)
@@ -498,7 +498,7 @@ namespace TeeChat.Application.Services
             var result = new CreateChatResponse()
             {
                 Chat = _mapper.Map<ChatViewModel>(chat),
-                ParticipantUserNamesToNotify = participantUserNamesToNotify
+                RecipientUserNames = participantUserNamesToNotify
             };
 
             return new ApiResult<CreateChatResponse>(result)
@@ -575,7 +575,7 @@ namespace TeeChat.Application.Services
                         {
                             ChatId = chat.Id,
                             GroupAvatarUrl = _storageService.GetImageUrl(fileName),
-                            ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+                            RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
                         };
 
                         return new ApiResult<UpdateGroupAvatarResponse>(result)
@@ -672,7 +672,7 @@ namespace TeeChat.Application.Services
                         {
                             ChatId = chat.Id,
                             Message = _mapper.Map<MessageViewModel>(newMessage),
-                            ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+                            RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
                         };
 
                         return new ApiResult<SendMessageResponse>(result)
@@ -746,7 +746,7 @@ namespace TeeChat.Application.Services
             {
                 ChatId = chat.Id,
                 ReadByUserName = currentUser.UserName,
-                ParticipantUserNamesToNotify = chat.Participants.Select(x => x.UserName).ToList()
+                RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
             };
 
             return new ApiResult<ReadChatResponse>(result)
