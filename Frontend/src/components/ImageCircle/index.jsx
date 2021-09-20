@@ -46,16 +46,16 @@ function ImageCircle({
       onlineSize = "w-2 h-2";
       break;
     case "lg":
-      onlineSize = "border-2 w-3 h-3 md:w-4 md:h-4";
+      onlineSize = "border-2 w-4 h-4";
       break;
     case "xl":
-      onlineSize = "border-2 w-3 h-3 md:w-4 md:h-4";
+      onlineSize = "border-2 w-4 h-4";
       break;
     case "full":
-      onlineSize = "border-2 w-3 h-3 md:w-4 md:h-4";
+      onlineSize = "border-2 w-4 h-4";
       break;
     default:
-      onlineSize = "border-2 w-3 h-3 md:w-4 md:h-4";
+      onlineSize = "border-2 w-4 h-4";
   }
 
   var avatarSize;
