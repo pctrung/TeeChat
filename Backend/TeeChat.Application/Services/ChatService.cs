@@ -51,7 +51,7 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
+            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
                 return new ApiResult<SendMessageResponse>(null)
@@ -279,7 +279,7 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
+            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
                 return new ApiResult<ChatViewModel>(null)
@@ -437,7 +437,7 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
+            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
                 return new ApiResult<CreateChatResponse>(null)
@@ -508,7 +508,7 @@ namespace TeeChat.Application.Services
             };
         }
 
-        private async Task<bool> IsHavePerrmissionToAccessChatAsync(Chat chat)
+        private async Task<bool> IsHavePermissionToAccessChatAsync(Chat chat)
         {
             var user = await _context.Users.FindAsync(_currentUser.UserId);
 
@@ -545,7 +545,7 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
+            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
                 return new ApiResult<UpdateGroupAvatarResponse>(null)
@@ -618,7 +618,7 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
+            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
                 return new ApiResult<SendMessageResponse>(null)
@@ -728,7 +728,7 @@ namespace TeeChat.Application.Services
                 };
             }
 
-            var isHaveAccess = await IsHavePerrmissionToAccessChatAsync(chat);
+            var isHaveAccess = await IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
                 return new ApiResult<ReadChatResponse>(null)
