@@ -50,6 +50,9 @@ export default function useApi() {
           case 403:
             history.push("/ForBid");
             break;
+          case 404:
+            history.push("/NotFound");
+            break;
           case 500:
             history.push("/ServerError");
             break;

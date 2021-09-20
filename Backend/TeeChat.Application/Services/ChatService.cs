@@ -51,7 +51,7 @@ namespace TeeChat.Application.Services
                 .FirstOrDefaultAsync(x => x.Id == chatId);
             if (chat == null)
             {
-                return ApiResult<SendMessageResponse>.NotFound(null, "Not found chat with Id: " + chatId);
+                return ApiResult<SendMessageResponse>.BadRequest(null, "Not found chat with Id: " + chatId);
             }
 
             var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
@@ -151,7 +151,7 @@ namespace TeeChat.Application.Services
 
             if (participant == null)
             {
-                return ApiResult<CreateChatResponse>.NotFound(null, "Not found user: " + request.ParticipantUserName);
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Not found user: " + request.ParticipantUserName);
             }
 
             var chat = await _context.Chats.FirstOrDefaultAsync(x => x.Type == ChatType.Private && x.Participants.Contains(_currentUser) && x.Participants.Contains(participant));
@@ -290,7 +290,7 @@ namespace TeeChat.Application.Services
                 .FirstOrDefaultAsync(x => x.Id == chatId);
             if (chat == null)
             {
-                return ApiResult<CreateChatResponse>.NotFound(null, "Not found chat with id: " + chatId);
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Not found chat with id: " + chatId);
             }
             if (chat.Type == ChatType.Private)
             {
@@ -323,7 +323,7 @@ namespace TeeChat.Application.Services
                     }
                     if (user == null)
                     {
-                        return ApiResult<CreateChatResponse>.NotFound(null, "Not found user: " + userName);
+                        return ApiResult<CreateChatResponse>.BadRequest(null, "Not found user: " + userName);
                     }
                     chat.Participants.Add(user);
                 }
@@ -335,7 +335,7 @@ namespace TeeChat.Application.Services
                     var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
                     if (user == null)
                     {
-                        return ApiResult<CreateChatResponse>.NotFound(null, "Not found user: " + userName);
+                        return ApiResult<CreateChatResponse>.BadRequest(null, "Not found user: " + userName);
                     }
                     chat.Participants.Remove(user);
                 }
@@ -366,7 +366,7 @@ namespace TeeChat.Application.Services
                 .FirstOrDefaultAsync(x => x.Id == chatId);
             if (chat == null)
             {
-                return ApiResult<UpdateGroupAvatarResponse>.NotFound(null, "Not found chat with id: " + chatId);
+                return ApiResult<UpdateGroupAvatarResponse>.BadRequest(null, "Not found chat with id: " + chatId);
             }
             if (chat.Type == ChatType.Private)
             {
@@ -423,7 +423,7 @@ namespace TeeChat.Application.Services
                 .FirstOrDefaultAsync(x => x.Id == chatId);
             if (chat == null)
             {
-                return ApiResult<SendMessageResponse>.NotFound(null, "Not found chat with Id: " + chatId);
+                return ApiResult<SendMessageResponse>.BadRequest(null, "Not found chat with Id: " + chatId);
             }
 
             var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
