@@ -485,6 +485,7 @@ namespace TeeChat.Application.Services
                 .Include(x => x.Messages.Where(x => !x.ReadByUsers.Contains(_currentUser)))
                 .ThenInclude(x => x.ReadByUsers)
                 .AsSplitQuery()
+                .OrderBy(x => x.DateCreated)
                 .FirstOrDefaultAsync(x => x.Id == chatId);
 
             if (chat == null)
