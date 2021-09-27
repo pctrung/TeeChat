@@ -21,7 +21,7 @@ function Button({
         onClick={onClick}
         onBlur={onBlur}
         className={
-          "px-4 py-2 rounded-lg transition-all text-sm md:text-base duration-200 disabled:opacity-50 outline-none z-0 select-none " +
+          "px-4 py-2 rounded-lg transition-all text-sm md:text-base duration-200 disabled:opacity-50 outline-none z-0 select-none min-w-70 " +
           " " +
           (outline
             ? "ring-inset ring-1 ring-green-500 bg-white dark:bg-transparent dark:hover:bg-green-500 text-green-500 hover:text-white hover:bg-green-400 active:bg-green-500"
