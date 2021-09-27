@@ -19,6 +19,7 @@ import Logo from "logo.png";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { ChatClient } from "utils/Constant";
 
 function Chat() {
   const [connection, setConnection] = useState(null);
@@ -77,36 +78,39 @@ function Chat() {
   useEffect(() => {
     if (connection && !connection.connectionStarted) {
       connection.start().then((result) => {
-        connection.on("ReceiveMessage", (response) => {
+        connection.on(ChatClient.RECEIVE_MESSAGE, (response) => {
           const action = addMessage(response);
           dispatch(action);
           if (response.chatId && selectedId !== response.chatId) {
             dispatch(addNotification(response.chatId));
           }
         });
-        connection.on("ReceiveChat", (chat) => {
+        connection.on(ChatClient.RECEIVE_CHAT, (chat) => {
           const action = addChat(chat);
           dispatch(action);
           if (chat.creatorUserName === currentUser.userName) {
             dispatch(setSelectedId(chat.id));
           }
         });
-        connection.on("ReceiveUpdatedChat", (chat) => {
+        connection.on(ChatClient.RECEIVE_UPDATED_CHAT, (chat) => {
           const action = editChat(chat);
           dispatch(action);
         });
-        connection.on("ReceiveUpdatedGroupAvatar", (response) => {
+        connection.on(ChatClient.RECEIVE_UPDATED_GROUP_AVATAR, (response) => {
           const action = editGroupAvatar(response);
           dispatch(action);
         });
-        connection.on("ReceiveAddReadByUserName", (response) => {
+        connection.on(ChatClient.RECEIVE_ADD_READ_BY_USERNAME, (response) => {
           const action = addReadByUserName(response);
           dispatch(action);
         });
-        connection.on("ReceiveUpdatedOnlineUserNameList", (response) => {
-          const action = updateOnlineUserNameList(response);
-          dispatch(action);
-        });
+        connection.on(
+          ChatClient.RECEIVE_UPDATED_ONLINE_USERNAME_LIST,
+          (response) => {
+            const action = updateOnlineUserNameList(response);
+            dispatch(action);
+          },
+        );
       });
     }
     return () => {
