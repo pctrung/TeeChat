@@ -10,7 +10,7 @@ function ServerError({ message }) {
       <span className="font-bold text-2xl md:text-3xl text-center">
         {message ?? "Oops! Something went wrong!"}
       </span>
-      <Link to="/chats">
+      <Link to="/">
         <Button content="Return home page" />
       </Link>
     </div>

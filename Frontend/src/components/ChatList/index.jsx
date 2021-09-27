@@ -22,12 +22,16 @@ function ChatList() {
 
   return (
     <>
-      <input
-        type="search"
-        className="my-3 rounded-3xl bg-gray-100 px-4 py-2 focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 outline-none transition-all duration-200 w-full dark:bg-dark-secondary dark:text-white"
-        placeholder="Search chat"
-        onChange={(e) => setKeyword(e.target.value)}
-      />
+      <div className="relative">
+        <input
+          type="search"
+          className="my-3 rounded-3xl bg-gray-100 px-4 pl-10 pr-3 py-2 focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 outline-none transition-all duration-200 w-full dark:bg-dark-secondary dark:text-white"
+          placeholder="Search chat"
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+        <i class="bx bx-search absolute text-xl top-1/2 left-3 transform text-gray-400 -translate-y-1/2 cursor-pointer"></i>
+      </div>
+
       <div className="h-full overflow-x-hidden space-y-2 overflow-y-auto pr-2 pb-48 md:pb-0">
         {chats &&
           getCurrentChats(chats, keyword).map((chat, index) => {

@@ -56,4 +56,10 @@
     background: #3a3b3c;
     transition: all 0.2s ease-in-out;
   }
+
+  /* expand css */
+  .text-center-middle::before {
+    text-align: center;
+    vertical-align: middle;
+  }
 }
