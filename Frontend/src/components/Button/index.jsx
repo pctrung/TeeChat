@@ -13,6 +13,7 @@ function Button({
   onClick,
   onBlur,
   disabled,
+  children,
 }) {
   return (
     <>
@@ -32,7 +33,7 @@ function Button({
           (!disabled ? "active:scale-95 active:transform" : "cursor-default")
         }
       >
-        {content}
+        {content ? content : children}
       </button>
     </>
   );
