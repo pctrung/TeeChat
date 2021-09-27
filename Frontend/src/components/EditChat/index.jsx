@@ -16,6 +16,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
 
   const [groupName, setGroupName] = useState(chat?.name);
   const [keyword, setKeyword] = useState("");
+  const [avatar, setAvatar] = useState(false);
 
   const [isValidButton, setIsValidButton] = useState(false);
   const [friendList, setFriendList] = useState([]);
@@ -166,7 +167,12 @@ function EditChat({ isOpen, setIsOpen, chat }) {
       participantUserNamesToRemove,
     };
 
-    chatApi.updateGroupChat(chat?.id, request);
+    chatApi.updateGroupChat(chat?.id, request).then(async (response) => {
+      if (avatar) {
+        await updateGroupAvatar();
+      }
+      openPopup("Success", "Update info successfully!");
+    });
 
     const isLeaveGroup = participantUserNamesToRemove.some(
       (x) => x === currentUser.userName,
@@ -174,19 +180,14 @@ function EditChat({ isOpen, setIsOpen, chat }) {
     if (isLeaveGroup) {
       dispatch(setSelectedId(0));
     }
-
     closeModal();
-    setIsOpen(false);
   }
 
   async function updateGroupAvatar(e) {
-    var file = e.target.files[0];
     const formData = new FormData();
-    formData.append("Avatar", file);
-
-    await chatApi.updateGroupAvatar(chat?.id, formData).then((response) => {
-      openPopup("Success", "Update group avatar successfully!");
-    });
+    formData.append("Avatar", avatar);
+    await chatApi.updateGroupAvatar(chat?.id, formData);
+    setAvatar(false);
   }
 
   function openPopup(title, content) {
@@ -207,7 +208,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   }
 
   return isOpen ? (
-    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 py-10 z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
+    <div className="animate-fadeIn fixed inset-0 grid place-items-center h-screen w-screen px-4 py-10 z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
       <div
         ref={ref}
         className={
@@ -272,7 +273,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                   />
                   {isOpenFriendList && (
                     <>
-                      <div className="animate-fade absolute top-full bg-white dark:bg-dark-third border border-gray-400 border-opacity-50 rounded-lg w-full md:py-4 py-2 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl ">
+                      <div className="animate-fadeIn absolute top-full bg-white dark:bg-dark-third border border-gray-400 border-opacity-50 rounded-lg w-full md:py-4 py-2 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl ">
                         <h4 className="font-semibold dark:text-gray-200 mb-2">
                           Friend list
                         </h4>
@@ -370,7 +371,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                 </label>
                 <input
                   id="avatar"
-                  onChange={updateGroupAvatar}
+                  onChange={(e) => setAvatar(e.target.files[0])}
                   type="file"
                   className="w-full"
                   accept="image/png, image/jpg, image/tiff, image/tif, image/jpeg"

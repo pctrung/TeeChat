@@ -75,14 +75,20 @@ module.exports = {
         500: "500px",
       },
       animation: {
-        fade: "fadeOut 0.3s ease-in-out",
+        fadeIn: "fadeIn 0.3s ease-in-out",
+        fadeOut: "fadeOut 0.3s ease-in-out forwards",
         bounce200: "bounce 1s infinite 200ms",
         bounce400: "bounce 1s infinite 400ms",
       },
       keyframes: (theme) => ({
-        fadeOut: {
+        fadeIn: {
           "0%": { opacity: 0 },
           "100%": { opacity: 1 },
+        },
+        fadeOut: {
+          "0%": { opacity: 1 },
+          "99%": { opacity: 0 },
+          "100%": { display: "none", visibility: "hidden" },
         },
       }),
     },

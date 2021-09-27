@@ -89,7 +89,7 @@ function ChatInput({ chatId }) {
             />
             <div
               className={
-                "animate-fade absolute right-0 bottom-full " +
+                "animate-fadeIn absolute right-0 bottom-full " +
                 " " +
                 (isOpenEmoji ? "visible" : "invisible")
               }

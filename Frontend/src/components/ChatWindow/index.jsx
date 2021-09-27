@@ -175,7 +175,7 @@ function ChatWindow({ chat }) {
                     className="flex flex-col items-end w-full"
                   >
                     {showTimeIndexes.includes(index) && (
-                      <span className="transition-all animate-fade text-xs md:text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
+                      <span className="transition-all animate-fadeIn text-xs md:text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
                         {moment(
                           new Date(message?.dateCreated),
                           "YYYYMMDD",
@@ -232,7 +232,7 @@ function ChatWindow({ chat }) {
                   <div className="flex flex-col w-full items-start">
                     {(showTimeIndexes.includes(index) ||
                       chat?.type === ChatType.GROUP) && (
-                      <span className="transition-all animate-fade text-xs md:text-sm text-gray-400 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-left">
+                      <span className="transition-all animate-fadeIn text-xs md:text-sm text-gray-400 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-left">
                         {message.senderFullName +
                           " - " +
                           moment(

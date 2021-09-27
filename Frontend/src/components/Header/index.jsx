@@ -106,13 +106,13 @@ function Header({ logout }) {
               className="dark:bg-dark-third bg-gray-100"
             />
             {isOpenMenu && (
-              <div className="animate-fade transition-all duration-200 absolute right-0 md:left-0 border border-gray-200 bg-white w-52 rounded-lg shadow-md overflow-hidden p-2 dark:bg-dark-secondary dark:border-dark-third mt-2 select-none z-30">
+              <div className="animate-fadeIn transition-all duration-200 absolute right-0 md:left-0 border border-gray-200 bg-white w-52 rounded-lg shadow-md overflow-hidden p-2 dark:bg-dark-secondary dark:border-dark-third mt-2 select-none z-30">
                 <button
                   className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95 dark:hover:bg-dark-third"
                   onClick={() => setDarkMode(!darkMode)}
                 >
                   <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
-                    <i className="bx bx-moon text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                    <i className="text-center-middle bx bx-moon text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
                   </span>
                   <span>Dark Mode</span>
                 </button>
@@ -123,7 +123,7 @@ function Header({ logout }) {
                   }}
                 >
                   <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
-                    <i className="bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                    <i className="text-center-middle bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
                   </span>
                   <span>Log Out</span>
                 </button>

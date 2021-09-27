@@ -111,7 +111,7 @@ function CreateChat({ isOpen, setIsOpen }) {
   }
 
   return isOpen ? (
-    <div className="animate-fade fixed inset-0 grid place-items-center h-screen w-screen px-4 py-10  z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
+    <div className="animate-fadeIn fixed inset-0 grid place-items-center h-screen w-screen px-4 py-10  z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
       <div
         ref={ref}
         className={
@@ -198,7 +198,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                   />
                   {isOpenFriendList && (
                     <>
-                      <div className="animate-fade absolute top-full bg-white dark:bg-dark-secondary dark:border-dark-hover border border-gray-300 border-opacity-50 rounded-lg w-full py-2 md:py-4 md:px-8 px-6 space-y-1 max-h-36 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl">
+                      <div className="animate-fadeIn absolute top-full bg-white dark:bg-dark-secondary dark:border-dark-hover border border-gray-300 border-opacity-50 rounded-lg w-full py-2 md:py-4 md:px-8 px-6 space-y-1 max-h-36 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl">
                         <h4 className="font-semibold mb-2 dark:text-gray-200">
                           Friend list
                         </h4>
@@ -308,7 +308,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                 />
                 {isOpenFriendList && (
                   <>
-                    <div className="animate-fade absolute top-full bg-white dark:bg-dark-secondary border border-gray-400 border-opacity-50 rounded-lg w-full space-y-1 max-h-36 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl py-2 md:py-4 md:px-8 px-6">
+                    <div className="animate-fadeIn absolute top-full bg-white dark:bg-dark-secondary border border-gray-400 border-opacity-50 rounded-lg w-full space-y-1 max-h-36 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl py-2 md:py-4 md:px-8 px-6">
                       <h4 className="font-semibold mb-2 text-start dark:text-gray-200">
                         Friend list
                       </h4>
