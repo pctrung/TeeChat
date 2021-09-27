@@ -58,7 +58,7 @@
   }
 
   /* expand css */
-  .text-center-middle::before {
+  .::before {
     text-align: center;
     vertical-align: middle;
   }

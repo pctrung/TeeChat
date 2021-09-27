@@ -27,7 +27,7 @@ function ClickableIcon({ className, icon, iconClass, alt, onClick, onBlur }) {
         ) : (
           <i
             className={
-              "text-center align-middle text-xl text-black dark:text-dark-txt w-7 h-7 text-center-middle" +
+              "text-center align-middle text-xl text-black dark:text-dark-txt w-7 h-7 " +
               " " +
               iconClass
             }

@@ -112,7 +112,7 @@ function Header({ logout }) {
                   onClick={() => setDarkMode(!darkMode)}
                 >
                   <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
-                    <i className="text-center-middle bx bx-moon text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                    <i className=" bx bx-moon text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
                   </span>
                   <span>Dark Mode</span>
                 </button>
@@ -123,7 +123,7 @@ function Header({ logout }) {
                   }}
                 >
                   <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
-                    <i className="text-center-middle bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                    <i className=" bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
                   </span>
                   <span>Log Out</span>
                 </button>
