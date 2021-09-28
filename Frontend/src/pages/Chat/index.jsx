@@ -66,7 +66,7 @@ function Chat() {
   // for realtime
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl(process.env.REACT_APP_SERVER_URL + "/hubs/chats", {
+      .withUrl(process.env.REACT_APP_CHAT_HUB_URL, {
         accessTokenFactory: () => localStorage.getItem("token"),
       })
       .withAutomaticReconnect()
