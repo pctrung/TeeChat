@@ -41,7 +41,7 @@ function Login() {
         var message =
           typeof error === "string"
             ? error
-            : "Username or password is incorrect";
+            : "Oops, something went wrong! Please contact administrator.";
         setError(message);
       });
   }
