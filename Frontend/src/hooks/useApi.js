@@ -39,37 +39,38 @@ export default function useApi() {
       return response;
     },
     (error) => {
-      if (error.response) {
-        dispatch(setIsLoading(false));
+      dispatch(setIsLoading(false));
+      var message =
+        typeof error.response?.data === "string"
+          ? error.response?.data
+          : "Oops, something went wrong! Please contact administrator.";
 
+      if (error.response) {
         switch (error.response.status) {
           case 401:
             window.localStorage.removeItem("token");
-            history.push("/login");
+            history?.push("/login");
             break;
           case 403:
-            history.push("/ForBid");
-            break;
-          case 404:
-            history.push("/NotFound");
+            history?.push("/ForBid");
             break;
           case 500:
-            history.push("/ServerError");
+            history?.push("/ServerError");
             break;
           default:
-            var message =
-              typeof error.response?.data === "string"
-                ? error.response?.data
-                : "Oops, something went wrong! Please contact administrator.";
-
             // for model binding error
             message = error.response?.data?.errors
               ? objToString(error.response?.data?.errors)
               : message;
 
-            openPopup("Notification", message);
+            if (!message.toLowerCase().includes("username or password")) {
+              openPopup("Notification", message);
+            }
             return Promise.reject(error.response?.data);
         }
+      }
+      if (!message.toLowerCase().includes("username or password")) {
+        openPopup("Notification", message);
       }
       return Promise.reject(error?.response?.data);
     },
@@ -80,6 +81,12 @@ export default function useApi() {
       isOpen: true,
       title: title,
       content: content,
+    };
+    dispatch(setPopup(popup));
+  }
+  function closePopup() {
+    const popup = {
+      isOpen: false,
     };
     dispatch(setPopup(popup));
   }
