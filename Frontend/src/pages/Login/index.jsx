@@ -35,7 +35,7 @@ function Login() {
       .then((response) => {
         dispatch(getCurrentUser());
         window.localStorage.setItem("token", response);
-        history.push("/chats");
+        history.push("/");
       })
       .catch((error) => {
         var message =
