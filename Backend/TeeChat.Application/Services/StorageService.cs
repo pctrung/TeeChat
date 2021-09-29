@@ -15,6 +15,7 @@ namespace TeeChat.Application.Services
         private readonly string _imagePath;
         private readonly string _imageUrl;
         private readonly string[] IMAGE_TYPES = new string[] { ".tiff", ".tiff", ".jpg", ".jpeg", ".gif", ".png" };
+        private const int OneMegaBytes = 1 * 1024 * 1024;
 
         public StorageService(IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
@@ -47,7 +48,13 @@ namespace TeeChat.Application.Services
             var extension = Path.GetExtension(originalFileName);
             if (Array.IndexOf(IMAGE_TYPES, extension.ToLower()) < 0)
             {
-                throw new Exception("File is invalid. Only image types are accepted!");
+                throw new Exception("Please upload image file!");
+            }
+
+            var fileSize = file.Length;
+            if (fileSize > OneMegaBytes)
+            {
+                throw new Exception("Please upload file less than 1MB!");
             }
 
             var fileName = $"{Guid.NewGuid()}{extension}";
