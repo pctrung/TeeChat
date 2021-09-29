@@ -172,7 +172,7 @@ function Register() {
           history.push("/login");
         }}
       />
-      <div className="z-10 h-screen grid md:grid-cols-7 place-items-center px-6">
+      <div className="animate-fadeIn z-10 h-screen grid md:grid-cols-7 place-items-center px-6">
         <img
           src={LoginPageImage}
           alt="login"
