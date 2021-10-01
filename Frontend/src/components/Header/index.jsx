@@ -112,9 +112,15 @@ function Header({ logout }) {
                   onClick={() => setDarkMode(!darkMode)}
                 >
                   <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
-                    <i className=" bx bx-moon text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                    <i
+                      className={
+                        "text-center-middle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 bx " +
+                        " " +
+                        (darkMode ? " bx-sun" : " bx-moon")
+                      }
+                    ></i>
                   </span>
-                  <span>Dark Mode</span>
+                  <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
                 </button>
                 <button
                   className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 transform active:scale-95 dark:hover:bg-dark-third"

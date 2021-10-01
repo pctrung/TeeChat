@@ -29,7 +29,7 @@ function ChatList() {
           placeholder="Search chat"
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <i class="bx bx-search absolute text-xl top-1/2 left-3 transform text-gray-400 -translate-y-1/2 cursor-pointer"></i>
+        <i className="bx bx-search absolute text-xl top-1/2 left-3 transform text-gray-400 -translate-y-1/2 cursor-pointer"></i>
       </div>
 
       <div className="h-full overflow-x-hidden space-y-2 overflow-y-auto pr-2 pb-48 md:pb-0">
@@ -59,7 +59,7 @@ function ChatList() {
             }
             return (
               <div
-                key={Date.now() + index}
+                key={chat.id}
                 className={
                   "relative select-none w-full h-20 flex flex-start cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all duration-150 ease-in dark:hover:bg-dark-secondary dark:text-dark-txt" +
                   " " +
