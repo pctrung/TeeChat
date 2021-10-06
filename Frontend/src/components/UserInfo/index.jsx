@@ -38,13 +38,13 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
 
   async function submit() {
     const request = new FormData();
-    request.append("Avatar", avatar);
-    request.append("FirstName", firstName.substring(0, 49));
-    request.append("LastName", lastName.substring(0, 49));
+    request.append("File", avatar);
 
-    userApi.updateUser(request).then((response) => {
-      dispatch(updateUser(response));
-      openPopup("Success", "Update info successfully!");
+    userApi.updateAvatar(request).then((response) => {
+      userApi.updateInformation({ firstName, lastName }).then((response) => {
+        dispatch(updateUser(response));
+        openPopup("Success", "Update info successfully!");
+      });
     });
 
     setIsOpen(false);

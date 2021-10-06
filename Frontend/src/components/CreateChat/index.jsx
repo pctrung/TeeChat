@@ -57,9 +57,9 @@ function CreateChat({ isOpen, setIsOpen }) {
   }, [isOpenFriendList]);
 
   useEffect(() => {
-    userApi.getFriendList().then((response) => {
+    userApi.getUserList().then((response) => {
       if (response) {
-        setFriendList(response);
+        setFriendList(response.items ?? response);
       }
     });
     return () => {
@@ -203,7 +203,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                           Friend list
                         </h4>
                         {friendList
-                          .filter(
+                          ?.filter(
                             (x) =>
                               (x.fullName
                                 ?.toLowerCase()
@@ -215,8 +215,8 @@ function CreateChat({ isOpen, setIsOpen }) {
                                 (selected) => selected.userName === x.userName,
                               ),
                           )
-                          .sort((a, b) => a.fullName.localeCompare(b.fullName))
-                          .map((friend, index) => (
+                          ?.sort((a, b) => a.fullName.localeCompare(b.fullName))
+                          ?.map((friend, index) => (
                             <div
                               onClick={() => {
                                 var result = [...selectedFriendList];
@@ -229,7 +229,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                                   setSelectedFriendList(result);
                                 }
                               }}
-                              key={Math.random() + index}
+                              key={friend?.id ?? "friend" + index}
                               className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-third bg-gray-100 hover:bg-green-200 dark:hover:bg-green-600 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                             >
                               <ImageCircle
@@ -272,7 +272,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                             setSelectedFriendList(result);
                           }
                         }}
-                        key={Math.random() + index}
+                        key={friend?.id ?? "friend" + index}
                         className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-third bg-gray-100 hover:bg-red-200 dark:hover:bg-red-500 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                       >
                         <ImageCircle
@@ -294,7 +294,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                 htmlFor="selectFriend"
                 className="font-semibold md:text-lg dark:text-gray-200"
               >
-                Select Friends
+                Select Friend
               </label>
               <div className="relative">
                 <input
@@ -313,8 +313,8 @@ function CreateChat({ isOpen, setIsOpen }) {
                         Friend list
                       </h4>
                       {friendList
-                        .sort((a, b) => a.fullName.localeCompare(b.fullName))
-                        .filter(
+                        ?.sort((a, b) => a.fullName.localeCompare(b.fullName))
+                        ?.filter(
                           (x) =>
                             (x.fullName
                               ?.toLowerCase()
@@ -326,7 +326,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                               (selected) => selected.userName === x.userName,
                             ),
                         )
-                        .map((friend, index) => (
+                        ?.map((friend, index) => (
                           <div
                             onClick={() => {
                               var result = [];
@@ -334,7 +334,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                               setIsOpenFriendList(false);
                               setSelectedFriendList(result);
                             }}
-                            key={Math.random() + index}
+                            key={friend?.id ?? "friend" + index}
                             className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-third bg-gray-100 hover:bg-green-200 dark:hover:bg-green-600 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                           >
                             <ImageCircle
@@ -376,7 +376,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                               setSelectedFriendList(result);
                             }
                           }}
-                          key={Math.random() + index}
+                          key={friend?.id ?? "friend" + index}
                           className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-third bg-gray-100 hover:bg-red-200 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300 dark:hover:bg-red-500"
                         >
                           <ImageCircle

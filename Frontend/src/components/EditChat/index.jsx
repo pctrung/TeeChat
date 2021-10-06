@@ -76,9 +76,9 @@ function EditChat({ isOpen, setIsOpen, chat }) {
   }, [isOpenFriendList]);
 
   useEffect(() => {
-    userApi.getFriendList().then((response) => {
+    userApi.getUserList().then((response) => {
       if (response) {
-        setFriendList(response);
+        setFriendList(response.items ?? response);
       }
     });
   }, []);
@@ -304,7 +304,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                                   setSelectedFriendList(result);
                                 }
                               }}
-                              key={Math.random() + index + friend?.userName}
+                              key={friend?.id ?? "friend" + index}
                               className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-hover bg-gray-100 hover:bg-green-200 dark:hover:bg-green-600 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                             >
                               <ImageCircle
@@ -347,7 +347,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                             setSelectedFriendList(result);
                           }
                         }}
-                        key={Math.random() + index + friend?.userName}
+                        key={friend?.id ?? "friend" + index}
                         className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2 dark:hover:bg-red-500 dark:bg-dark-hover bg-gray-100 hover:bg-red-200 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300"
                       >
                         <ImageCircle

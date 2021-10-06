@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TeeChat.Application.Interfaces;
+using TeeChat.Models.RequestModels.Common;
 using TeeChat.Models.RequestModels.Users;
 
 namespace TeeChat.Api.Controllers
@@ -17,7 +18,7 @@ namespace TeeChat.Api.Controllers
             _userService = userService;
         }
 
-        [HttpGet("{userName}/isExists")]
+        [HttpGet("/api/accounts/{userName}/isExists")]
         public async Task<IActionResult> CheckUserExistsAsync(string userName)
         {
             var result = await _userService.CheckUserNameExistsAsync(userName);
@@ -25,7 +26,7 @@ namespace TeeChat.Api.Controllers
             return Ok(new { isExists = result });
         }
 
-        [HttpPost("register")]
+        [HttpPost("/api/accounts/register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
             var result = await _userService.RegisterAsync(request);
@@ -45,7 +46,7 @@ namespace TeeChat.Api.Controllers
             }
         }
 
-        [HttpPost("login")]
+        [HttpPost("/api/accounts/login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
             var result = await _userService.LoginAsync(request);
@@ -83,9 +84,22 @@ namespace TeeChat.Api.Controllers
 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> UpdateUserAsync([FromForm] UpdateUserRequest request)
+        public async Task<IActionResult> UpdateInformation(UpdateUserRequest request)
         {
-            var result = await _userService.UpdateUserAsync(request);
+            var result = await _userService.UpdateInformationAsync(request);
+
+            return result.StatusCode switch
+            {
+                200 => Ok(result.Data),
+                _ => BadRequest(result.Message),
+            };
+        }
+
+        [HttpPatch("avatar")]
+        [Authorize]
+        public async Task<IActionResult> UpdateAvatar([FromForm] FileRequest request)
+        {
+            var result = await _userService.UpdateAvatarAsync(request);
 
             return result.StatusCode switch
             {

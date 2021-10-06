@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TeeChat.Models.Common;
+using TeeChat.Models.RequestModels.Common;
 using TeeChat.Models.RequestModels.Users;
 using TeeChat.Models.ViewModels;
 
@@ -21,6 +22,8 @@ namespace TeeChat.Application.Interfaces
 
         Task<bool> CheckUserNameExistsAsync(string userName);
 
-        Task<ApiResult<UserViewModel>> UpdateUserAsync(UpdateUserRequest request);
+        Task<ApiResult<UserViewModel>> UpdateInformationAsync(UpdateUserRequest request);
+
+        Task<ApiResult<UserViewModel>> UpdateAvatarAsync(FileRequest request);
     }
 }

@@ -121,7 +121,11 @@ function ChatList() {
                           : "")
                       }
                     >
-                      {lastMessage.content ?? ""}
+                      {lastMessage.content
+                        ? lastMessage.content
+                        : lastMessage.imageUrl
+                        ? "Sent an image"
+                        : ""}
                     </span>
                   </div>
                 </div>

@@ -29,7 +29,7 @@ export default function useMessagePagination(currentChat, page) {
   }, [page]);
 
   useEffect(() => {
-    setHasMore(page < currentChat.pageCount);
+    setHasMore(page < currentChat?.pageCount);
   }, [currentChat]);
 
   return { loading, error, appendChat, hasMore };

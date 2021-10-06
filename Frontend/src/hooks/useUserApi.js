@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import useApi from "./useApi.js";
 
 const baseApiUrl = "/users";
+const accountApiUrl = "/accounts";
 
 export default function useUserApi() {
   const Api = useApi();
@@ -11,7 +12,7 @@ export default function useUserApi() {
   const userApi = {
     login: (content) => {
       dispatch(setIsLoading(true));
-      const url = `${baseApiUrl}/login`;
+      const url = `${accountApiUrl}/login`;
       return Api.post(url, content);
     },
     register: (content) => {
@@ -19,17 +20,17 @@ export default function useUserApi() {
       content.lastName = content?.lastName?.substring(0, 49);
 
       dispatch(setIsLoading(true));
-      const url = `${baseApiUrl}/register`;
+      const url = `${accountApiUrl}/register`;
       return Api.post(url, content);
     },
     checkUserNameExists: (userName) => {
       if (userName) {
-        const url = `${baseApiUrl}/${userName}/isExists`;
+        const url = `${accountApiUrl}/${userName}/isExists`;
         return Api.get(url);
       }
       return Promise.reject();
     },
-    getFriendList: () => {
+    getUserList: () => {
       const url = `${baseApiUrl}`;
       return Api.get(url);
     },
@@ -37,9 +38,14 @@ export default function useUserApi() {
       const url = `${baseApiUrl}/current`;
       return Api.get(url);
     },
-    updateUser: (content) => {
+    updateInformation: (content) => {
       dispatch(setIsLoading(true));
       const url = `${baseApiUrl}`;
+      return Api.put(url, content);
+    },
+    updateAvatar: (content) => {
+      dispatch(setIsLoading(true));
+      const url = `${baseApiUrl}/avatar`;
       Api.interceptors.request.use(async (config) => {
         var token = window.localStorage.getItem("token");
         var newConfig = {};
@@ -54,7 +60,7 @@ export default function useUserApi() {
         }
         return newConfig;
       });
-      return Api.put(url, content);
+      return Api.patch(url, content);
     },
   };
   return userApi;

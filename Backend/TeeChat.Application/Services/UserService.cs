@@ -14,6 +14,7 @@ using TeeChat.Application.Interfaces;
 using TeeChat.Data.EF;
 using TeeChat.Data.Entities;
 using TeeChat.Models.Common;
+using TeeChat.Models.RequestModels.Common;
 using TeeChat.Models.RequestModels.Users;
 using TeeChat.Models.ViewModels;
 
@@ -112,9 +113,8 @@ namespace TeeChat.Application.Services
             return result;
         }
 
-        public async Task<ApiResult<UserViewModel>> UpdateUserAsync(UpdateUserRequest request)
+        public async Task<ApiResult<UserViewModel>> UpdateInformationAsync(UpdateUserRequest request)
         {
-            bool isChanged = false;
             var user = await _context.Users.FindAsync(_currentUser.UserId);
             if (user == null)
             {
@@ -123,19 +123,33 @@ namespace TeeChat.Application.Services
 
             if (!string.IsNullOrWhiteSpace(request.FirstName))
             {
-                isChanged = true;
                 user.FirstName = request.FirstName.Trim();
             }
             if (!string.IsNullOrWhiteSpace(request.LastName))
             {
-                isChanged = true;
                 user.LastName = request.LastName.Trim();
             }
-            if (request.Avatar != null)
+
+            await _context.SaveChangesAsync();
+
+            var responseUser = _mapper.Map<UserViewModel>(user);
+
+            return ApiResult<UserViewModel>.Ok(responseUser, "Update user successfully");
+        }
+
+        public async Task<ApiResult<UserViewModel>> UpdateAvatarAsync(FileRequest request)
+        {
+            var user = await _context.Users.FindAsync(_currentUser.UserId);
+            if (user == null)
+            {
+                return ApiResult<UserViewModel>.BadRequest(null, "Something went wrong. Cannot find user: " + _currentUser.UserName);
+            }
+
+            if (request.File != null)
             {
                 try
                 {
-                    var fileName = await _storageService.SaveImageAsync(request.Avatar);
+                    var fileName = await _storageService.SaveImageAsync(request.File);
 
                     if (!string.IsNullOrWhiteSpace(fileName))
                     {
@@ -144,8 +158,11 @@ namespace TeeChat.Application.Services
                             var currentFileName = user.AvatarFileName;
                             await _storageService.DeleteFileAsync(currentFileName);
                         }
-                        isChanged = true;
                         user.AvatarFileName = fileName;
+
+                        await _context.SaveChangesAsync();
+                        var responseUser = _mapper.Map<UserViewModel>(user);
+                        return ApiResult<UserViewModel>.Ok(responseUser, "Update user successfully");
                     }
                 }
                 catch (Exception e)
@@ -153,17 +170,7 @@ namespace TeeChat.Application.Services
                     return ApiResult<UserViewModel>.BadRequest(null, e.Message);
                 }
             }
-
-            await _context.SaveChangesAsync();
-
-            if (!isChanged)
-            {
-                return ApiResult<UserViewModel>.BadRequest(null, "Nothing is changed!");
-            }
-
-            var responseUser = _mapper.Map<UserViewModel>(user);
-
-            return ApiResult<UserViewModel>.Ok(responseUser, "Update user successfully");
+            return ApiResult<UserViewModel>.Ok(null);
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterRequest request)

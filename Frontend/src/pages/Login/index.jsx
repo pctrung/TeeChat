@@ -35,7 +35,7 @@ function Login() {
       .then((response) => {
         dispatch(getCurrentUser());
         window.localStorage.setItem("token", response);
-        history.push("/");
+        window.location.href = process.env.PUBLIC_URL + "/";
       })
       .catch((error) => {
         var message =
