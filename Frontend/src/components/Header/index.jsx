@@ -92,29 +92,6 @@ function Header({ logout }) {
             />
           </div>
           <h1 className="font-bold text-3xl">Chats</h1>
-          {/* Dark mode toggle */}
-          <div
-            className="items-center cursor-pointer flex"
-            onClick={() => setDarkMode(!darkMode)}
-          >
-            <i
-              className={
-                "bx p-2 dark:text-dark-txt text-gray-500 " +
-                (darkMode ? "bx-moon" : "bx-sun")
-              }
-            ></i>
-            <div className="relative">
-              <div className="block bg-gray-600 w-10 h-6 rounded-full"></div>
-              <div
-                className={
-                  "absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-all duration-200 ease-in-out transform " +
-                  (darkMode
-                    ? "translate-x-full bg-green600 dark:bg-green-400"
-                    : "")
-                }
-              ></div>
-            </div>
-          </div>
         </div>
 
         <div className="flex space-x-2 items-center">
