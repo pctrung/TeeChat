@@ -154,22 +154,47 @@ namespace TeeChat.Application.Services
                 return ApiResult<CreateChatResponse>.BadRequest(null, "Not found user: " + request.ParticipantUserName);
             }
 
-            var chat = await _context.Chats.FirstOrDefaultAsync(x => x.Type == ChatType.Private && x.Participants.Contains(_currentUser) && x.Participants.Contains(participant));
+            var chat = new Chat();
+            bool isExistChat = false;
 
-            bool isExistChat = chat != null;
-
-            if (!isExistChat)
+            if (participant.Id.Equals(_currentUser.Id))
             {
-                chat = new Chat
+                chat = await _context.Chats.Include(x => x.Participants).FirstOrDefaultAsync(x => x.Type == ChatType.Private && x.Participants.Contains(_currentUser) && x.Participants.Count == 1);
+
+                isExistChat = chat != null;
+
+                if (!isExistChat)
                 {
-                    Type = ChatType.Private,
-                    Participants = new List<AppUser>() { participant }
-                };
-                chat.Participants.Add(_currentUser);
-                chat.Creator = _currentUser;
-                chat.DateCreated = DateTime.Now;
-                await _context.Chats.AddAsync(chat);
-                await _context.SaveChangesAsync();
+                    chat = new Chat
+                    {
+                        Type = ChatType.Private,
+                        Participants = new List<AppUser>() { participant }
+                    };
+                    chat.Creator = _currentUser;
+                    chat.DateCreated = DateTime.Now;
+                    await _context.Chats.AddAsync(chat);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                chat = await _context.Chats.Include(x => x.Participants).FirstOrDefaultAsync(x => x.Type == ChatType.Private && x.Participants.Contains(_currentUser) && x.Participants.Contains(participant));
+
+                isExistChat = chat != null;
+
+                if (!isExistChat)
+                {
+                    chat = new Chat
+                    {
+                        Type = ChatType.Private,
+                        Participants = new List<AppUser>() { participant }
+                    };
+                    chat.Participants.Add(_currentUser);
+                    chat.Creator = _currentUser;
+                    chat.DateCreated = DateTime.Now;
+                    await _context.Chats.AddAsync(chat);
+                    await _context.SaveChangesAsync();
+                }
             }
 
             if (chat.Id != 0)
