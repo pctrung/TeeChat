@@ -3,13 +3,15 @@ My pet project - A chat application for TeeApp social media
 
 Now available at https://pctrung.github.io/TeeChat/
 
- ## Tech Stack
+ ## Tech Stack 
+ ### Backend
  - ASP.NET Core 5.0
- - ReactJs
- - TailwindCSS
- - Redux
  - SQL Server
  - Entity Framework Core
+ ### Frontend
+ - TailwindCSS
+ - ReactJs
+ - Redux
 
  ## UI
 - TeeApp:
