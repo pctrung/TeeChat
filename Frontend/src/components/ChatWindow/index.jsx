@@ -52,11 +52,11 @@ function ChatWindow({ chat }) {
         dispatch(readChat(chat?.id));
       });
     }
-    if (chat?.participants.length > 1) {
+    if (chat?.participants.length > 0) {
       var newFriend = chat?.participants
         ?.filter((x) => x.userName !== currentUser?.userName)
         .shift();
-      setFriend(newFriend);
+      setFriend(newFriend ?? currentUser);
 
       if (chat?.readByUserNames?.length > 1) {
         var newSeenBy = "";
@@ -170,11 +170,8 @@ function ChatWindow({ chat }) {
               })
               .map((message, index) =>
                 message.senderUserName === currentUser.userName ? (
-                  <>
-                    <div
-                      key={message.id ?? "message" + index}
-                      className="flex flex-col items-end w-full"
-                    >
+                  <div key={message.id ?? "message" + index}>
+                    <div className="flex flex-col items-end w-full">
                       {showTimeIndexes.includes(index) && (
                         <span className="transition-all animate-fadeIn text-xs md:text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
                           {moment(
@@ -215,7 +212,7 @@ function ChatWindow({ chat }) {
                           </div>
                         </>
                       )}
-                  </>
+                  </div>
                 ) : (
                   <div
                     key={message.id ?? "message" + index}
