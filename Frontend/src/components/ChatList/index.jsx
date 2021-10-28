@@ -4,6 +4,7 @@ import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChatType, DefaultName } from "utils/Constant";
+import Logo from "logo.png";
 
 function ChatList() {
   const chats = useSelector((state) => state.chats.chats);
@@ -132,6 +133,21 @@ function ChatList() {
               </div>
             );
           })}
+        {chats?.length === 0 && (
+          <div className="animate-fadeIn flex md:hidden items-center justify-center lg:col-span-9 md:col-span-8 col-span-12 flex-col h-full w-full">
+            <img src={Logo} className="w-16 h-16 mb-3" alt="logo" />
+            <span className="text-center">
+              {" "}
+              Welcome to{" "}
+              <span className="text-green-600 dark:text-green-400 font-bold">
+                TeeChat!
+              </span>{" "}
+              <br />
+              You do not have any chats, please start a chat!{" "}
+            </span>
+            <span></span>
+          </div>
+        )}
       </div>
     </>
   );
