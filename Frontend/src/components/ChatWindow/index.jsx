@@ -157,7 +157,6 @@ function ChatWindow({ chat }) {
             )}
             {!hasMore && (
               <div className="text-gray-500 text-xs md:text-sm text-center mb-2">
-                Date created:{" "}
                 {moment(new Date(chat?.dateCreated), "YYYYMMDD").format(
                   "MMMM Do YYYY, h:mm:ss a",
                 )}
