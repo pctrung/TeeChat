@@ -1,7 +1,8 @@
 # TeeChat!
 - My pet project - A chat application for TeeApp social media
 - Features: Register, create chat room or private chat, dark mode, update avatar
-- Now available at https://pctrung.github.io/TeeChat/  (Test account: guestuser2 - Abcd1234!)
+- Now available at https://pctrung.github.io/TeeChat/  
+- Test account: guestuser2 - Abcd1234!
 
  ## Tech Stack 
  ### Backend
