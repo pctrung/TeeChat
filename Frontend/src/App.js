@@ -1,6 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import {
+  HashRouter as BrowserRouter,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
 
 import { setPopup } from "app/appSlice";
 import Loader from "components/Loader";
