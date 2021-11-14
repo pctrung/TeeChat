@@ -41,10 +41,17 @@ function UserInfo({ isOpen, setIsOpen, currentUser }) {
     request.append("File", avatar);
 
     userApi.updateAvatar(request).then((response) => {
-      userApi.updateInformation({ firstName, lastName }).then((response) => {
-        dispatch(updateUser(response));
-        openPopup("Success", "Update info successfully!");
-      });
+      userApi
+        .updateInformation({
+          firstName,
+          lastName,
+          aboutMe: currentUser.aboutMe,
+          phoneNumber: currentUser.phoneNumber,
+        })
+        .then((response) => {
+          dispatch(updateUser(response));
+          openPopup("Success", "Update info successfully!");
+        });
     });
 
     setIsOpen(false);
