@@ -53,24 +53,24 @@ function ChatWindow({ chat }) {
       });
     }
     if (chat?.participants.length > 0) {
-      var newFriend = chat?.participants
+      let newFriend = chat?.participants
         ?.filter((x) => x.userName !== currentUser?.userName)
         .shift();
       setFriend(newFriend ?? currentUser);
 
       if (chat?.readByUserNames?.length > 1) {
-        var newSeenBy = "";
-        var fullNameList = chat?.readByUserNames
+        let newSeenBy = "";
+        let firstNameList = chat?.readByUserNames
           ?.filter((userName) => userName !== currentUser?.userName)
           ?.map((userName) => {
-            var fullName = chat.participants
+            let firstName = chat.participants
               .filter((x) => x.userName === userName)
-              ?.shift()?.fullName;
-            return fullName;
+              ?.shift()?.firstName;
+            return firstName;
           });
 
-        if (fullNameList?.length > 1) {
-          newSeenBy = "Seen by " + fullNameList.filter((x) => x).join(", ");
+        if (firstNameList?.length > 1) {
+          newSeenBy = "Seen by " + firstNameList.filter((x) => x).join(", ");
           setSeenBy(newSeenBy);
         } else {
           setSeenBy("");
@@ -169,8 +169,11 @@ function ChatWindow({ chat }) {
               })
               .map((message, index) =>
                 message.senderUserName === currentUser.userName ? (
-                  <div key={message.id ?? "message" + index}>
-                    <div className="flex flex-col items-end w-full">
+                  <div
+                    className="flex-shrink-0"
+                    key={message.id ?? "message" + index}
+                  >
+                    <div className="flex-shrink-0 flex flex-col items-end w-full">
                       {showTimeIndexes.includes(index) && (
                         <span className="transition-all animate-fadeIn text-xs md:text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
                           {moment(
@@ -215,7 +218,7 @@ function ChatWindow({ chat }) {
                 ) : (
                   <div
                     key={message.id ?? "message" + index}
-                    className="flex items-end space-x-2"
+                    className="flex-shrink-0 flex items-end space-x-2"
                   >
                     <ImageCircle
                       src={
@@ -227,8 +230,7 @@ function ChatWindow({ chat }) {
                       userName={message.senderUserName}
                     />
                     <div className="flex flex-col w-full items-start">
-                      {(showTimeIndexes.includes(index) ||
-                        chat?.type === ChatType.GROUP) && (
+                      {showTimeIndexes.includes(index) && (
                         <span className="transition-all animate-fadeIn text-xs md:text-sm text-gray-400 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-left">
                           {message.senderFullName +
                             " - " +
