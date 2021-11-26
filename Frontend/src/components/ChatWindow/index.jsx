@@ -7,10 +7,10 @@ import EditChat from "components/EditChat";
 import ImageCircle from "components/ImageCircle";
 import useChatApi from "hooks/useChatApi";
 import useMessagePagination from "hooks/useMessagePagination";
-import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ChatType, DefaultName } from "utils/Constant";
+import { ChatType, DefaultName } from "utils/Constants";
+import { formatDate } from "utils/UtilityMethods";
 
 function ChatWindow({ chat }) {
   const dispatch = useDispatch();
@@ -157,9 +157,7 @@ function ChatWindow({ chat }) {
             )}
             {!hasMore && (
               <div className="text-gray-500 text-xs md:text-sm text-center mb-2">
-                {moment(new Date(chat?.dateCreated), "YYYYMMDD").format(
-                  "MMMM Do YYYY, h:mm:ss a",
-                )}
+                {formatDate(chat?.dateCreated)}
               </div>
             )}
             <div>{error ? "Error" : ""}</div>
@@ -176,10 +174,7 @@ function ChatWindow({ chat }) {
                     <div className="flex-shrink-0 flex flex-col items-end w-full">
                       {showTimeIndexes.includes(index) && (
                         <span className="transition-all animate-fadeIn text-xs md:text-sm text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-right">
-                          {moment(
-                            new Date(message?.dateCreated),
-                            "YYYYMMDD",
-                          ).calendar() ?? ""}
+                          {formatDate(message.dateCreated) ?? ""}
                         </span>
                       )}
                       {message.imageUrl ? (
@@ -234,10 +229,7 @@ function ChatWindow({ chat }) {
                         <span className="transition-all animate-fadeIn text-xs md:text-sm text-gray-400 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-left">
                           {message.senderFullName +
                             " - " +
-                            moment(
-                              new Date(message?.dateCreated),
-                              "YYYYMMDD",
-                            ).calendar() ?? ""}
+                            formatDate(message.dateCreated) ?? ""}
                         </span>
                       )}
                       {message.imageUrl ? (

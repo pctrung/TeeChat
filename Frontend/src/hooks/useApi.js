@@ -46,15 +46,19 @@ export default function useApi() {
           : "Oops, something went wrong! Please contact administrator.";
 
       if (error.response) {
+        var popupTitle = "Notification";
         switch (error.response.status) {
           case 401:
+            popupTitle = "Login required";
             window.localStorage.removeItem("token");
-            history?.push("/login");
+            window.location.href = process.env.PUBLIC_URL + "/";
             break;
           case 403:
+            popupTitle = "Forbidden";
             history?.push("/ForBid");
             break;
           case 500:
+            popupTitle = "Server error";
             history?.push("/ServerError");
             break;
           default:
@@ -63,15 +67,18 @@ export default function useApi() {
               ? objToString(error.response?.data?.errors)
               : message;
 
-            if (!message.toLowerCase().includes("username or password")) {
-              openPopup("Notification", message);
-            }
+            openPopup(popupTitle, message);
             return Promise.reject(error.response?.data);
         }
       }
-      if (!message.toLowerCase().includes("username or password")) {
-        openPopup("Notification", message);
+
+      if (message.toLowerCase().includes("Unable to identify user")) {
+        openPopup(popupTitle, message);
+        window.localStorage.removeItem("token");
+        window.location.href = process.env.PUBLIC_URL + "/";
       }
+      history?.push("/ServerError");
+
       return Promise.reject(error?.response?.data);
     },
   );
@@ -81,12 +88,6 @@ export default function useApi() {
       isOpen: true,
       title: title,
       content: content,
-    };
-    dispatch(setPopup(popup));
-  }
-  function closePopup() {
-    const popup = {
-      isOpen: false,
     };
     dispatch(setPopup(popup));
   }

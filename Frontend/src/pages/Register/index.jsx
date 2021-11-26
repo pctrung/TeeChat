@@ -34,10 +34,7 @@ function Register() {
         "checkUsername",
         "Username does not contain special characters",
         (value) => {
-          return checkRegex(
-            value,
-            "^(?=[a-zA-Z0-9._])(?!.*[_.]{2})[^_.].*[^_.]$",
-          );
+          return checkRegex(value, "^[a-zA-Z0-9!@#$%^&*)(+=._-]{6,}$");
         },
       )
       .test(
@@ -137,19 +134,25 @@ function Register() {
 
   // handle submit
   const onSubmit = (content) => {
-    userApi.register(content).then((response) => {
-      openPopup(
-        "Success",
-        <span>
-          "Create account successfully! Please{" "}
-          <Link className="font-bold text-green-600" to="/login">
-            log in
-          </Link>
-          !"
-        </span>,
-      );
-      reset({});
-    });
+    userApi
+      .register(content)
+      .then((response) => {
+        openPopup(
+          "Success",
+          <span>
+            "Create account successfully! Please{" "}
+            <Link className="font-bold text-green-600" to="/login">
+              log in
+            </Link>
+            !"
+          </span>,
+        );
+        reset({});
+      })
+      .catch((error) => {
+        let message = error?.errors ? objToString(error?.errors) : "";
+        openPopup("Notification", message);
+      });
   };
 
   function openPopup(title, content) {

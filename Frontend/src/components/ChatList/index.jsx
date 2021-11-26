@@ -1,10 +1,10 @@
 import { setSelectedId } from "app/chatSlice";
 import ImageCircle from "components/ImageCircle";
-import moment from "moment";
+import Logo from "logo.png";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ChatType, DefaultName } from "utils/Constant";
-import Logo from "logo.png";
+import { ChatType, DefaultName } from "utils/Constants";
+import { formatDate } from "utils/UtilityMethods";
 
 function ChatList() {
   const chats = useSelector((state) => state.chats.chats);
@@ -103,13 +103,9 @@ function ChatList() {
                         : chat?.name ?? DefaultName.NO_NAME_GROUP}
                     </span>
                     <span className="text-sm text-gray-500 truncate flex-shrink-0">
-                      {moment(
-                        new Date(lastMessage?.dateCreated ?? chat?.dateCreated),
-                        "YYYYMMDD",
-                      )
-                        .fromNow()
-                        ?.replace("ago", "")
-                        ?.trim()}
+                      {formatDate(
+                        lastMessage?.dateCreated ?? chat?.dateCreated,
+                      )}
                     </span>
                   </div>
                   <div className="flex">

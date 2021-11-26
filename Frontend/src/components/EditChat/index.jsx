@@ -5,10 +5,10 @@ import ImageCircle from "components/ImageCircle";
 import Popup from "components/Popup";
 import useChatApi from "hooks/useChatApi";
 import useUserApi from "hooks/useUserApi";
-import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ChatType, DefaultName } from "utils/Constant";
+import { ChatType, DefaultName } from "utils/Constants";
+import { formatDate } from "utils/UtilityMethods";
 
 function EditChat({ isOpen, setIsOpen, chat }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -387,9 +387,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
               <div className="font-bold dark:text-dark-txt">
                 Created at:{" "}
                 <span className="font-normal">
-                  {moment(new Date(chat?.dateCreated), "YYYYMMDD").format(
-                    "MMMM Do YYYY, h:mm:ss a",
-                  )}
+                  {formatDate(chat?.dateCreated)}
                 </span>
               </div>
               <div className="font-bold dark:text-dark-txt">
