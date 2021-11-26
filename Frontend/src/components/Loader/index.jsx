@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Logo from "logo.png";
 
 const Loader = ({ className, isOpen = true }) => {

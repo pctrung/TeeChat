@@ -7,6 +7,7 @@ import Logo from "logo.png";
 import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
+import { checkRegex, identityObjectToString } from "utils/UtilityMethods";
 import * as yup from "yup";
 
 function Register() {
@@ -150,7 +151,9 @@ function Register() {
         reset({});
       })
       .catch((error) => {
-        let message = error?.errors ? objToString(error?.errors) : "";
+        let message = error?.errors
+          ? identityObjectToString(error?.errors)
+          : "";
         openPopup("Notification", message);
       });
   };
@@ -286,11 +289,3 @@ function Register() {
 }
 
 export default Register;
-
-function checkRegex(value, regex) {
-  if (value && regex) {
-    var pattern = new RegExp(regex);
-    var res = pattern.test(value);
-    return res;
-  }
-}

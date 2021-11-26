@@ -3,6 +3,7 @@ import axios from "axios";
 import queryString from "query-string";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { identityObjectToString } from "utils/UtilityMethods";
 
 export default function useApi() {
   const dispatch = useDispatch();
@@ -64,7 +65,7 @@ export default function useApi() {
           default:
             // for model binding error
             message = error.response?.data?.errors
-              ? objToString(error.response?.data?.errors)
+              ? identityObjectToString(error.response?.data?.errors)
               : message;
 
             openPopup(popupTitle, message);
@@ -93,14 +94,4 @@ export default function useApi() {
   }
 
   return Api;
-}
-
-// utils function for model binding convert
-function objToString(obj) {
-  let str = "";
-  for (const val of Object.values(obj)) {
-    str += `${val.toString()}, `;
-  }
-  str = str.substring(0, str.length - 2);
-  return str;
 }

@@ -21,3 +21,20 @@ export function formatDate(d) {
 function isValidDate(d) {
   return d instanceof Date && !isNaN(d);
 }
+
+export function checkRegex(value, regex) {
+  if (value && regex) {
+    var pattern = new RegExp(regex);
+    var res = pattern.test(value);
+    return res;
+  }
+}
+
+export function identityObjectToString(obj) {
+  let str = "";
+  for (const val of Object.values(obj)) {
+    str += `${val.toString()}, `;
+  }
+  str = str.substring(0, str.length - 2);
+  return str;
+}

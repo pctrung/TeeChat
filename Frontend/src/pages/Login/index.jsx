@@ -5,14 +5,13 @@ import useUserApi from "hooks/useUserApi";
 import Logo from "logo.png";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const [isDirty, setIsDirty] = useState(false);
-  const history = useHistory();
   const dispatch = useDispatch();
 
   const userApi = useUserApi();

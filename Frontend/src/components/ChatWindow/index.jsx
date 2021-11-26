@@ -227,9 +227,9 @@ function ChatWindow({ chat }) {
                     <div className="flex flex-col w-full items-start">
                       {showTimeIndexes.includes(index) && (
                         <span className="transition-all animate-fadeIn text-xs md:text-sm text-gray-400 bottom-full mb-1 ml-1 space-x-2 md:w-80 w-60 truncate overflow-ellipsis text-left">
-                          {message.senderFullName +
-                            " - " +
-                            formatDate(message.dateCreated) ?? ""}
+                          {(chat?.type === ChatType.GROUP
+                            ? message.senderFullName + " - "
+                            : "") + formatDate(message.dateCreated) ?? ""}
                         </span>
                       )}
                       {message.imageUrl ? (
