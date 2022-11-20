@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  HashRouter as BrowserRouter,
+  BrowserRouter,
   Redirect,
   Route,
   Switch,
@@ -27,7 +27,7 @@ function App() {
   }
   return (
     <>
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <BrowserRouter>
         <Loader isOpen={isLoading} className="z-50" />
         <Popup
           title={popup.title}
