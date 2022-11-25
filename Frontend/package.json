@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@material-tailwind/react": "^0.3.4",
     "axios": "^0.21.1",
     "boxicons": "^2.0.9",
     "emoji-picker-react": "^3.4.8",
