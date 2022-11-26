@@ -33,8 +33,8 @@ function Login() {
       .login(request)
       .then((response) => {
         dispatch(getCurrentUser());
-        window.localStorage.setItem("token", response);
-        window.location.href = process.env.PUBLIC_URL + "/";
+        window.localStorage.setItem("token", response?.data);
+        window.location.href = "/";
       })
       .catch((error) => {
         var message =
